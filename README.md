@@ -1,3 +1,14 @@
+# Quick start
+
+1. Go into `sanity_test.go` and replace `TODO_ADD_BEARER_KEY` with your secret token
+
+2.
+```shell
+go build
+
+go test -v
+```
+
 # Go API client for getopenpay
 
 super charge your subscription management.
