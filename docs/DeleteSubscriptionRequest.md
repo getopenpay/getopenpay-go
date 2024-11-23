@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **CancelUnpaidInvoices** | Pointer to **bool** | Mark unpaid invoices as uncollectible | [optional] [default to false]
 **Prorate** | Pointer to **bool** | Will generate a proration invoice_item that credits remaining unused time until the subscription period end, also creates invoice_item for un-invoiced metered usage.Setting this to false will not invoice for un-invoiced metered usage. | [optional] [default to true]
 **FullRefund** | Pointer to **bool** | Flag to decide whether full refund should be given or not. | [optional] [default to false]
+**IsPreview** | Pointer to **bool** | Whether the request is in preview mode (subscriptions won&#39;t actually be deleted) | [optional] [default to false]
 
 ## Methods
 
@@ -137,6 +138,31 @@ SetFullRefund sets FullRefund field to given value.
 `func (o *DeleteSubscriptionRequest) HasFullRefund() bool`
 
 HasFullRefund returns a boolean if a field has been set.
+
+### GetIsPreview
+
+`func (o *DeleteSubscriptionRequest) GetIsPreview() bool`
+
+GetIsPreview returns the IsPreview field if non-nil, zero value otherwise.
+
+### GetIsPreviewOk
+
+`func (o *DeleteSubscriptionRequest) GetIsPreviewOk() (*bool, bool)`
+
+GetIsPreviewOk returns a tuple with the IsPreview field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsPreview
+
+`func (o *DeleteSubscriptionRequest) SetIsPreview(v bool)`
+
+SetIsPreview sets IsPreview field to given value.
+
+### HasIsPreview
+
+`func (o *DeleteSubscriptionRequest) HasIsPreview() bool`
+
+HasIsPreview returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

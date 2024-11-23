@@ -15,18 +15,21 @@ Name | Type | Description | Notes
 **Provider** | [**PaymentProviderType**](PaymentProviderType.md) |  | 
 **CardType** | Pointer to **interface{}** |  | [optional] 
 **LastFour** | Pointer to **interface{}** |  | [optional] 
+**DisplayName** | **interface{}** | Display name for the payment method to show on the UI. | 
 **ExpiryDate** | **interface{}** |  | 
 **CardFingerprint** | Pointer to **interface{}** |  | [optional] 
 **CardIin** | Pointer to **interface{}** |  | [optional] 
 **CardCountry** | Pointer to **interface{}** |  | [optional] 
 **CardBrand** | Pointer to **interface{}** |  | [optional] 
 **CardIssuer** | Pointer to **interface{}** |  | [optional] 
+**IsFullDetailsKnown** | **interface{}** | Indicates if full details of the card are known | 
+**CdeExternalId** | Pointer to **interface{}** |  | [optional] 
 
 ## Methods
 
 ### NewListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner
 
-`func NewListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner(id interface{}, createdAt interface{}, updatedAt interface{}, provider PaymentProviderType, expiryDate interface{}, ) *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner`
+`func NewListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner(id interface{}, createdAt interface{}, updatedAt interface{}, provider PaymentProviderType, displayName interface{}, expiryDate interface{}, isFullDetailsKnown interface{}, ) *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner`
 
 NewListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner instantiates a new ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner object
 This constructor will assign default values to properties that have it defined,
@@ -376,6 +379,36 @@ HasLastFour returns a boolean if a field has been set.
 `func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) UnsetLastFour()`
 
 UnsetLastFour ensures that no value is present for LastFour, not even an explicit nil
+### GetDisplayName
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetDisplayName() interface{}`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetDisplayNameOk() (*interface{}, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) SetDisplayName(v interface{})`
+
+SetDisplayName sets DisplayName field to given value.
+
+
+### SetDisplayNameNil
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) SetDisplayNameNil(b bool)`
+
+ SetDisplayNameNil sets the value for DisplayName to be an explicit nil
+
+### UnsetDisplayName
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) UnsetDisplayName()`
+
+UnsetDisplayName ensures that no value is present for DisplayName, not even an explicit nil
 ### GetExpiryDate
 
 `func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetExpiryDate() interface{}`
@@ -581,6 +614,71 @@ HasCardIssuer returns a boolean if a field has been set.
 `func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) UnsetCardIssuer()`
 
 UnsetCardIssuer ensures that no value is present for CardIssuer, not even an explicit nil
+### GetIsFullDetailsKnown
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetIsFullDetailsKnown() interface{}`
+
+GetIsFullDetailsKnown returns the IsFullDetailsKnown field if non-nil, zero value otherwise.
+
+### GetIsFullDetailsKnownOk
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetIsFullDetailsKnownOk() (*interface{}, bool)`
+
+GetIsFullDetailsKnownOk returns a tuple with the IsFullDetailsKnown field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsFullDetailsKnown
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) SetIsFullDetailsKnown(v interface{})`
+
+SetIsFullDetailsKnown sets IsFullDetailsKnown field to given value.
+
+
+### SetIsFullDetailsKnownNil
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) SetIsFullDetailsKnownNil(b bool)`
+
+ SetIsFullDetailsKnownNil sets the value for IsFullDetailsKnown to be an explicit nil
+
+### UnsetIsFullDetailsKnown
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) UnsetIsFullDetailsKnown()`
+
+UnsetIsFullDetailsKnown ensures that no value is present for IsFullDetailsKnown, not even an explicit nil
+### GetCdeExternalId
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetCdeExternalId() interface{}`
+
+GetCdeExternalId returns the CdeExternalId field if non-nil, zero value otherwise.
+
+### GetCdeExternalIdOk
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) GetCdeExternalIdOk() (*interface{}, bool)`
+
+GetCdeExternalIdOk returns a tuple with the CdeExternalId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCdeExternalId
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) SetCdeExternalId(v interface{})`
+
+SetCdeExternalId sets CdeExternalId field to given value.
+
+### HasCdeExternalId
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) HasCdeExternalId() bool`
+
+HasCdeExternalId returns a boolean if a field has been set.
+
+### SetCdeExternalIdNil
+
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) SetCdeExternalIdNil(b bool)`
+
+ SetCdeExternalIdNil sets the value for CdeExternalId to be an explicit nil
+
+### UnsetCdeExternalId
+`func (o *ListResponseUnionTokenizedCreditCardExternalPaymentMethodExternalDataInner) UnsetCdeExternalId()`
+
+UnsetCdeExternalId ensures that no value is present for CdeExternalId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

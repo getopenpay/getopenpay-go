@@ -31,6 +31,11 @@ type UpdateSubscriptionRequest struct {
 	CollectionMethod NullableCollectionMethodEnum `json:"collection_method,omitempty"`
 	NetD NullableInt32 `json:"net_d,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	NewPeriodEnd NullableTime `json:"new_period_end,omitempty"`
+	// Whether the request is in preview mode (subscriptions won't actually be updated)
+	IsPreview *bool `json:"is_preview,omitempty"`
+	// Whether to include the preview of the renewal invoices for the subscriptions in the response.
+	PreviewRenewalInvoices *bool `json:"preview_renewal_invoices,omitempty"`
 	Items []InlineSubscriptionItemUpdate `json:"items,omitempty"`
 }
 
@@ -42,6 +47,10 @@ func NewUpdateSubscriptionRequest() *UpdateSubscriptionRequest {
 	this := UpdateSubscriptionRequest{}
 	var prorationBehavior ProrationEnum = PRORATIONENUM_ALWAYS_INVOICE
 	this.ProrationBehavior = &prorationBehavior
+	var isPreview bool = false
+	this.IsPreview = &isPreview
+	var previewRenewalInvoices bool = false
+	this.PreviewRenewalInvoices = &previewRenewalInvoices
 	return &this
 }
 
@@ -52,6 +61,10 @@ func NewUpdateSubscriptionRequestWithDefaults() *UpdateSubscriptionRequest {
 	this := UpdateSubscriptionRequest{}
 	var prorationBehavior ProrationEnum = PRORATIONENUM_ALWAYS_INVOICE
 	this.ProrationBehavior = &prorationBehavior
+	var isPreview bool = false
+	this.IsPreview = &isPreview
+	var previewRenewalInvoices bool = false
+	this.PreviewRenewalInvoices = &previewRenewalInvoices
 	return &this
 }
 
@@ -498,6 +511,112 @@ func (o *UpdateSubscriptionRequest) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetNewPeriodEnd returns the NewPeriodEnd field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateSubscriptionRequest) GetNewPeriodEnd() time.Time {
+	if o == nil || IsNil(o.NewPeriodEnd.Get()) {
+		var ret time.Time
+		return ret
+	}
+	return *o.NewPeriodEnd.Get()
+}
+
+// GetNewPeriodEndOk returns a tuple with the NewPeriodEnd field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateSubscriptionRequest) GetNewPeriodEndOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.NewPeriodEnd.Get(), o.NewPeriodEnd.IsSet()
+}
+
+// HasNewPeriodEnd returns a boolean if a field has been set.
+func (o *UpdateSubscriptionRequest) HasNewPeriodEnd() bool {
+	if o != nil && o.NewPeriodEnd.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetNewPeriodEnd gets a reference to the given NullableTime and assigns it to the NewPeriodEnd field.
+func (o *UpdateSubscriptionRequest) SetNewPeriodEnd(v time.Time) {
+	o.NewPeriodEnd.Set(&v)
+}
+// SetNewPeriodEndNil sets the value for NewPeriodEnd to be an explicit nil
+func (o *UpdateSubscriptionRequest) SetNewPeriodEndNil() {
+	o.NewPeriodEnd.Set(nil)
+}
+
+// UnsetNewPeriodEnd ensures that no value is present for NewPeriodEnd, not even an explicit nil
+func (o *UpdateSubscriptionRequest) UnsetNewPeriodEnd() {
+	o.NewPeriodEnd.Unset()
+}
+
+// GetIsPreview returns the IsPreview field value if set, zero value otherwise.
+func (o *UpdateSubscriptionRequest) GetIsPreview() bool {
+	if o == nil || IsNil(o.IsPreview) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPreview
+}
+
+// GetIsPreviewOk returns a tuple with the IsPreview field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSubscriptionRequest) GetIsPreviewOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPreview) {
+		return nil, false
+	}
+	return o.IsPreview, true
+}
+
+// HasIsPreview returns a boolean if a field has been set.
+func (o *UpdateSubscriptionRequest) HasIsPreview() bool {
+	if o != nil && !IsNil(o.IsPreview) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPreview gets a reference to the given bool and assigns it to the IsPreview field.
+func (o *UpdateSubscriptionRequest) SetIsPreview(v bool) {
+	o.IsPreview = &v
+}
+
+// GetPreviewRenewalInvoices returns the PreviewRenewalInvoices field value if set, zero value otherwise.
+func (o *UpdateSubscriptionRequest) GetPreviewRenewalInvoices() bool {
+	if o == nil || IsNil(o.PreviewRenewalInvoices) {
+		var ret bool
+		return ret
+	}
+	return *o.PreviewRenewalInvoices
+}
+
+// GetPreviewRenewalInvoicesOk returns a tuple with the PreviewRenewalInvoices field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSubscriptionRequest) GetPreviewRenewalInvoicesOk() (*bool, bool) {
+	if o == nil || IsNil(o.PreviewRenewalInvoices) {
+		return nil, false
+	}
+	return o.PreviewRenewalInvoices, true
+}
+
+// HasPreviewRenewalInvoices returns a boolean if a field has been set.
+func (o *UpdateSubscriptionRequest) HasPreviewRenewalInvoices() bool {
+	if o != nil && !IsNil(o.PreviewRenewalInvoices) {
+		return true
+	}
+
+	return false
+}
+
+// SetPreviewRenewalInvoices gets a reference to the given bool and assigns it to the PreviewRenewalInvoices field.
+func (o *UpdateSubscriptionRequest) SetPreviewRenewalInvoices(v bool) {
+	o.PreviewRenewalInvoices = &v
+}
+
 // GetItems returns the Items field value if set, zero value otherwise.
 func (o *UpdateSubscriptionRequest) GetItems() []InlineSubscriptionItemUpdate {
 	if o == nil || IsNil(o.Items) {
@@ -572,6 +691,15 @@ func (o UpdateSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if o.NewPeriodEnd.IsSet() {
+		toSerialize["new_period_end"] = o.NewPeriodEnd.Get()
+	}
+	if !IsNil(o.IsPreview) {
+		toSerialize["is_preview"] = o.IsPreview
+	}
+	if !IsNil(o.PreviewRenewalInvoices) {
+		toSerialize["preview_renewal_invoices"] = o.PreviewRenewalInvoices
 	}
 	if !IsNil(o.Items) {
 		toSerialize["items"] = o.Items

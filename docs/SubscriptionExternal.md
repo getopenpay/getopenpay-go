@@ -40,6 +40,7 @@ Name | Type | Description | Notes
 **CollectionMethod** | [**CollectionMethodEnum**](CollectionMethodEnum.md) |  | 
 **NetD** | **NullableInt32** |  | 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**RenewsAt** | Pointer to **NullableTime** |  | [optional] 
 
 ## Methods
 
@@ -1080,6 +1081,41 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *SubscriptionExternal) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetRenewsAt
+
+`func (o *SubscriptionExternal) GetRenewsAt() time.Time`
+
+GetRenewsAt returns the RenewsAt field if non-nil, zero value otherwise.
+
+### GetRenewsAtOk
+
+`func (o *SubscriptionExternal) GetRenewsAtOk() (*time.Time, bool)`
+
+GetRenewsAtOk returns a tuple with the RenewsAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRenewsAt
+
+`func (o *SubscriptionExternal) SetRenewsAt(v time.Time)`
+
+SetRenewsAt sets RenewsAt field to given value.
+
+### HasRenewsAt
+
+`func (o *SubscriptionExternal) HasRenewsAt() bool`
+
+HasRenewsAt returns a boolean if a field has been set.
+
+### SetRenewsAtNil
+
+`func (o *SubscriptionExternal) SetRenewsAtNil(b bool)`
+
+ SetRenewsAtNil sets the value for RenewsAt to be an explicit nil
+
+### UnsetRenewsAt
+`func (o *SubscriptionExternal) UnsetRenewsAt()`
+
+UnsetRenewsAt ensures that no value is present for RenewsAt, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -6,6 +6,7 @@ Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**CreatePriceForProduct**](PricesAPI.md#CreatePriceForProduct) | **Post** /prices/ | Create Price For Product
 [**DeletePriceForProduct**](PricesAPI.md#DeletePriceForProduct) | **Delete** /prices/{price_id} | Delete Price For Product
+[**GetPriceAddOns**](PricesAPI.md#GetPriceAddOns) | **Get** /prices/{price_id}/add-ons | Get Price Add Ons
 [**GetPriceForProduct**](PricesAPI.md#GetPriceForProduct) | **Get** /prices/{price_id} | Get Price For Product
 [**ListPrices**](PricesAPI.md#ListPrices) | **Post** /prices/list | List Prices
 [**SearchPrices**](PricesAPI.md#SearchPrices) | **Post** /prices/search | Search Prices
@@ -130,6 +131,76 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**DeletePriceResponse**](DeletePriceResponse.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## GetPriceAddOns
+
+> []PriceExternal GetPriceAddOns(ctx, priceId).Execute()
+
+Get Price Add Ons
+
+
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/getopenpay/getopenpay-go"
+)
+
+func main() {
+    priceId := "price_dev_abc123" // string | Unique identifier of the price.
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.PricesAPI.GetPriceAddOns(context.Background(), priceId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `PricesAPI.GetPriceAddOns``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `GetPriceAddOns`: []PriceExternal
+    fmt.Fprintf(os.Stdout, "Response from `PricesAPI.GetPriceAddOns`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**priceId** | **string** | Unique identifier of the price. | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiGetPriceAddOnsRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**[]PriceExternal**](PriceExternal.md)
 
 ### Authorization
 

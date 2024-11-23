@@ -30,30 +30,25 @@ const (
 	EVENTTYPE_CHARGE_CREATED EventType = "charge.created"
 	EVENTTYPE_CHARGE_UPDATED EventType = "charge.updated"
 	EVENTTYPE_CHARGE_DELETED EventType = "charge.deleted"
+	EVENTTYPE_CHARGE_SUCCEEDED EventType = "charge.succeeded"
+	EVENTTYPE_CHARGE_FAILED EventType = "charge.failed"
+	EVENTTYPE_CHARGE_PENDING EventType = "charge.pending"
+	EVENTTYPE_CHARGE_REFUNDED EventType = "charge.refunded"
 	EVENTTYPE_COUPON_CREATED EventType = "coupon.created"
 	EVENTTYPE_COUPON_UPDATED EventType = "coupon.updated"
 	EVENTTYPE_COUPON_DELETED EventType = "coupon.deleted"
 	EVENTTYPE_CREDIT_NOTE_CREATED EventType = "credit_note.created"
 	EVENTTYPE_CREDIT_NOTE_UPDATED EventType = "credit_note.updated"
 	EVENTTYPE_CREDIT_NOTE_DELETED EventType = "credit_note.deleted"
-	EVENTTYPE_CREDIT_NOTE_ITEM_CREATED EventType = "credit_note_item.created"
-	EVENTTYPE_CREDIT_NOTE_ITEM_UPDATED EventType = "credit_note_item.updated"
-	EVENTTYPE_CREDIT_NOTE_ITEM_DELETED EventType = "credit_note_item.deleted"
 	EVENTTYPE_CUSTOMER_CREATED EventType = "customer.created"
 	EVENTTYPE_CUSTOMER_UPDATED EventType = "customer.updated"
 	EVENTTYPE_CUSTOMER_DELETED EventType = "customer.deleted"
 	EVENTTYPE_CUSTOMER_BALANCE_TRANSACTION_CREATED EventType = "customer_balance_transaction.created"
 	EVENTTYPE_CUSTOMER_BALANCE_TRANSACTION_UPDATED EventType = "customer_balance_transaction.updated"
 	EVENTTYPE_CUSTOMER_BALANCE_TRANSACTION_DELETED EventType = "customer_balance_transaction.deleted"
-	EVENTTYPE_DELIVERY_ATTEMPT_CREATED EventType = "delivery_attempt.created"
-	EVENTTYPE_DELIVERY_ATTEMPT_UPDATED EventType = "delivery_attempt.updated"
-	EVENTTYPE_DELIVERY_ATTEMPT_DELETED EventType = "delivery_attempt.deleted"
 	EVENTTYPE_DISCOUNT_CREATED EventType = "discount.created"
 	EVENTTYPE_DISCOUNT_UPDATED EventType = "discount.updated"
 	EVENTTYPE_DISCOUNT_DELETED EventType = "discount.deleted"
-	EVENTTYPE_EVENT_CREATED EventType = "event.created"
-	EVENTTYPE_EVENT_UPDATED EventType = "event.updated"
-	EVENTTYPE_EVENT_DELETED EventType = "event.deleted"
 	EVENTTYPE_INVITE_CREATED EventType = "invite.created"
 	EVENTTYPE_INVITE_UPDATED EventType = "invite.updated"
 	EVENTTYPE_INVITE_DELETED EventType = "invite.deleted"
@@ -62,6 +57,11 @@ const (
 	EVENTTYPE_INVITE_ITEM_DISCOUNT_DELETED EventType = "invite_item_discount.deleted"
 	EVENTTYPE_INVOICE_CREATED EventType = "invoice.created"
 	EVENTTYPE_INVOICE_UPDATED EventType = "invoice.updated"
+	EVENTTYPE_INVOICE_FINALIZED EventType = "invoice.finalized"
+	EVENTTYPE_INVOICE_PAID EventType = "invoice.paid"
+	EVENTTYPE_INVOICE_PAST_DUE EventType = "invoice.past_due"
+	EVENTTYPE_INVOICE_VOIDED EventType = "invoice.voided"
+	EVENTTYPE_INVOICE_UNCOLLECTIBLE EventType = "invoice.uncollectible"
 	EVENTTYPE_INVOICE_DELETED EventType = "invoice.deleted"
 	EVENTTYPE_INVOICE_UPCOMING EventType = "invoice.upcoming"
 	EVENTTYPE_INVOICE_DISCOUNT_CREATED EventType = "invoice_discount.created"
@@ -73,6 +73,10 @@ const (
 	EVENTTYPE_PAYMENT_INTENT_CREATED EventType = "payment_intent.created"
 	EVENTTYPE_PAYMENT_INTENT_UPDATED EventType = "payment_intent.updated"
 	EVENTTYPE_PAYMENT_INTENT_DELETED EventType = "payment_intent.deleted"
+	EVENTTYPE_PAYMENT_INTENT_SUCCEEDED EventType = "payment_intent.succeeded"
+	EVENTTYPE_PAYMENT_INTENT_PROCESSING EventType = "payment_intent.processing"
+	EVENTTYPE_PAYMENT_INTENT_REQUIRES_ACTION EventType = "payment_intent.requires_action"
+	EVENTTYPE_PAYMENT_INTENT_FAILED EventType = "payment_intent.failed"
 	EVENTTYPE_PAYMENT_METHOD_CREATED EventType = "payment_method.created"
 	EVENTTYPE_PAYMENT_METHOD_UPDATED EventType = "payment_method.updated"
 	EVENTTYPE_PAYMENT_METHOD_DELETED EventType = "payment_method.deleted"
@@ -82,9 +86,6 @@ const (
 	EVENTTYPE_PRICE_CREATED EventType = "price.created"
 	EVENTTYPE_PRICE_UPDATED EventType = "price.updated"
 	EVENTTYPE_PRICE_DELETED EventType = "price.deleted"
-	EVENTTYPE_PRICE_TIER_CREATED EventType = "price_tier.created"
-	EVENTTYPE_PRICE_TIER_UPDATED EventType = "price_tier.updated"
-	EVENTTYPE_PRICE_TIER_DELETED EventType = "price_tier.deleted"
 	EVENTTYPE_PRODUCT_CREATED EventType = "product.created"
 	EVENTTYPE_PRODUCT_UPDATED EventType = "product.updated"
 	EVENTTYPE_PRODUCT_DELETED EventType = "product.deleted"
@@ -97,6 +98,12 @@ const (
 	EVENTTYPE_CUSTOMER_SUBSCRIPTION_CREATED EventType = "customer.subscription.created"
 	EVENTTYPE_CUSTOMER_SUBSCRIPTION_UPDATED EventType = "customer.subscription.updated"
 	EVENTTYPE_CUSTOMER_SUBSCRIPTION_DELETED EventType = "customer.subscription.deleted"
+	EVENTTYPE_CUSTOMER_SUBSCRIPTION_CANCELED EventType = "customer.subscription.canceled"
+	EVENTTYPE_CUSTOMER_SUBSCRIPTION_ACTIVATED EventType = "customer.subscription.activated"
+	EVENTTYPE_CUSTOMER_SUBSCRIPTION_PAUSED EventType = "customer.subscription.paused"
+	EVENTTYPE_CUSTOMER_SUBSCRIPTION_RESUMED EventType = "customer.subscription.resumed"
+	EVENTTYPE_CUSTOMER_SUBSCRIPTION_PAST_DUE EventType = "customer.subscription.past_due"
+	EVENTTYPE_CUSTOMER_SUBSCRIPTION_TRIALING EventType = "customer.subscription.trialing"
 	EVENTTYPE_CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END EventType = "customer.subscription.trial_will_end"
 	EVENTTYPE_SUBSCRIPTION_ITEM_CREATED EventType = "subscription_item.created"
 	EVENTTYPE_SUBSCRIPTION_ITEM_UPDATED EventType = "subscription_item.updated"
@@ -130,30 +137,25 @@ var AllowedEventTypeEnumValues = []EventType{
 	"charge.created",
 	"charge.updated",
 	"charge.deleted",
+	"charge.succeeded",
+	"charge.failed",
+	"charge.pending",
+	"charge.refunded",
 	"coupon.created",
 	"coupon.updated",
 	"coupon.deleted",
 	"credit_note.created",
 	"credit_note.updated",
 	"credit_note.deleted",
-	"credit_note_item.created",
-	"credit_note_item.updated",
-	"credit_note_item.deleted",
 	"customer.created",
 	"customer.updated",
 	"customer.deleted",
 	"customer_balance_transaction.created",
 	"customer_balance_transaction.updated",
 	"customer_balance_transaction.deleted",
-	"delivery_attempt.created",
-	"delivery_attempt.updated",
-	"delivery_attempt.deleted",
 	"discount.created",
 	"discount.updated",
 	"discount.deleted",
-	"event.created",
-	"event.updated",
-	"event.deleted",
 	"invite.created",
 	"invite.updated",
 	"invite.deleted",
@@ -162,6 +164,11 @@ var AllowedEventTypeEnumValues = []EventType{
 	"invite_item_discount.deleted",
 	"invoice.created",
 	"invoice.updated",
+	"invoice.finalized",
+	"invoice.paid",
+	"invoice.past_due",
+	"invoice.voided",
+	"invoice.uncollectible",
 	"invoice.deleted",
 	"invoice.upcoming",
 	"invoice_discount.created",
@@ -173,6 +180,10 @@ var AllowedEventTypeEnumValues = []EventType{
 	"payment_intent.created",
 	"payment_intent.updated",
 	"payment_intent.deleted",
+	"payment_intent.succeeded",
+	"payment_intent.processing",
+	"payment_intent.requires_action",
+	"payment_intent.failed",
 	"payment_method.created",
 	"payment_method.updated",
 	"payment_method.deleted",
@@ -182,9 +193,6 @@ var AllowedEventTypeEnumValues = []EventType{
 	"price.created",
 	"price.updated",
 	"price.deleted",
-	"price_tier.created",
-	"price_tier.updated",
-	"price_tier.deleted",
 	"product.created",
 	"product.updated",
 	"product.deleted",
@@ -197,6 +205,12 @@ var AllowedEventTypeEnumValues = []EventType{
 	"customer.subscription.created",
 	"customer.subscription.updated",
 	"customer.subscription.deleted",
+	"customer.subscription.canceled",
+	"customer.subscription.activated",
+	"customer.subscription.paused",
+	"customer.subscription.resumed",
+	"customer.subscription.past_due",
+	"customer.subscription.trialing",
 	"customer.subscription.trial_will_end",
 	"subscription_item.created",
 	"subscription_item.updated",

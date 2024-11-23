@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **Description** | Pointer to **NullableString** |  | [optional] 
 **DueDate** | **time.Time** | Due date to pay the invoice. | 
 **LatestPaymentIntentId** | Pointer to **NullableString** |  | [optional] 
+**PaidAt** | Pointer to **NullableTime** |  | [optional] 
 **PeriodEnd** | **time.Time** | End of the usage period during which invoice_items were added to this invoice. It is in &#39;ISO 8601&#39; format. | 
 **PeriodStart** | **time.Time** | Start of the usage period during which invoice_items were added to this invoice. It is in &#39;ISO 8601&#39; format. | 
 **Status** | [**InvoiceStatusEnum**](InvoiceStatusEnum.md) |  | 
@@ -48,7 +49,9 @@ Name | Type | Description | Notes
 **ReceiptPdfUrl** | **string** | The URL for the Receipt PDF | 
 **IsInitialInvoiceForTrialSub** | **bool** | Whether this is the first invoice for a trial subscription. | 
 **InvoiceNumber** | **int32** | Invoice number | 
+**Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**EmailInvoiceOnFinalization** | Pointer to **bool** | Whether invoice should be sent to the customer upon finalizing the invoice | [optional] [default to false]
 
 ## Methods
 
@@ -464,6 +467,41 @@ HasLatestPaymentIntentId returns a boolean if a field has been set.
 `func (o *InvoiceExternal) UnsetLatestPaymentIntentId()`
 
 UnsetLatestPaymentIntentId ensures that no value is present for LatestPaymentIntentId, not even an explicit nil
+### GetPaidAt
+
+`func (o *InvoiceExternal) GetPaidAt() time.Time`
+
+GetPaidAt returns the PaidAt field if non-nil, zero value otherwise.
+
+### GetPaidAtOk
+
+`func (o *InvoiceExternal) GetPaidAtOk() (*time.Time, bool)`
+
+GetPaidAtOk returns a tuple with the PaidAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPaidAt
+
+`func (o *InvoiceExternal) SetPaidAt(v time.Time)`
+
+SetPaidAt sets PaidAt field to given value.
+
+### HasPaidAt
+
+`func (o *InvoiceExternal) HasPaidAt() bool`
+
+HasPaidAt returns a boolean if a field has been set.
+
+### SetPaidAtNil
+
+`func (o *InvoiceExternal) SetPaidAtNil(b bool)`
+
+ SetPaidAtNil sets the value for PaidAt to be an explicit nil
+
+### UnsetPaidAt
+`func (o *InvoiceExternal) UnsetPaidAt()`
+
+UnsetPaidAt ensures that no value is present for PaidAt, not even an explicit nil
 ### GetPeriodEnd
 
 `func (o *InvoiceExternal) GetPeriodEnd() time.Time`
@@ -776,20 +814,20 @@ HasPostPaymentCreditNotesAmount returns a boolean if a field has been set.
 UnsetPostPaymentCreditNotesAmount ensures that no value is present for PostPaymentCreditNotesAmount, not even an explicit nil
 ### GetCreditNoteIds
 
-`func (o *InvoiceExternal) GetCreditNoteIds() []string`
+`func (o *InvoiceExternal) GetCreditNoteIds() []*string`
 
 GetCreditNoteIds returns the CreditNoteIds field if non-nil, zero value otherwise.
 
 ### GetCreditNoteIdsOk
 
-`func (o *InvoiceExternal) GetCreditNoteIdsOk() (*[]string, bool)`
+`func (o *InvoiceExternal) GetCreditNoteIdsOk() (*[]*string, bool)`
 
 GetCreditNoteIdsOk returns a tuple with the CreditNoteIds field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCreditNoteIds
 
-`func (o *InvoiceExternal) SetCreditNoteIds(v []string)`
+`func (o *InvoiceExternal) SetCreditNoteIds(v []*string)`
 
 SetCreditNoteIds sets CreditNoteIds field to given value.
 
@@ -1169,6 +1207,41 @@ and a boolean to check if the value has been set.
 SetInvoiceNumber sets InvoiceNumber field to given value.
 
 
+### GetMetadata
+
+`func (o *InvoiceExternal) GetMetadata() map[string]interface{}`
+
+GetMetadata returns the Metadata field if non-nil, zero value otherwise.
+
+### GetMetadataOk
+
+`func (o *InvoiceExternal) GetMetadataOk() (*map[string]interface{}, bool)`
+
+GetMetadataOk returns a tuple with the Metadata field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMetadata
+
+`func (o *InvoiceExternal) SetMetadata(v map[string]interface{})`
+
+SetMetadata sets Metadata field to given value.
+
+### HasMetadata
+
+`func (o *InvoiceExternal) HasMetadata() bool`
+
+HasMetadata returns a boolean if a field has been set.
+
+### SetMetadataNil
+
+`func (o *InvoiceExternal) SetMetadataNil(b bool)`
+
+ SetMetadataNil sets the value for Metadata to be an explicit nil
+
+### UnsetMetadata
+`func (o *InvoiceExternal) UnsetMetadata()`
+
+UnsetMetadata ensures that no value is present for Metadata, not even an explicit nil
 ### GetCustomFields
 
 `func (o *InvoiceExternal) GetCustomFields() map[string]interface{}`
@@ -1204,6 +1277,31 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *InvoiceExternal) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetEmailInvoiceOnFinalization
+
+`func (o *InvoiceExternal) GetEmailInvoiceOnFinalization() bool`
+
+GetEmailInvoiceOnFinalization returns the EmailInvoiceOnFinalization field if non-nil, zero value otherwise.
+
+### GetEmailInvoiceOnFinalizationOk
+
+`func (o *InvoiceExternal) GetEmailInvoiceOnFinalizationOk() (*bool, bool)`
+
+GetEmailInvoiceOnFinalizationOk returns a tuple with the EmailInvoiceOnFinalization field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEmailInvoiceOnFinalization
+
+`func (o *InvoiceExternal) SetEmailInvoiceOnFinalization(v bool)`
+
+SetEmailInvoiceOnFinalization sets EmailInvoiceOnFinalization field to given value.
+
+### HasEmailInvoiceOnFinalization
+
+`func (o *InvoiceExternal) HasEmailInvoiceOnFinalization() bool`
+
+HasEmailInvoiceOnFinalization returns a boolean if a field has been set.
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

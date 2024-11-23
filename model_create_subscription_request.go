@@ -39,6 +39,8 @@ type CreateSubscriptionRequest struct {
 	CollectionMethod *CollectionMethodEnum `json:"collection_method,omitempty"`
 	NetD NullableInt32 `json:"net_d,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	// Whether the request is in preview mode (subscriptions won't actually be created)
+	IsPreview *bool `json:"is_preview,omitempty"`
 }
 
 type _CreateSubscriptionRequest CreateSubscriptionRequest
@@ -58,6 +60,8 @@ func NewCreateSubscriptionRequest(customerId string, selectedProductPriceQuantit
 	this.TrialFromPrice = &trialFromPrice
 	var collectionMethod CollectionMethodEnum = COLLECTIONMETHODENUM_CHARGE_AUTOMATICALLY
 	this.CollectionMethod = &collectionMethod
+	var isPreview bool = false
+	this.IsPreview = &isPreview
 	return &this
 }
 
@@ -72,6 +76,8 @@ func NewCreateSubscriptionRequestWithDefaults() *CreateSubscriptionRequest {
 	this.TrialFromPrice = &trialFromPrice
 	var collectionMethod CollectionMethodEnum = COLLECTIONMETHODENUM_CHARGE_AUTOMATICALLY
 	this.CollectionMethod = &collectionMethod
+	var isPreview bool = false
+	this.IsPreview = &isPreview
 	return &this
 }
 
@@ -570,6 +576,38 @@ func (o *CreateSubscriptionRequest) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetIsPreview returns the IsPreview field value if set, zero value otherwise.
+func (o *CreateSubscriptionRequest) GetIsPreview() bool {
+	if o == nil || IsNil(o.IsPreview) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPreview
+}
+
+// GetIsPreviewOk returns a tuple with the IsPreview field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateSubscriptionRequest) GetIsPreviewOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPreview) {
+		return nil, false
+	}
+	return o.IsPreview, true
+}
+
+// HasIsPreview returns a boolean if a field has been set.
+func (o *CreateSubscriptionRequest) HasIsPreview() bool {
+	if o != nil && !IsNil(o.IsPreview) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPreview gets a reference to the given bool and assigns it to the IsPreview field.
+func (o *CreateSubscriptionRequest) SetIsPreview(v bool) {
+	o.IsPreview = &v
+}
+
 func (o CreateSubscriptionRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -615,6 +653,9 @@ func (o CreateSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if !IsNil(o.IsPreview) {
+		toSerialize["is_preview"] = o.IsPreview
 	}
 	return toSerialize, nil
 }

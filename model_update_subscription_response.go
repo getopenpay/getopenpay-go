@@ -22,6 +22,7 @@ var _ MappedNullable = &UpdateSubscriptionResponse{}
 type UpdateSubscriptionResponse struct {
 	Subscriptions []SubscriptionExternal `json:"subscriptions"`
 	Invoices []InvoiceExternal `json:"invoices"`
+	RenewalInvoices []InvoiceExternal `json:"renewal_invoices,omitempty"`
 }
 
 type _UpdateSubscriptionResponse UpdateSubscriptionResponse
@@ -93,6 +94,38 @@ func (o *UpdateSubscriptionResponse) SetInvoices(v []InvoiceExternal) {
 	o.Invoices = v
 }
 
+// GetRenewalInvoices returns the RenewalInvoices field value if set, zero value otherwise.
+func (o *UpdateSubscriptionResponse) GetRenewalInvoices() []InvoiceExternal {
+	if o == nil || IsNil(o.RenewalInvoices) {
+		var ret []InvoiceExternal
+		return ret
+	}
+	return o.RenewalInvoices
+}
+
+// GetRenewalInvoicesOk returns a tuple with the RenewalInvoices field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *UpdateSubscriptionResponse) GetRenewalInvoicesOk() ([]InvoiceExternal, bool) {
+	if o == nil || IsNil(o.RenewalInvoices) {
+		return nil, false
+	}
+	return o.RenewalInvoices, true
+}
+
+// HasRenewalInvoices returns a boolean if a field has been set.
+func (o *UpdateSubscriptionResponse) HasRenewalInvoices() bool {
+	if o != nil && !IsNil(o.RenewalInvoices) {
+		return true
+	}
+
+	return false
+}
+
+// SetRenewalInvoices gets a reference to the given []InvoiceExternal and assigns it to the RenewalInvoices field.
+func (o *UpdateSubscriptionResponse) SetRenewalInvoices(v []InvoiceExternal) {
+	o.RenewalInvoices = v
+}
+
 func (o UpdateSubscriptionResponse) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -105,6 +138,9 @@ func (o UpdateSubscriptionResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["subscriptions"] = o.Subscriptions
 	toSerialize["invoices"] = o.Invoices
+	if !IsNil(o.RenewalInvoices) {
+		toSerialize["renewal_invoices"] = o.RenewalInvoices
+	}
 	return toSerialize, nil
 }
 

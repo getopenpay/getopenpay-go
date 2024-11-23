@@ -26,6 +26,8 @@ type DeleteSubscriptionRequest struct {
 	Prorate *bool `json:"prorate,omitempty"`
 	// Flag to decide whether full refund should be given or not.
 	FullRefund *bool `json:"full_refund,omitempty"`
+	// Whether the request is in preview mode (subscriptions won't actually be deleted)
+	IsPreview *bool `json:"is_preview,omitempty"`
 }
 
 // NewDeleteSubscriptionRequest instantiates a new DeleteSubscriptionRequest object
@@ -40,6 +42,8 @@ func NewDeleteSubscriptionRequest() *DeleteSubscriptionRequest {
 	this.Prorate = &prorate
 	var fullRefund bool = false
 	this.FullRefund = &fullRefund
+	var isPreview bool = false
+	this.IsPreview = &isPreview
 	return &this
 }
 
@@ -54,6 +58,8 @@ func NewDeleteSubscriptionRequestWithDefaults() *DeleteSubscriptionRequest {
 	this.Prorate = &prorate
 	var fullRefund bool = false
 	this.FullRefund = &fullRefund
+	var isPreview bool = false
+	this.IsPreview = &isPreview
 	return &this
 }
 
@@ -195,6 +201,38 @@ func (o *DeleteSubscriptionRequest) SetFullRefund(v bool) {
 	o.FullRefund = &v
 }
 
+// GetIsPreview returns the IsPreview field value if set, zero value otherwise.
+func (o *DeleteSubscriptionRequest) GetIsPreview() bool {
+	if o == nil || IsNil(o.IsPreview) {
+		var ret bool
+		return ret
+	}
+	return *o.IsPreview
+}
+
+// GetIsPreviewOk returns a tuple with the IsPreview field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DeleteSubscriptionRequest) GetIsPreviewOk() (*bool, bool) {
+	if o == nil || IsNil(o.IsPreview) {
+		return nil, false
+	}
+	return o.IsPreview, true
+}
+
+// HasIsPreview returns a boolean if a field has been set.
+func (o *DeleteSubscriptionRequest) HasIsPreview() bool {
+	if o != nil && !IsNil(o.IsPreview) {
+		return true
+	}
+
+	return false
+}
+
+// SetIsPreview gets a reference to the given bool and assigns it to the IsPreview field.
+func (o *DeleteSubscriptionRequest) SetIsPreview(v bool) {
+	o.IsPreview = &v
+}
+
 func (o DeleteSubscriptionRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -216,6 +254,9 @@ func (o DeleteSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.FullRefund) {
 		toSerialize["full_refund"] = o.FullRefund
+	}
+	if !IsNil(o.IsPreview) {
+		toSerialize["is_preview"] = o.IsPreview
 	}
 	return toSerialize, nil
 }

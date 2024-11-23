@@ -20,6 +20,7 @@ type SubscriptionStatusEnum string
 
 // List of SubscriptionStatusEnum
 const (
+	SUBSCRIPTIONSTATUSENUM_INCOMPLETE SubscriptionStatusEnum = "incomplete"
 	SUBSCRIPTIONSTATUSENUM_TRIALING SubscriptionStatusEnum = "trialing"
 	SUBSCRIPTIONSTATUSENUM_ACTIVE SubscriptionStatusEnum = "active"
 	SUBSCRIPTIONSTATUSENUM_PAUSED SubscriptionStatusEnum = "paused"
@@ -29,6 +30,7 @@ const (
 
 // All allowed values of SubscriptionStatusEnum enum
 var AllowedSubscriptionStatusEnumEnumValues = []SubscriptionStatusEnum{
+	"incomplete",
 	"trialing",
 	"active",
 	"paused",

@@ -15,18 +15,21 @@ Name | Type | Description | Notes
 **Provider** | [**PaymentProviderType**](PaymentProviderType.md) |  | 
 **CardType** | Pointer to **NullableString** |  | [optional] 
 **LastFour** | Pointer to **NullableString** |  | [optional] 
+**DisplayName** | **string** | Display name for the payment method to show on the UI. | 
 **ExpiryDate** | **NullableString** |  | 
 **CardFingerprint** | Pointer to **NullableString** |  | [optional] 
 **CardIin** | Pointer to **NullableString** |  | [optional] 
 **CardCountry** | Pointer to **NullableString** |  | [optional] 
 **CardBrand** | Pointer to **NullableString** |  | [optional] 
 **CardIssuer** | Pointer to **NullableString** |  | [optional] 
+**IsFullDetailsKnown** | **bool** | Indicates if full details of the card are known | 
+**CdeExternalId** | Pointer to **NullableString** |  | [optional] 
 
 ## Methods
 
 ### NewTokenizedCreditCardExternal
 
-`func NewTokenizedCreditCardExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, expiryDate NullableString, ) *TokenizedCreditCardExternal`
+`func NewTokenizedCreditCardExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, displayName string, expiryDate NullableString, isFullDetailsKnown bool, ) *TokenizedCreditCardExternal`
 
 NewTokenizedCreditCardExternal instantiates a new TokenizedCreditCardExternal object
 This constructor will assign default values to properties that have it defined,
@@ -346,6 +349,26 @@ HasLastFour returns a boolean if a field has been set.
 `func (o *TokenizedCreditCardExternal) UnsetLastFour()`
 
 UnsetLastFour ensures that no value is present for LastFour, not even an explicit nil
+### GetDisplayName
+
+`func (o *TokenizedCreditCardExternal) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *TokenizedCreditCardExternal) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *TokenizedCreditCardExternal) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
+
+
 ### GetExpiryDate
 
 `func (o *TokenizedCreditCardExternal) GetExpiryDate() string`
@@ -551,6 +574,61 @@ HasCardIssuer returns a boolean if a field has been set.
 `func (o *TokenizedCreditCardExternal) UnsetCardIssuer()`
 
 UnsetCardIssuer ensures that no value is present for CardIssuer, not even an explicit nil
+### GetIsFullDetailsKnown
+
+`func (o *TokenizedCreditCardExternal) GetIsFullDetailsKnown() bool`
+
+GetIsFullDetailsKnown returns the IsFullDetailsKnown field if non-nil, zero value otherwise.
+
+### GetIsFullDetailsKnownOk
+
+`func (o *TokenizedCreditCardExternal) GetIsFullDetailsKnownOk() (*bool, bool)`
+
+GetIsFullDetailsKnownOk returns a tuple with the IsFullDetailsKnown field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsFullDetailsKnown
+
+`func (o *TokenizedCreditCardExternal) SetIsFullDetailsKnown(v bool)`
+
+SetIsFullDetailsKnown sets IsFullDetailsKnown field to given value.
+
+
+### GetCdeExternalId
+
+`func (o *TokenizedCreditCardExternal) GetCdeExternalId() string`
+
+GetCdeExternalId returns the CdeExternalId field if non-nil, zero value otherwise.
+
+### GetCdeExternalIdOk
+
+`func (o *TokenizedCreditCardExternal) GetCdeExternalIdOk() (*string, bool)`
+
+GetCdeExternalIdOk returns a tuple with the CdeExternalId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCdeExternalId
+
+`func (o *TokenizedCreditCardExternal) SetCdeExternalId(v string)`
+
+SetCdeExternalId sets CdeExternalId field to given value.
+
+### HasCdeExternalId
+
+`func (o *TokenizedCreditCardExternal) HasCdeExternalId() bool`
+
+HasCdeExternalId returns a boolean if a field has been set.
+
+### SetCdeExternalIdNil
+
+`func (o *TokenizedCreditCardExternal) SetCdeExternalIdNil(b bool)`
+
+ SetCdeExternalIdNil sets the value for CdeExternalId to be an explicit nil
+
+### UnsetCdeExternalId
+`func (o *TokenizedCreditCardExternal) UnsetCdeExternalId()`
+
+UnsetCdeExternalId ensures that no value is present for CdeExternalId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -22,12 +22,21 @@ Name | Type | Description | Notes
 **Metadata** | Pointer to **map[string]interface{}** |  | [optional] 
 **Notes** | **NullableString** |  | 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**TotalSpent** | Pointer to [**[]CustomerTotalAmount**](CustomerTotalAmount.md) |  | [optional] 
+**TotalRefunds** | Pointer to [**[]CustomerTotalAmount**](CustomerTotalAmount.md) |  | [optional] 
+**Mrr** | Pointer to [**[]CustomerTotalAmount**](CustomerTotalAmount.md) |  | [optional] 
+**BillingEmail** | Pointer to **NullableString** |  | [optional] 
+**Language** | Pointer to [**CustomerLanguage**](CustomerLanguage.md) |  | [optional] [default to CUSTOMERLANGUAGE_EN]
+**InvoiceSettings** | Pointer to [**NullableCustomerInvoiceSettings**](CustomerInvoiceSettings.md) |  | [optional] 
+**ShouldSendPaymentReceipt** | **bool** | Whether email should be sent or not on payment. | 
+**Status** | Pointer to [**NullableCustomerStatus**](CustomerStatus.md) |  | [optional] 
+**PhoneNumber** | Pointer to **NullableString** |  | [optional] 
 
 ## Methods
 
 ### NewCustomerExternal
 
-`func NewCustomerExternal(id string, createdAt time.Time, updatedAt time.Time, accountId string, email string, firstName NullableString, lastName NullableString, address NullableCompleteAddress, notes NullableString, ) *CustomerExternal`
+`func NewCustomerExternal(id string, createdAt time.Time, updatedAt time.Time, accountId string, email string, firstName NullableString, lastName NullableString, address NullableCompleteAddress, notes NullableString, shouldSendPaymentReceipt bool, ) *CustomerExternal`
 
 NewCustomerExternal instantiates a new CustomerExternal object
 This constructor will assign default values to properties that have it defined,
@@ -527,6 +536,266 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *CustomerExternal) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetTotalSpent
+
+`func (o *CustomerExternal) GetTotalSpent() []CustomerTotalAmount`
+
+GetTotalSpent returns the TotalSpent field if non-nil, zero value otherwise.
+
+### GetTotalSpentOk
+
+`func (o *CustomerExternal) GetTotalSpentOk() (*[]CustomerTotalAmount, bool)`
+
+GetTotalSpentOk returns a tuple with the TotalSpent field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTotalSpent
+
+`func (o *CustomerExternal) SetTotalSpent(v []CustomerTotalAmount)`
+
+SetTotalSpent sets TotalSpent field to given value.
+
+### HasTotalSpent
+
+`func (o *CustomerExternal) HasTotalSpent() bool`
+
+HasTotalSpent returns a boolean if a field has been set.
+
+### GetTotalRefunds
+
+`func (o *CustomerExternal) GetTotalRefunds() []CustomerTotalAmount`
+
+GetTotalRefunds returns the TotalRefunds field if non-nil, zero value otherwise.
+
+### GetTotalRefundsOk
+
+`func (o *CustomerExternal) GetTotalRefundsOk() (*[]CustomerTotalAmount, bool)`
+
+GetTotalRefundsOk returns a tuple with the TotalRefunds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTotalRefunds
+
+`func (o *CustomerExternal) SetTotalRefunds(v []CustomerTotalAmount)`
+
+SetTotalRefunds sets TotalRefunds field to given value.
+
+### HasTotalRefunds
+
+`func (o *CustomerExternal) HasTotalRefunds() bool`
+
+HasTotalRefunds returns a boolean if a field has been set.
+
+### GetMrr
+
+`func (o *CustomerExternal) GetMrr() []CustomerTotalAmount`
+
+GetMrr returns the Mrr field if non-nil, zero value otherwise.
+
+### GetMrrOk
+
+`func (o *CustomerExternal) GetMrrOk() (*[]CustomerTotalAmount, bool)`
+
+GetMrrOk returns a tuple with the Mrr field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMrr
+
+`func (o *CustomerExternal) SetMrr(v []CustomerTotalAmount)`
+
+SetMrr sets Mrr field to given value.
+
+### HasMrr
+
+`func (o *CustomerExternal) HasMrr() bool`
+
+HasMrr returns a boolean if a field has been set.
+
+### GetBillingEmail
+
+`func (o *CustomerExternal) GetBillingEmail() string`
+
+GetBillingEmail returns the BillingEmail field if non-nil, zero value otherwise.
+
+### GetBillingEmailOk
+
+`func (o *CustomerExternal) GetBillingEmailOk() (*string, bool)`
+
+GetBillingEmailOk returns a tuple with the BillingEmail field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBillingEmail
+
+`func (o *CustomerExternal) SetBillingEmail(v string)`
+
+SetBillingEmail sets BillingEmail field to given value.
+
+### HasBillingEmail
+
+`func (o *CustomerExternal) HasBillingEmail() bool`
+
+HasBillingEmail returns a boolean if a field has been set.
+
+### SetBillingEmailNil
+
+`func (o *CustomerExternal) SetBillingEmailNil(b bool)`
+
+ SetBillingEmailNil sets the value for BillingEmail to be an explicit nil
+
+### UnsetBillingEmail
+`func (o *CustomerExternal) UnsetBillingEmail()`
+
+UnsetBillingEmail ensures that no value is present for BillingEmail, not even an explicit nil
+### GetLanguage
+
+`func (o *CustomerExternal) GetLanguage() CustomerLanguage`
+
+GetLanguage returns the Language field if non-nil, zero value otherwise.
+
+### GetLanguageOk
+
+`func (o *CustomerExternal) GetLanguageOk() (*CustomerLanguage, bool)`
+
+GetLanguageOk returns a tuple with the Language field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLanguage
+
+`func (o *CustomerExternal) SetLanguage(v CustomerLanguage)`
+
+SetLanguage sets Language field to given value.
+
+### HasLanguage
+
+`func (o *CustomerExternal) HasLanguage() bool`
+
+HasLanguage returns a boolean if a field has been set.
+
+### GetInvoiceSettings
+
+`func (o *CustomerExternal) GetInvoiceSettings() CustomerInvoiceSettings`
+
+GetInvoiceSettings returns the InvoiceSettings field if non-nil, zero value otherwise.
+
+### GetInvoiceSettingsOk
+
+`func (o *CustomerExternal) GetInvoiceSettingsOk() (*CustomerInvoiceSettings, bool)`
+
+GetInvoiceSettingsOk returns a tuple with the InvoiceSettings field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInvoiceSettings
+
+`func (o *CustomerExternal) SetInvoiceSettings(v CustomerInvoiceSettings)`
+
+SetInvoiceSettings sets InvoiceSettings field to given value.
+
+### HasInvoiceSettings
+
+`func (o *CustomerExternal) HasInvoiceSettings() bool`
+
+HasInvoiceSettings returns a boolean if a field has been set.
+
+### SetInvoiceSettingsNil
+
+`func (o *CustomerExternal) SetInvoiceSettingsNil(b bool)`
+
+ SetInvoiceSettingsNil sets the value for InvoiceSettings to be an explicit nil
+
+### UnsetInvoiceSettings
+`func (o *CustomerExternal) UnsetInvoiceSettings()`
+
+UnsetInvoiceSettings ensures that no value is present for InvoiceSettings, not even an explicit nil
+### GetShouldSendPaymentReceipt
+
+`func (o *CustomerExternal) GetShouldSendPaymentReceipt() bool`
+
+GetShouldSendPaymentReceipt returns the ShouldSendPaymentReceipt field if non-nil, zero value otherwise.
+
+### GetShouldSendPaymentReceiptOk
+
+`func (o *CustomerExternal) GetShouldSendPaymentReceiptOk() (*bool, bool)`
+
+GetShouldSendPaymentReceiptOk returns a tuple with the ShouldSendPaymentReceipt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetShouldSendPaymentReceipt
+
+`func (o *CustomerExternal) SetShouldSendPaymentReceipt(v bool)`
+
+SetShouldSendPaymentReceipt sets ShouldSendPaymentReceipt field to given value.
+
+
+### GetStatus
+
+`func (o *CustomerExternal) GetStatus() CustomerStatus`
+
+GetStatus returns the Status field if non-nil, zero value otherwise.
+
+### GetStatusOk
+
+`func (o *CustomerExternal) GetStatusOk() (*CustomerStatus, bool)`
+
+GetStatusOk returns a tuple with the Status field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetStatus
+
+`func (o *CustomerExternal) SetStatus(v CustomerStatus)`
+
+SetStatus sets Status field to given value.
+
+### HasStatus
+
+`func (o *CustomerExternal) HasStatus() bool`
+
+HasStatus returns a boolean if a field has been set.
+
+### SetStatusNil
+
+`func (o *CustomerExternal) SetStatusNil(b bool)`
+
+ SetStatusNil sets the value for Status to be an explicit nil
+
+### UnsetStatus
+`func (o *CustomerExternal) UnsetStatus()`
+
+UnsetStatus ensures that no value is present for Status, not even an explicit nil
+### GetPhoneNumber
+
+`func (o *CustomerExternal) GetPhoneNumber() string`
+
+GetPhoneNumber returns the PhoneNumber field if non-nil, zero value otherwise.
+
+### GetPhoneNumberOk
+
+`func (o *CustomerExternal) GetPhoneNumberOk() (*string, bool)`
+
+GetPhoneNumberOk returns a tuple with the PhoneNumber field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPhoneNumber
+
+`func (o *CustomerExternal) SetPhoneNumber(v string)`
+
+SetPhoneNumber sets PhoneNumber field to given value.
+
+### HasPhoneNumber
+
+`func (o *CustomerExternal) HasPhoneNumber() bool`
+
+HasPhoneNumber returns a boolean if a field has been set.
+
+### SetPhoneNumberNil
+
+`func (o *CustomerExternal) SetPhoneNumberNil(b bool)`
+
+ SetPhoneNumberNil sets the value for PhoneNumber to be an explicit nil
+
+### UnsetPhoneNumber
+`func (o *CustomerExternal) UnsetPhoneNumber()`
+
+UnsetPhoneNumber ensures that no value is present for PhoneNumber, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

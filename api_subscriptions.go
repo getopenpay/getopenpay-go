@@ -267,7 +267,7 @@ func (r ApiDeleteSubscriptionRequest) DeleteSubscriptionRequest(deleteSubscripti
 	return r
 }
 
-func (r ApiDeleteSubscriptionRequest) Execute() (*SubscriptionExternal, *http.Response, error) {
+func (r ApiDeleteSubscriptionRequest) Execute() (*DeleteSubscriptionResponse, *http.Response, error) {
 	return r.ApiService.DeleteSubscriptionExecute(r)
 }
 
@@ -287,13 +287,13 @@ func (a *SubscriptionsAPIService) DeleteSubscription(ctx context.Context, subscr
 }
 
 // Execute executes the request
-//  @return SubscriptionExternal
-func (a *SubscriptionsAPIService) DeleteSubscriptionExecute(r ApiDeleteSubscriptionRequest) (*SubscriptionExternal, *http.Response, error) {
+//  @return DeleteSubscriptionResponse
+func (a *SubscriptionsAPIService) DeleteSubscriptionExecute(r ApiDeleteSubscriptionRequest) (*DeleteSubscriptionResponse, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodDelete
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *SubscriptionExternal
+		localVarReturnValue  *DeleteSubscriptionResponse
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "SubscriptionsAPIService.DeleteSubscription")

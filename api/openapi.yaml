@@ -424,6 +424,7 @@ paths:
         required: false
         schema:
           items:
+            nullable: true
             type: string
           type: array
         style: form
@@ -579,7 +580,7 @@ paths:
       summary: List Customer Payment Methods
       tags:
       - customers
-  /customers{customer_id}/list_valid_subscriptions:
+  /customers/{customer_id}/list_valid_subscriptions:
     post:
       description: |-
         Lists valid subscriptions for given product_id or price_id. All 'active' or 'trialing'
@@ -1224,6 +1225,36 @@ paths:
       security:
       - HTTPBearer: []
       summary: Search Invoices
+      tags:
+      - invoices
+  /invoices/preview_next_invoice/{subscription_id}:
+    get:
+      operationId: preview_next_invoice
+      parameters:
+      - explode: false
+        in: path
+        name: subscription_id
+        required: true
+        schema:
+          title: Subscription Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceExternal'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Preview Next Invoice
       tags:
       - invoices
   /invoice-items/list:
@@ -1940,6 +1971,43 @@ paths:
       summary: Update Price For Product
       tags:
       - prices
+  /prices/{price_id}/add-ons:
+    get:
+      description: Returns list of prices which can only be purchased with the given
+        price.
+      operationId: get_price_add_ons
+      parameters:
+      - description: Unique identifier of the price.
+        example: price_dev_abc123
+        explode: false
+        in: path
+        name: price_id
+        required: true
+        schema:
+          description: Unique identifier of the price.
+          title: Price Id
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/PriceExternal'
+                type: array
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Get Price Add Ons
+      tags:
+      - prices
   /prices/search:
     post:
       operationId: search_prices
@@ -2230,7 +2298,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SubscriptionExternal'
+                $ref: '#/components/schemas/DeleteSubscriptionResponse'
           description: Successful Response
         "422":
           content:
@@ -3230,7 +3298,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -3239,7 +3307,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -3247,6 +3315,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -3290,6 +3359,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -3360,7 +3430,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -3369,7 +3439,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -3377,6 +3447,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -3420,6 +3491,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -4173,7 +4245,7 @@ components:
         metadata: "{}"
         is_active: true
         max_redemptions: 5
-        times_redeemed: 5
+        times_redeemed: 2
         created_at: 2000-01-23T04:56:07.000+00:00
         product_families:
         - product_families
@@ -4182,7 +4254,7 @@ components:
         - products
         - products
         duration: null
-        duration_in_months: 1
+        duration_in_months: 5
         is_deleted: false
         updated_at: 2000-01-23T04:56:07.000+00:00
         amount_atom_off: 0
@@ -4190,6 +4262,7 @@ components:
         percent_off: 6
         currency: null
         id: id
+        trial_days_off: 1
         object: ""
       properties:
         id:
@@ -4224,6 +4297,9 @@ components:
           nullable: true
           type: integer
         percent_off:
+          nullable: true
+          type: integer
+        trial_days_off:
           nullable: true
           type: integer
         currency:
@@ -4442,7 +4518,7 @@ components:
     CreateCouponRequest:
       example:
         duration: ""
-        duration_in_months: 1
+        duration_in_months: 5
         redeem_by: 2000-01-23T04:56:07.000+00:00
         is_active: true
         product_ids:
@@ -4453,6 +4529,7 @@ components:
         name: name
         percent_off: 60
         currency: null
+        trial_days_off: 0
         product_family_ids:
         - product_family_ids
         - product_family_ids
@@ -4463,10 +4540,15 @@ components:
           title: Name
           type: string
         amount_atom_off:
+          minimum: 0.0
           nullable: true
           type: integer
         percent_off:
           maximum: 100.0
+          nullable: true
+          type: integer
+        trial_days_off:
+          minimum: 0.0
           nullable: true
           type: integer
         currency:
@@ -4624,14 +4706,20 @@ components:
       title: CreateCustomerBalanceTransactionRequest
     CreateCustomerRequest:
       example:
+        invoice_settings:
+          email_receipt_on_paid: true
+          default_net_d: 1
         country: country
         notes: notes
         city: city
         custom_fields: "{}"
         last_name: last_name
+        language: null
         zip_code: zip_code
         coupon_id: coupon_id
         promotion_code_id: promotion_code_id
+        billing_email: billing_email
+        phone_number: phone_number
         state: state
         line3: line3
         first_name: first_name
@@ -4684,6 +4772,17 @@ components:
           format: email
           title: Email
           type: string
+        invoice_settings:
+          $ref: '#/components/schemas/CustomerInvoiceSettings'
+        billing_email:
+          format: email
+          nullable: true
+          type: string
+        language:
+          $ref: '#/components/schemas/CustomerLanguage'
+        phone_number:
+          nullable: true
+          type: string
       required:
       - email
       title: CreateCustomerRequest
@@ -4713,19 +4812,25 @@ components:
       title: CreateDisputeRequest
     CreateInvoiceRequest:
       example:
-        subscription_id: subscription_dev_abc123
+        subscription_id: subscription_id
+        selected_product_price_quantity:
+        - quantity: 0
+          price_id: price_id
+        - quantity: 0
+          price_id: price_id
         payment_method_id: payment_method_id
-        discounts: ""
+        coupon_id: coupon_id
+        email_invoice_on_finalization: true
+        finalize_invoice_immediately: true
         custom_fields: "{}"
         collection_method: null
         description: Invoice to acme.co
+        invoice_type: ""
+        customer_id: customer_id
+        net_d: 6
       properties:
         subscription_id:
-          description: Unique identifier of the subscription. The created invoice
-            will only include pending invoice items for that subscription. The subscription’s
-            billing cycle and regular subscription events won’t be affected.
-          example: subscription_dev_abc123
-          title: Subscription Id
+          nullable: true
           type: string
         payment_method_id:
           nullable: true
@@ -4738,13 +4843,37 @@ components:
           example: Invoice to acme.co
           title: Description
           type: string
-        discounts:
-          $ref: '#/components/schemas/Discounts'
+        coupon_id:
+          nullable: true
+          type: string
         custom_fields:
           nullable: true
           type: object
+        selected_product_price_quantity:
+          items:
+            $ref: '#/components/schemas/SelectedPriceQuantity'
+          type: array
+        invoice_type:
+          allOf:
+          - $ref: '#/components/schemas/InvoiceType'
+          default: standard
+          description: The type of invoice to create. Choose standard to create the
+            subscription based invoice and one_off to create the one-off invoices.
+        customer_id:
+          description: The external id of the customer.
+          title: Customer Id
+          type: string
+        net_d:
+          nullable: true
+          type: integer
+        email_invoice_on_finalization:
+          nullable: true
+          type: boolean
+        finalize_invoice_immediately:
+          nullable: true
+          type: boolean
       required:
-      - subscription_id
+      - customer_id
       title: CreateInvoiceRequest
     CreatePaymentLinkRequest:
       example:
@@ -4838,8 +4967,10 @@ components:
           units_from: 1
           flat_amount_atom: 5
         usage_type: licensed
+        meta: "{}"
         pricing_model: standard
         product_id: product_dev_abc123
+        name: name
         contract_term_multiple: 2
         price_type: recurring
         listed_exclusively_for_customers:
@@ -4863,6 +4994,9 @@ components:
           example: true
           title: Is Active
           type: boolean
+        name:
+          nullable: true
+          type: string
         internal_description:
           nullable: true
           type: string
@@ -4934,6 +5068,9 @@ components:
           items:
             type: string
           type: array
+        meta:
+          nullable: true
+          type: object
         product_id:
           description: Unique identifier of the product.
           example: product_dev_abc123
@@ -5159,16 +5296,17 @@ components:
           price_id: price_id
         promotion_code: promotion_code
         custom_fields: "{}"
+        is_preview: false
         description: description
         trial_end: 2000-01-23T04:56:07.000+00:00
-        trial_period_days: 6
+        trial_period_days: 0
         payment_method_id: payment_method_id
         coupon_id: coupon_id
         total_amount_atom: 9000
         collection_method: charge_automatically
         customer_id: cus_dev_abc123
         cancel_at_end: false
-        net_d: 1
+        net_d: 6
       properties:
         customer_id:
           description: Unique Identifier of the customer.
@@ -5236,6 +5374,13 @@ components:
         custom_fields:
           nullable: true
           type: object
+        is_preview:
+          default: false
+          description: Whether the request is in preview mode (subscriptions won't
+            actually be created)
+          example: false
+          title: Is Preview
+          type: boolean
       required:
       - customer_id
       - selected_product_price_quantity
@@ -5247,6 +5392,7 @@ components:
         - credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -5304,7 +5450,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -5313,7 +5459,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -5321,6 +5467,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -5364,6 +5511,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -5404,7 +5552,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -5413,7 +5561,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -5421,6 +5569,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -5465,7 +5614,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -5474,7 +5623,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -5482,6 +5631,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -5518,6 +5668,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -5605,6 +5756,7 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -5626,6 +5778,7 @@ components:
         - credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -5683,7 +5836,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -5692,7 +5845,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -5700,6 +5853,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -5743,6 +5897,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -5783,7 +5938,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -5792,7 +5947,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -5800,6 +5955,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -5844,7 +6000,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -5853,7 +6009,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -5861,6 +6017,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -5897,6 +6054,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -5984,6 +6142,7 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -6050,7 +6209,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -6059,7 +6218,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -6067,6 +6226,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -6110,6 +6270,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -6180,7 +6341,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -6189,7 +6350,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -6197,6 +6358,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -6240,6 +6402,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -6573,6 +6736,10 @@ components:
       enum:
       - usd
       - brl
+      - eur
+      - gbp
+      - aud
+      - cad
       title: CurrencyEnum
       type: string
     CustomerBalanceExternal:
@@ -6721,7 +6888,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -6730,7 +6897,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -6738,6 +6905,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -6781,6 +6949,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -6851,7 +7020,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -6860,7 +7029,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -6868,6 +7037,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -6911,6 +7081,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -6935,14 +7106,7 @@ components:
           status: canceled
           net_d: 3
         metadata: "{}"
-        address:
-          country: country
-          city: city
-          state: state
-          line3: line3
-          line2: line2
-          line1: line1
-          zip_code: zip_code
+        should_send_payment_receipt: true
         subscribed_to_products:
         - metadata: "{}"
           is_active: true
@@ -7011,6 +7175,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -7068,6 +7233,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -7142,6 +7308,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -7199,6 +7366,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -7230,6 +7398,7 @@ components:
             credit_note_ids:
             - credit_note_ids
             - credit_note_ids
+            metadata: "{}"
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
             total_discount_amount_atoms:
@@ -7287,7 +7456,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -7296,7 +7465,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -7304,6 +7473,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -7347,6 +7517,7 @@ components:
               is_deleted: false
               paused_at: 2000-01-23T04:56:07.000+00:00
               updated_at: 2000-01-23T04:56:07.000+00:00
+              renews_at: 2000-01-23T04:56:07.000+00:00
               currency: null
               id: subscription_dev_abc123
               current_period_start: 2023-10-02T08:49:54.678156Z
@@ -7387,7 +7558,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -7396,7 +7567,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -7404,6 +7575,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -7448,7 +7620,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -7457,7 +7629,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -7465,6 +7637,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -7501,6 +7674,7 @@ components:
               object: ""
               start_date: 2000-01-23T04:56:07.000+00:00
             period_start: 2023-11-04T19:31:08.650160Z
+            email_invoice_on_finalization: false
             is_initial_invoice_for_trial_sub: true
             currency: usd
             id: invoice_dev_abc123
@@ -7588,6 +7762,7 @@ components:
             due_date: 2000-01-23T04:56:07.000+00:00
             latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
             billing_reason: subscription_create
+            paid_at: 2000-01-23T04:56:07.000+00:00
             period_end: 2023-11-04T19:31:08.650160Z
             account_id: account_dev_abc123
             invoice_pdf_url: invoice_pdf_url
@@ -7611,9 +7786,7 @@ components:
           object: ""
           status: null
         notes: notes
-        custom_fields: "{}"
         created_at: 2000-01-23T04:56:07.000+00:00
-        last_name: last_name
         discount:
           end_date: 2000-01-23T04:56:07.000+00:00
           coupon:
@@ -7624,7 +7797,7 @@ components:
             metadata: "{}"
             is_active: true
             max_redemptions: 5
-            times_redeemed: 5
+            times_redeemed: 2
             created_at: 2000-01-23T04:56:07.000+00:00
             product_families:
             - product_families
@@ -7633,7 +7806,7 @@ components:
             - products
             - products
             duration: null
-            duration_in_months: 1
+            duration_in_months: 5
             is_deleted: false
             updated_at: 2000-01-23T04:56:07.000+00:00
             amount_atom_off: 0
@@ -7641,6 +7814,7 @@ components:
             percent_off: 6
             currency: null
             id: id
+            trial_days_off: 1
             object: ""
           promotion_code:
             metadata: "{}"
@@ -7676,9 +7850,10 @@ components:
           customer_id: customer_id
           object: ""
           start_date: 2000-01-23T04:56:07.000+00:00
+        language: ""
         is_deleted: false
-        account_id: account_dev_abc123
         updated_at: 2000-01-23T04:56:07.000+00:00
+        billing_email: billing_email
         id: cus_dev_abc123
         first_name: first_name
         balance_atoms:
@@ -7687,7 +7862,38 @@ components:
         - amount_atom: 2
           currency: null
         email: johndoe@xyz.com
+        total_spent:
+        - amount_atom: 6
+          currency: ""
+        - amount_atom: 6
+          currency: ""
+        invoice_settings:
+          email_receipt_on_paid: true
+          default_net_d: 1
+        address:
+          country: country
+          city: city
+          state: state
+          line3: line3
+          line2: line2
+          line1: line1
+          zip_code: zip_code
+        custom_fields: "{}"
+        last_name: last_name
+        mrr:
+        - amount_atom: 6
+          currency: ""
+        - amount_atom: 6
+          currency: ""
+        account_id: account_dev_abc123
+        phone_number: phone_number
+        total_refunds:
+        - amount_atom: 6
+          currency: ""
+        - amount_atom: 6
+          currency: ""
         object: ""
+        status: null
       properties:
         id:
           description: Unique identifier of the customer.
@@ -7756,6 +7962,37 @@ components:
         custom_fields:
           nullable: true
           type: object
+        total_spent:
+          items:
+            $ref: '#/components/schemas/CustomerTotalAmount'
+          type: array
+        total_refunds:
+          items:
+            $ref: '#/components/schemas/CustomerTotalAmount'
+          type: array
+        mrr:
+          items:
+            $ref: '#/components/schemas/CustomerTotalAmount'
+          type: array
+        billing_email:
+          nullable: true
+          type: string
+        language:
+          allOf:
+          - $ref: '#/components/schemas/CustomerLanguage'
+          default: en
+          description: Language of the customer.
+        invoice_settings:
+          $ref: '#/components/schemas/CustomerInvoiceSettings'
+        should_send_payment_receipt:
+          description: Whether email should be sent or not on payment.
+          title: Should Send Payment Receipt
+          type: boolean
+        status:
+          $ref: '#/components/schemas/CustomerStatus'
+        phone_number:
+          nullable: true
+          type: string
       required:
       - account_id
       - address
@@ -7765,8 +8002,28 @@ components:
       - id
       - last_name
       - notes
+      - should_send_payment_receipt
       - updated_at
       title: CustomerExternal
+    CustomerInvoiceSettings:
+      example:
+        email_receipt_on_paid: true
+        default_net_d: 1
+      properties:
+        email_receipt_on_paid:
+          nullable: true
+          type: boolean
+        default_net_d:
+          nullable: true
+          type: integer
+      title: CustomerInvoiceSettings
+    CustomerLanguage:
+      enum:
+      - en
+      - en_us
+      - pt
+      title: CustomerLanguage
+      type: string
     CustomerPaymentMethodQueryParams:
       example:
         provider_type: null
@@ -7891,6 +8148,31 @@ components:
         search:
           $ref: '#/components/schemas/SearchFilter'
       title: CustomerQueryParams
+    CustomerStatus:
+      enum:
+      - active
+      - inactive
+      - trialing
+      - cancelled
+      title: CustomerStatus
+      type: string
+    CustomerTotalAmount:
+      example:
+        amount_atom: 6
+        currency: ""
+      properties:
+        currency:
+          allOf:
+          - $ref: '#/components/schemas/CurrencyEnum'
+          description: The currency of the total amount.
+        amount_atom:
+          default: 0
+          description: The total refunds/spent of the customer.
+          title: Amount Atom
+          type: integer
+      required:
+      - currency
+      title: CustomerTotalAmount
     DateTimeFilter:
       example:
         lt: 2000-01-23T04:56:07.000+00:00
@@ -8032,6 +8314,7 @@ components:
     DeleteSubscriptionRequest:
       example:
         cancel_unpaid_invoices: false
+        is_preview: false
         cancellation_details:
           feedback: null
           reason: reason
@@ -8061,7 +8344,414 @@ components:
           example: false
           title: Full Refund
           type: boolean
+        is_preview:
+          default: false
+          description: Whether the request is in preview mode (subscriptions won't
+            actually be deleted)
+          example: false
+          title: Is Preview
+          type: boolean
       title: DeleteSubscriptionRequest
+    DeleteSubscriptionResponse:
+      example:
+        subscription: ""
+        invoice:
+          credit_note_ids:
+          - credit_note_ids
+          - credit_note_ids
+          metadata: "{}"
+          created_at: 2000-01-23T04:56:07.000+00:00
+          description: description
+          total_discount_amount_atoms:
+          - amount_atom: 9
+            object: ""
+            discount_id: discount_id
+          - amount_atom: 9
+            object: ""
+            discount_id: discount_id
+          subscription:
+            subscription_items:
+            - drop_at_end: false
+              add_at_period_end: true
+              quantity: 2
+              price_id: price_dev_abc123
+              created_at: 2000-01-23T04:56:07.000+00:00
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              price: ""
+              product_id: product_dev_xyz123
+              pending_attachment_to_subscription_id: pending_attachment_to_subscription_id
+              currency: usd
+              id: subi_dev_abc123
+              object: ""
+            - drop_at_end: false
+              add_at_period_end: true
+              quantity: 2
+              price_id: price_dev_abc123
+              created_at: 2000-01-23T04:56:07.000+00:00
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              price: ""
+              product_id: product_dev_xyz123
+              pending_attachment_to_subscription_id: pending_attachment_to_subscription_id
+              currency: usd
+              id: subi_dev_abc123
+              object: ""
+            cancelled_at: 2000-01-23T04:56:07.000+00:00
+            contract_auto_renew: true
+            metadata: "{}"
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            billing_interval: null
+            discount:
+              end_date: 2000-01-23T04:56:07.000+00:00
+              coupon:
+                redeem_by: 2000-01-23T04:56:07.000+00:00
+                promotion_codes:
+                - promotion_codes
+                - promotion_codes
+                metadata: "{}"
+                is_active: true
+                max_redemptions: 5
+                times_redeemed: 2
+                created_at: 2000-01-23T04:56:07.000+00:00
+                product_families:
+                - product_families
+                - product_families
+                products:
+                - products
+                - products
+                duration: null
+                duration_in_months: 5
+                is_deleted: false
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                amount_atom_off: 0
+                name: name
+                percent_off: 6
+                currency: null
+                id: id
+                trial_days_off: 1
+                object: ""
+              promotion_code:
+                metadata: "{}"
+                code: code
+                is_active: true
+                coupon: ""
+                max_redemptions: 1
+                times_redeemed: 5
+                created_at: 2000-01-23T04:56:07.000+00:00
+                restrictions:
+                  first_time_transaction: true
+                  minimum_amount_currency: null
+                  minimum_amount_atom: 2
+                is_deleted: false
+                expires_at: 2000-01-23T04:56:07.000+00:00
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                coupon_id: coupon_id
+                customer_ids:
+                - customer_ids
+                - customer_ids
+                max_redemptions_per_customer: 5
+                id: id
+                object: ""
+              invoice_item_id: invoice_item_id
+              created_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              promotion_code_id: promotion_code_id
+              invoice_id: invoice_id
+              id: id
+              customer_id: customer_id
+              object: ""
+              start_date: 2000-01-23T04:56:07.000+00:00
+            cancellation_details:
+              feedback: null
+              reason: reason
+              comment: comment
+            contract_start: 2000-01-23T04:56:07.000+00:00
+            is_deleted: false
+            paused_at: 2000-01-23T04:56:07.000+00:00
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
+            currency: null
+            id: subscription_dev_abc123
+            current_period_start: 2023-10-02T08:49:54.678156Z
+            cancel_at_end: true
+            default_payment_method_id: default_payment_method_id
+            billing_interval_count: 6
+            total_billing_cycles: 7
+            pause_for_cycles: 0
+            remaining_billing_cycles: 9
+            custom_fields: "{}"
+            trial_end: 2000-01-23T04:56:07.000+00:00
+            current_period_end: 2023-11-02T08:49:54.678156Z
+            pause_at_end: true
+            account_id: account_dev_abc123
+            initial_start: 2023-10-02T08:49:54.678156Z
+            resumes_at: 2000-01-23T04:56:07.000+00:00
+            name: name
+            trial_start: 2000-01-23T04:56:07.000+00:00
+            collection_method: charge_automatically
+            customer_id: cus_dev_abc123
+            object: ""
+            status: canceled
+            net_d: 3
+          subscription_id: subscription_id
+          applied_balance_amount_atom: 500
+          is_deleted: false
+          remaining_amount_atom: 0
+          tax_amount_atom: 900
+          pre_payment_credit_notes_amount: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          discounts:
+          - end_date: 2000-01-23T04:56:07.000+00:00
+            coupon:
+              redeem_by: 2000-01-23T04:56:07.000+00:00
+              promotion_codes:
+              - promotion_codes
+              - promotion_codes
+              metadata: "{}"
+              is_active: true
+              max_redemptions: 5
+              times_redeemed: 2
+              created_at: 2000-01-23T04:56:07.000+00:00
+              product_families:
+              - product_families
+              - product_families
+              products:
+              - products
+              - products
+              duration: null
+              duration_in_months: 5
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              amount_atom_off: 0
+              name: name
+              percent_off: 6
+              currency: null
+              id: id
+              trial_days_off: 1
+              object: ""
+            promotion_code:
+              metadata: "{}"
+              code: code
+              is_active: true
+              coupon: ""
+              max_redemptions: 1
+              times_redeemed: 5
+              created_at: 2000-01-23T04:56:07.000+00:00
+              restrictions:
+                first_time_transaction: true
+                minimum_amount_currency: null
+                minimum_amount_atom: 2
+              is_deleted: false
+              expires_at: 2000-01-23T04:56:07.000+00:00
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              customer_ids:
+              - customer_ids
+              - customer_ids
+              max_redemptions_per_customer: 5
+              id: id
+              object: ""
+            invoice_item_id: invoice_item_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            subscription_id: subscription_id
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            coupon_id: coupon_id
+            promotion_code_id: promotion_code_id
+            invoice_id: invoice_id
+            id: id
+            customer_id: customer_id
+            object: ""
+            start_date: 2000-01-23T04:56:07.000+00:00
+          - end_date: 2000-01-23T04:56:07.000+00:00
+            coupon:
+              redeem_by: 2000-01-23T04:56:07.000+00:00
+              promotion_codes:
+              - promotion_codes
+              - promotion_codes
+              metadata: "{}"
+              is_active: true
+              max_redemptions: 5
+              times_redeemed: 2
+              created_at: 2000-01-23T04:56:07.000+00:00
+              product_families:
+              - product_families
+              - product_families
+              products:
+              - products
+              - products
+              duration: null
+              duration_in_months: 5
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              amount_atom_off: 0
+              name: name
+              percent_off: 6
+              currency: null
+              id: id
+              trial_days_off: 1
+              object: ""
+            promotion_code:
+              metadata: "{}"
+              code: code
+              is_active: true
+              coupon: ""
+              max_redemptions: 1
+              times_redeemed: 5
+              created_at: 2000-01-23T04:56:07.000+00:00
+              restrictions:
+                first_time_transaction: true
+                minimum_amount_currency: null
+                minimum_amount_atom: 2
+              is_deleted: false
+              expires_at: 2000-01-23T04:56:07.000+00:00
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              customer_ids:
+              - customer_ids
+              - customer_ids
+              max_redemptions_per_customer: 5
+              id: id
+              object: ""
+            invoice_item_id: invoice_item_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            subscription_id: subscription_id
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            coupon_id: coupon_id
+            promotion_code_id: promotion_code_id
+            invoice_id: invoice_id
+            id: id
+            customer_id: customer_id
+            object: ""
+            start_date: 2000-01-23T04:56:07.000+00:00
+          period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
+          is_initial_invoice_for_trial_sub: true
+          currency: usd
+          id: invoice_dev_abc123
+          lines:
+          - discount_amount_atoms:
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            subscription_item_id: subscription_item_id
+            price_id: price_dev_abc123
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            proration_details_debit_invoice_item: proration_details_debit_invoice_item
+            subscription_id: subscription_id
+            amount_atom: 200
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            discounts:
+            - discounts
+            - discounts
+            period_start: 2023-11-04T19:31:08.650160Z
+            product_id: product_dev_abc123
+            invoice_id: invoice_id
+            currency: usd
+            id: invoiceitem_dev_abc123
+            subscription_cancelled_at: 2000-01-23T04:56:07.000+00:00
+            quantity: 2
+            amount_atom_considering_discount_applied: 150
+            proration: false
+            period_end: 2023-11-04T19:31:08.650160Z
+            account_id: account_dev_abc123
+            price_type: recurring
+            customer_id: cus_dev_abc123
+            object: ""
+          - discount_amount_atoms:
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            subscription_item_id: subscription_item_id
+            price_id: price_dev_abc123
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            proration_details_debit_invoice_item: proration_details_debit_invoice_item
+            subscription_id: subscription_id
+            amount_atom: 200
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            discounts:
+            - discounts
+            - discounts
+            period_start: 2023-11-04T19:31:08.650160Z
+            product_id: product_dev_abc123
+            invoice_id: invoice_id
+            currency: usd
+            id: invoiceitem_dev_abc123
+            subscription_cancelled_at: 2000-01-23T04:56:07.000+00:00
+            quantity: 2
+            amount_atom_considering_discount_applied: 150
+            proration: false
+            period_end: 2023-11-04T19:31:08.650160Z
+            account_id: account_dev_abc123
+            price_type: recurring
+            customer_id: cus_dev_abc123
+            object: ""
+          invoice_number: 3
+          default_payment_method_id: default_payment_method_id
+          comments:
+          - user_email: user_email
+            created_at: 2000-01-23T04:56:07.000+00:00
+            comment: comment
+          - user_email: user_email
+            created_at: 2000-01-23T04:56:07.000+00:00
+            comment: comment
+          paid_out_of_band: true
+          tax_processor_updated_at: 2000-01-23T04:56:07.000+00:00
+          refunded_amount_atom: 6
+          post_payment_credit_notes_amount: 8
+          custom_fields: "{}"
+          due_date: 2000-01-23T04:56:07.000+00:00
+          latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
+          billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
+          period_end: 2023-11-04T19:31:08.650160Z
+          account_id: account_dev_abc123
+          invoice_pdf_url: invoice_pdf_url
+          paid_amount_atom: 6000
+          total_amount_atom: 9000
+          due_amount_atom: 8950
+          collection_method: charge_automatically
+          latest_payment_intent_id: latest_payment_intent_id
+          hosted_invoice_url: hosted_invoice_url
+          refund_ids:
+          - refund_ids
+          - refund_ids
+          receipt_pdf_url: receipt_pdf_url
+          customer_id: cus_dev_abc123
+          object: ""
+          customer: null
+          status: paid
+          net_d: 30
+      properties:
+        subscription:
+          allOf:
+          - $ref: '#/components/schemas/SubscriptionExternal'
+          description: Deleted subscription.
+        invoice:
+          $ref: '#/components/schemas/InvoiceExternal'
+      required:
+      - subscription
+      title: DeleteSubscriptionResponse
     DiscountExternal:
       example:
         end_date: 2000-01-23T04:56:07.000+00:00
@@ -8073,7 +8763,7 @@ components:
           metadata: "{}"
           is_active: true
           max_redemptions: 5
-          times_redeemed: 5
+          times_redeemed: 2
           created_at: 2000-01-23T04:56:07.000+00:00
           product_families:
           - product_families
@@ -8082,7 +8772,7 @@ components:
           - products
           - products
           duration: null
-          duration_in_months: 1
+          duration_in_months: 5
           is_deleted: false
           updated_at: 2000-01-23T04:56:07.000+00:00
           amount_atom_off: 0
@@ -8090,6 +8780,7 @@ components:
           percent_off: 6
           currency: null
           id: id
+          trial_days_off: 1
           object: ""
         promotion_code:
           metadata: "{}"
@@ -8301,16 +8992,17 @@ components:
       title: EnumConfigField
     EventExternal:
       example:
-        is_deleted: false
-        account_id: account_id
-        updated_at: 2000-01-23T04:56:07.000+00:00
         data: "{}"
         data_previous: "{}"
         created_at: 2000-01-23T04:56:07.000+00:00
+        type: null
+        is_deleted: false
+        account_id: account_id
+        updated_at: 2000-01-23T04:56:07.000+00:00
         request_idempotency_key: request_idempotency_key
         id: id
-        type: null
         request_id: request_id
+        user: user
         pending_webhooks: 0
         object: ""
       properties:
@@ -8356,6 +9048,9 @@ components:
         pending_webhooks:
           title: Pending Webhooks
           type: integer
+        user:
+          nullable: true
+          type: string
       required:
       - account_id
       - created_at
@@ -8454,30 +9149,25 @@ components:
       - charge.created
       - charge.updated
       - charge.deleted
+      - charge.succeeded
+      - charge.failed
+      - charge.pending
+      - charge.refunded
       - coupon.created
       - coupon.updated
       - coupon.deleted
       - credit_note.created
       - credit_note.updated
       - credit_note.deleted
-      - credit_note_item.created
-      - credit_note_item.updated
-      - credit_note_item.deleted
       - customer.created
       - customer.updated
       - customer.deleted
       - customer_balance_transaction.created
       - customer_balance_transaction.updated
       - customer_balance_transaction.deleted
-      - delivery_attempt.created
-      - delivery_attempt.updated
-      - delivery_attempt.deleted
       - discount.created
       - discount.updated
       - discount.deleted
-      - event.created
-      - event.updated
-      - event.deleted
       - invite.created
       - invite.updated
       - invite.deleted
@@ -8486,6 +9176,11 @@ components:
       - invite_item_discount.deleted
       - invoice.created
       - invoice.updated
+      - invoice.finalized
+      - invoice.paid
+      - invoice.past_due
+      - invoice.voided
+      - invoice.uncollectible
       - invoice.deleted
       - invoice.upcoming
       - invoice_discount.created
@@ -8497,6 +9192,10 @@ components:
       - payment_intent.created
       - payment_intent.updated
       - payment_intent.deleted
+      - payment_intent.succeeded
+      - payment_intent.processing
+      - payment_intent.requires_action
+      - payment_intent.failed
       - payment_method.created
       - payment_method.updated
       - payment_method.deleted
@@ -8506,9 +9205,6 @@ components:
       - price.created
       - price.updated
       - price.deleted
-      - price_tier.created
-      - price_tier.updated
-      - price_tier.deleted
       - product.created
       - product.updated
       - product.deleted
@@ -8521,6 +9217,12 @@ components:
       - customer.subscription.created
       - customer.subscription.updated
       - customer.subscription.deleted
+      - customer.subscription.canceled
+      - customer.subscription.activated
+      - customer.subscription.paused
+      - customer.subscription.resumed
+      - customer.subscription.past_due
+      - customer.subscription.trialing
       - customer.subscription.trial_will_end
       - subscription_item.created
       - subscription_item.updated
@@ -8721,21 +9423,12 @@ components:
       - amount_atom
       - discount_id
       title: InvoiceDiscountAmountsExternal
-    InvoiceDiscountOptions:
-      properties:
-        coupons:
-          items:
-            type: string
-          type: array
-        discount:
-          nullable: true
-          type: string
-      title: InvoiceDiscountOptions
     InvoiceExternal:
       example:
         credit_note_ids:
         - credit_note_ids
         - credit_note_ids
+        metadata: "{}"
         created_at: 2000-01-23T04:56:07.000+00:00
         description: description
         total_discount_amount_atoms:
@@ -8793,7 +9486,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -8802,7 +9495,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -8810,6 +9503,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -8853,6 +9547,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -8893,7 +9588,7 @@ components:
             metadata: "{}"
             is_active: true
             max_redemptions: 5
-            times_redeemed: 5
+            times_redeemed: 2
             created_at: 2000-01-23T04:56:07.000+00:00
             product_families:
             - product_families
@@ -8902,7 +9597,7 @@ components:
             - products
             - products
             duration: null
-            duration_in_months: 1
+            duration_in_months: 5
             is_deleted: false
             updated_at: 2000-01-23T04:56:07.000+00:00
             amount_atom_off: 0
@@ -8910,6 +9605,7 @@ components:
             percent_off: 6
             currency: null
             id: id
+            trial_days_off: 1
             object: ""
           promotion_code:
             metadata: "{}"
@@ -8954,7 +9650,7 @@ components:
             metadata: "{}"
             is_active: true
             max_redemptions: 5
-            times_redeemed: 5
+            times_redeemed: 2
             created_at: 2000-01-23T04:56:07.000+00:00
             product_families:
             - product_families
@@ -8963,7 +9659,7 @@ components:
             - products
             - products
             duration: null
-            duration_in_months: 1
+            duration_in_months: 5
             is_deleted: false
             updated_at: 2000-01-23T04:56:07.000+00:00
             amount_atom_off: 0
@@ -8971,6 +9667,7 @@ components:
             percent_off: 6
             currency: null
             id: id
+            trial_days_off: 1
             object: ""
           promotion_code:
             metadata: "{}"
@@ -9007,6 +9704,7 @@ components:
           object: ""
           start_date: 2000-01-23T04:56:07.000+00:00
         period_start: 2023-11-04T19:31:08.650160Z
+        email_invoice_on_finalization: false
         is_initial_invoice_for_trial_sub: true
         currency: usd
         id: invoice_dev_abc123
@@ -9094,6 +9792,7 @@ components:
         due_date: 2000-01-23T04:56:07.000+00:00
         latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
         billing_reason: subscription_create
+        paid_at: 2000-01-23T04:56:07.000+00:00
         period_end: 2023-11-04T19:31:08.650160Z
         account_id: account_dev_abc123
         invoice_pdf_url: invoice_pdf_url
@@ -9182,6 +9881,10 @@ components:
         latest_payment_intent_id:
           nullable: true
           type: string
+        paid_at:
+          format: date-time
+          nullable: true
+          type: string
         period_end:
           description: End of the usage period during which invoice_items were added
             to this invoice. It is in 'ISO 8601' format.
@@ -9238,6 +9941,7 @@ components:
           type: integer
         credit_note_ids:
           items:
+            nullable: true
             type: string
           type: array
         applied_balance_amount_atom:
@@ -9305,9 +10009,18 @@ components:
           description: Invoice number
           title: Invoice Number
           type: integer
+        metadata:
+          nullable: true
+          type: object
         custom_fields:
           nullable: true
           type: object
+        email_invoice_on_finalization:
+          default: false
+          description: Whether invoice should be sent to the customer upon finalizing
+            the invoice
+          title: Email Invoice On Finalization
+          type: boolean
       required:
       - account_id
       - applied_balance_amount_atom
@@ -9713,6 +10426,8 @@ components:
         branding:
           logo: https://example.com/logo.png
         trial_end_for_sub: 2000-01-23T04:56:07.000+00:00
+        due_date: 2000-01-23T04:56:07.000+00:00
+        created_at: 2000-01-23T04:56:07.000+00:00
         total_discount_amount_atoms:
         - amount_atom: 9
           object: ""
@@ -9723,7 +10438,7 @@ components:
         billing_address: billing_address
         billed_to: billed_to
         card_type: card_type
-        paid_at: 2023-11-04T19:31:08.650160Z
+        paid_at: 2000-01-23T04:56:07.000+00:00
         tax_amount_atom: 900
         remaining_amount_atom: 0
         invoice_pdf_url: invoice_pdf_url
@@ -9792,10 +10507,13 @@ components:
           title: Id
           type: string
         paid_at:
-          description: "When the invoice is paid, in 'ISO 8601' format."
-          example: 2023-11-04T19:31:08.650160Z
           format: date-time
-          title: Paid At
+          nullable: true
+          type: string
+        created_at:
+          description: "DateTime at which the object was created, in 'ISO 8601' format."
+          format: date-time
+          title: Created At
           type: string
         currency:
           allOf:
@@ -9875,15 +10593,19 @@ components:
           example: 8950
           title: Due Amount Atom
           type: integer
+        due_date:
+          format: date-time
+          nullable: true
+          type: string
       required:
       - branding
+      - created_at
       - currency
       - due_amount_atom
       - id
       - invoice_pdf_url
       - is_initial_invoice_for_trial_sub
       - paid_amount_atom
-      - paid_at
       - receipt_pdf_url
       - remaining_amount_atom
       - status
@@ -10015,6 +10737,12 @@ components:
       - past_due
       - uncollectible
       title: InvoiceStatusEnum
+      type: string
+    InvoiceType:
+      enum:
+      - standard
+      - one_off
+      title: InvoiceType
       type: string
     ListActiveSubParams:
       example:
@@ -10263,7 +10991,7 @@ components:
           metadata: "{}"
           is_active: true
           max_redemptions: 5
-          times_redeemed: 5
+          times_redeemed: 2
           created_at: 2000-01-23T04:56:07.000+00:00
           product_families:
           - product_families
@@ -10272,7 +11000,7 @@ components:
           - products
           - products
           duration: null
-          duration_in_months: 1
+          duration_in_months: 5
           is_deleted: false
           updated_at: 2000-01-23T04:56:07.000+00:00
           amount_atom_off: 0
@@ -10280,6 +11008,7 @@ components:
           percent_off: 6
           currency: null
           id: id
+          trial_days_off: 1
           object: ""
         - redeem_by: 2000-01-23T04:56:07.000+00:00
           promotion_codes:
@@ -10288,7 +11017,7 @@ components:
           metadata: "{}"
           is_active: true
           max_redemptions: 5
-          times_redeemed: 5
+          times_redeemed: 2
           created_at: 2000-01-23T04:56:07.000+00:00
           product_families:
           - product_families
@@ -10297,7 +11026,7 @@ components:
           - products
           - products
           duration: null
-          duration_in_months: 1
+          duration_in_months: 5
           is_deleted: false
           updated_at: 2000-01-23T04:56:07.000+00:00
           amount_atom_off: 0
@@ -10305,6 +11034,7 @@ components:
           percent_off: 6
           currency: null
           id: id
+          trial_days_off: 1
           object: ""
         total_objects: 100
         page_size: 100
@@ -10480,7 +11210,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -10489,7 +11219,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -10497,6 +11227,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -10540,6 +11271,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -10610,7 +11342,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -10619,7 +11351,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -10627,6 +11359,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -10670,6 +11403,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -10694,14 +11428,7 @@ components:
             status: canceled
             net_d: 3
           metadata: "{}"
-          address:
-            country: country
-            city: city
-            state: state
-            line3: line3
-            line2: line2
-            line1: line1
-            zip_code: zip_code
+          should_send_payment_receipt: true
           subscribed_to_products:
           - metadata: "{}"
             is_active: true
@@ -10770,6 +11497,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -10827,6 +11555,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -10901,6 +11630,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -10958,6 +11688,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -10989,6 +11720,7 @@ components:
               credit_note_ids:
               - credit_note_ids
               - credit_note_ids
+              metadata: "{}"
               created_at: 2000-01-23T04:56:07.000+00:00
               description: description
               total_discount_amount_atoms:
@@ -11046,7 +11778,7 @@ components:
                     metadata: "{}"
                     is_active: true
                     max_redemptions: 5
-                    times_redeemed: 5
+                    times_redeemed: 2
                     created_at: 2000-01-23T04:56:07.000+00:00
                     product_families:
                     - product_families
@@ -11055,7 +11787,7 @@ components:
                     - products
                     - products
                     duration: null
-                    duration_in_months: 1
+                    duration_in_months: 5
                     is_deleted: false
                     updated_at: 2000-01-23T04:56:07.000+00:00
                     amount_atom_off: 0
@@ -11063,6 +11795,7 @@ components:
                     percent_off: 6
                     currency: null
                     id: id
+                    trial_days_off: 1
                     object: ""
                   promotion_code:
                     metadata: "{}"
@@ -11106,6 +11839,7 @@ components:
                 is_deleted: false
                 paused_at: 2000-01-23T04:56:07.000+00:00
                 updated_at: 2000-01-23T04:56:07.000+00:00
+                renews_at: 2000-01-23T04:56:07.000+00:00
                 currency: null
                 id: subscription_dev_abc123
                 current_period_start: 2023-10-02T08:49:54.678156Z
@@ -11146,7 +11880,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -11155,7 +11889,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -11163,6 +11897,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -11207,7 +11942,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -11216,7 +11951,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -11224,6 +11959,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -11260,6 +11996,7 @@ components:
                 object: ""
                 start_date: 2000-01-23T04:56:07.000+00:00
               period_start: 2023-11-04T19:31:08.650160Z
+              email_invoice_on_finalization: false
               is_initial_invoice_for_trial_sub: true
               currency: usd
               id: invoice_dev_abc123
@@ -11347,6 +12084,7 @@ components:
               due_date: 2000-01-23T04:56:07.000+00:00
               latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
               billing_reason: subscription_create
+              paid_at: 2000-01-23T04:56:07.000+00:00
               period_end: 2023-11-04T19:31:08.650160Z
               account_id: account_dev_abc123
               invoice_pdf_url: invoice_pdf_url
@@ -11370,9 +12108,7 @@ components:
             object: ""
             status: null
           notes: notes
-          custom_fields: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
-          last_name: last_name
           discount:
             end_date: 2000-01-23T04:56:07.000+00:00
             coupon:
@@ -11383,7 +12119,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -11392,7 +12128,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -11400,6 +12136,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -11435,9 +12172,10 @@ components:
             customer_id: customer_id
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
+          language: ""
           is_deleted: false
-          account_id: account_dev_abc123
           updated_at: 2000-01-23T04:56:07.000+00:00
+          billing_email: billing_email
           id: cus_dev_abc123
           first_name: first_name
           balance_atoms:
@@ -11446,7 +12184,38 @@ components:
           - amount_atom: 2
             currency: null
           email: johndoe@xyz.com
+          total_spent:
+          - amount_atom: 6
+            currency: ""
+          - amount_atom: 6
+            currency: ""
+          invoice_settings:
+            email_receipt_on_paid: true
+            default_net_d: 1
+          address:
+            country: country
+            city: city
+            state: state
+            line3: line3
+            line2: line2
+            line1: line1
+            zip_code: zip_code
+          custom_fields: "{}"
+          last_name: last_name
+          mrr:
+          - amount_atom: 6
+            currency: ""
+          - amount_atom: 6
+            currency: ""
+          account_id: account_dev_abc123
+          phone_number: phone_number
+          total_refunds:
+          - amount_atom: 6
+            currency: ""
+          - amount_atom: 6
+            currency: ""
           object: ""
+          status: null
         - subscriptions:
           - subscription_items:
             - drop_at_end: false
@@ -11495,7 +12264,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -11504,7 +12273,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -11512,6 +12281,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -11555,6 +12325,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -11625,7 +12396,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -11634,7 +12405,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -11642,6 +12413,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -11685,6 +12457,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -11709,14 +12482,7 @@ components:
             status: canceled
             net_d: 3
           metadata: "{}"
-          address:
-            country: country
-            city: city
-            state: state
-            line3: line3
-            line2: line2
-            line1: line1
-            zip_code: zip_code
+          should_send_payment_receipt: true
           subscribed_to_products:
           - metadata: "{}"
             is_active: true
@@ -11785,6 +12551,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -11842,6 +12609,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -11916,6 +12684,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -11973,6 +12742,7 @@ components:
                 id: id
                 flat_amount_atom: 1
                 object: ""
+              name: name
               contract_term_multiple: 7
               price_type: recurring
               listed_exclusively_for_customers:
@@ -12004,6 +12774,7 @@ components:
               credit_note_ids:
               - credit_note_ids
               - credit_note_ids
+              metadata: "{}"
               created_at: 2000-01-23T04:56:07.000+00:00
               description: description
               total_discount_amount_atoms:
@@ -12061,7 +12832,7 @@ components:
                     metadata: "{}"
                     is_active: true
                     max_redemptions: 5
-                    times_redeemed: 5
+                    times_redeemed: 2
                     created_at: 2000-01-23T04:56:07.000+00:00
                     product_families:
                     - product_families
@@ -12070,7 +12841,7 @@ components:
                     - products
                     - products
                     duration: null
-                    duration_in_months: 1
+                    duration_in_months: 5
                     is_deleted: false
                     updated_at: 2000-01-23T04:56:07.000+00:00
                     amount_atom_off: 0
@@ -12078,6 +12849,7 @@ components:
                     percent_off: 6
                     currency: null
                     id: id
+                    trial_days_off: 1
                     object: ""
                   promotion_code:
                     metadata: "{}"
@@ -12121,6 +12893,7 @@ components:
                 is_deleted: false
                 paused_at: 2000-01-23T04:56:07.000+00:00
                 updated_at: 2000-01-23T04:56:07.000+00:00
+                renews_at: 2000-01-23T04:56:07.000+00:00
                 currency: null
                 id: subscription_dev_abc123
                 current_period_start: 2023-10-02T08:49:54.678156Z
@@ -12161,7 +12934,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -12170,7 +12943,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -12178,6 +12951,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -12222,7 +12996,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -12231,7 +13005,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -12239,6 +13013,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -12275,6 +13050,7 @@ components:
                 object: ""
                 start_date: 2000-01-23T04:56:07.000+00:00
               period_start: 2023-11-04T19:31:08.650160Z
+              email_invoice_on_finalization: false
               is_initial_invoice_for_trial_sub: true
               currency: usd
               id: invoice_dev_abc123
@@ -12362,6 +13138,7 @@ components:
               due_date: 2000-01-23T04:56:07.000+00:00
               latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
               billing_reason: subscription_create
+              paid_at: 2000-01-23T04:56:07.000+00:00
               period_end: 2023-11-04T19:31:08.650160Z
               account_id: account_dev_abc123
               invoice_pdf_url: invoice_pdf_url
@@ -12385,9 +13162,7 @@ components:
             object: ""
             status: null
           notes: notes
-          custom_fields: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
-          last_name: last_name
           discount:
             end_date: 2000-01-23T04:56:07.000+00:00
             coupon:
@@ -12398,7 +13173,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -12407,7 +13182,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -12415,6 +13190,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -12450,9 +13226,10 @@ components:
             customer_id: customer_id
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
+          language: ""
           is_deleted: false
-          account_id: account_dev_abc123
           updated_at: 2000-01-23T04:56:07.000+00:00
+          billing_email: billing_email
           id: cus_dev_abc123
           first_name: first_name
           balance_atoms:
@@ -12461,7 +13238,38 @@ components:
           - amount_atom: 2
             currency: null
           email: johndoe@xyz.com
+          total_spent:
+          - amount_atom: 6
+            currency: ""
+          - amount_atom: 6
+            currency: ""
+          invoice_settings:
+            email_receipt_on_paid: true
+            default_net_d: 1
+          address:
+            country: country
+            city: city
+            state: state
+            line3: line3
+            line2: line2
+            line1: line1
+            zip_code: zip_code
+          custom_fields: "{}"
+          last_name: last_name
+          mrr:
+          - amount_atom: 6
+            currency: ""
+          - amount_atom: 6
+            currency: ""
+          account_id: account_dev_abc123
+          phone_number: phone_number
+          total_refunds:
+          - amount_atom: 6
+            currency: ""
+          - amount_atom: 6
+            currency: ""
           object: ""
+          status: null
         total_objects: 100
         page_size: 100
       properties:
@@ -12491,28 +13299,30 @@ components:
       example:
         page_number: 1
         data:
-        - is_deleted: false
-          account_id: account_id
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          data: "{}"
+        - data: "{}"
           data_previous: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
+          type: null
+          is_deleted: false
+          account_id: account_id
+          updated_at: 2000-01-23T04:56:07.000+00:00
           request_idempotency_key: request_idempotency_key
           id: id
-          type: null
           request_id: request_id
+          user: user
           pending_webhooks: 0
           object: ""
-        - is_deleted: false
-          account_id: account_id
-          updated_at: 2000-01-23T04:56:07.000+00:00
-          data: "{}"
+        - data: "{}"
           data_previous: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
+          type: null
+          is_deleted: false
+          account_id: account_id
+          updated_at: 2000-01-23T04:56:07.000+00:00
           request_idempotency_key: request_idempotency_key
           id: id
-          type: null
           request_id: request_id
+          user: user
           pending_webhooks: 0
           object: ""
         total_objects: 100
@@ -12547,6 +13357,7 @@ components:
         - credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -12604,7 +13415,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -12613,7 +13424,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -12621,6 +13432,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -12664,6 +13476,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -12704,7 +13517,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -12713,7 +13526,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -12721,6 +13534,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -12765,7 +13579,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -12774,7 +13588,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -12782,6 +13596,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -12818,6 +13633,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -12905,6 +13721,7 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -12926,6 +13743,7 @@ components:
         - credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -12983,7 +13801,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -12992,7 +13810,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -13000,6 +13818,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -13043,6 +13862,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -13083,7 +13903,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -13092,7 +13912,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -13100,6 +13920,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -13144,7 +13965,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -13153,7 +13974,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -13161,6 +13982,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -13197,6 +14019,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -13284,6 +14107,7 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -13449,6 +14273,7 @@ components:
             credit_note_ids:
             - credit_note_ids
             - credit_note_ids
+            metadata: "{}"
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
             total_discount_amount_atoms:
@@ -13506,7 +14331,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -13515,7 +14340,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -13523,6 +14348,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -13566,6 +14392,7 @@ components:
               is_deleted: false
               paused_at: 2000-01-23T04:56:07.000+00:00
               updated_at: 2000-01-23T04:56:07.000+00:00
+              renews_at: 2000-01-23T04:56:07.000+00:00
               currency: null
               id: subscription_dev_abc123
               current_period_start: 2023-10-02T08:49:54.678156Z
@@ -13606,7 +14433,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -13615,7 +14442,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -13623,6 +14450,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -13667,7 +14495,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -13676,7 +14504,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -13684,6 +14512,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -13720,6 +14549,7 @@ components:
               object: ""
               start_date: 2000-01-23T04:56:07.000+00:00
             period_start: 2023-11-04T19:31:08.650160Z
+            email_invoice_on_finalization: false
             is_initial_invoice_for_trial_sub: true
             currency: usd
             id: invoice_dev_abc123
@@ -13807,6 +14637,7 @@ components:
             due_date: 2000-01-23T04:56:07.000+00:00
             latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
             billing_reason: subscription_create
+            paid_at: 2000-01-23T04:56:07.000+00:00
             period_end: 2023-11-04T19:31:08.650160Z
             account_id: account_dev_abc123
             invoice_pdf_url: invoice_pdf_url
@@ -13852,6 +14683,7 @@ components:
             credit_note_ids:
             - credit_note_ids
             - credit_note_ids
+            metadata: "{}"
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
             total_discount_amount_atoms:
@@ -13909,7 +14741,7 @@ components:
                   metadata: "{}"
                   is_active: true
                   max_redemptions: 5
-                  times_redeemed: 5
+                  times_redeemed: 2
                   created_at: 2000-01-23T04:56:07.000+00:00
                   product_families:
                   - product_families
@@ -13918,7 +14750,7 @@ components:
                   - products
                   - products
                   duration: null
-                  duration_in_months: 1
+                  duration_in_months: 5
                   is_deleted: false
                   updated_at: 2000-01-23T04:56:07.000+00:00
                   amount_atom_off: 0
@@ -13926,6 +14758,7 @@ components:
                   percent_off: 6
                   currency: null
                   id: id
+                  trial_days_off: 1
                   object: ""
                 promotion_code:
                   metadata: "{}"
@@ -13969,6 +14802,7 @@ components:
               is_deleted: false
               paused_at: 2000-01-23T04:56:07.000+00:00
               updated_at: 2000-01-23T04:56:07.000+00:00
+              renews_at: 2000-01-23T04:56:07.000+00:00
               currency: null
               id: subscription_dev_abc123
               current_period_start: 2023-10-02T08:49:54.678156Z
@@ -14009,7 +14843,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -14018,7 +14852,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -14026,6 +14860,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -14070,7 +14905,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -14079,7 +14914,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -14087,6 +14922,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -14123,6 +14959,7 @@ components:
               object: ""
               start_date: 2000-01-23T04:56:07.000+00:00
             period_start: 2023-11-04T19:31:08.650160Z
+            email_invoice_on_finalization: false
             is_initial_invoice_for_trial_sub: true
             currency: usd
             id: invoice_dev_abc123
@@ -14210,6 +15047,7 @@ components:
             due_date: 2000-01-23T04:56:07.000+00:00
             latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
             billing_reason: subscription_create
+            paid_at: 2000-01-23T04:56:07.000+00:00
             period_end: 2023-11-04T19:31:08.650160Z
             account_id: account_dev_abc123
             invoice_pdf_url: invoice_pdf_url
@@ -14413,6 +15251,7 @@ components:
             id: id
             flat_amount_atom: 1
             object: ""
+          name: name
           contract_term_multiple: 7
           price_type: recurring
           listed_exclusively_for_customers:
@@ -14470,6 +15309,7 @@ components:
             id: id
             flat_amount_atom: 1
             object: ""
+          name: name
           contract_term_multiple: 7
           price_type: recurring
           listed_exclusively_for_customers:
@@ -14572,6 +15412,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -14629,6 +15470,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -14703,6 +15545,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -14760,6 +15603,7 @@ components:
               id: id
               flat_amount_atom: 1
               object: ""
+            name: name
             contract_term_multiple: 7
             price_type: recurring
             listed_exclusively_for_customers:
@@ -15020,7 +15864,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -15029,7 +15873,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -15037,6 +15881,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -15080,6 +15925,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -15150,7 +15996,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -15159,7 +16005,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -15167,6 +16013,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -15210,6 +16057,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -15520,6 +16368,7 @@ components:
           credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -15577,7 +16426,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -15586,7 +16435,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -15594,6 +16443,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -15637,6 +16487,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -15677,7 +16528,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -15686,7 +16537,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -15694,6 +16545,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -15738,7 +16590,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -15747,7 +16599,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -15755,6 +16607,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -15791,6 +16644,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -15878,6 +16732,7 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -15988,6 +16843,13 @@ components:
       title: PaymentIntentExternal
     PaymentIntentQueryParams:
       example:
+        created_at:
+          lt: 2000-01-23T04:56:07.000+00:00
+          gte: 2000-01-23T04:56:07.000+00:00
+          eq: 2000-01-23T04:56:07.000+00:00
+          lte: 2000-01-23T04:56:07.000+00:00
+          gt: 2000-01-23T04:56:07.000+00:00
+        sort_key: created_at
         expand:
         - expand
         - expand
@@ -16000,6 +16862,7 @@ components:
         search:
           ilike: ilike
           eq: eq
+        payment_method_id: payment_method_id
         page_number: 1
         updated_at:
           lt: 2000-01-23T04:56:07.000+00:00
@@ -16007,14 +16870,7 @@ components:
           eq: 2000-01-23T04:56:07.000+00:00
           lte: 2000-01-23T04:56:07.000+00:00
           gt: 2000-01-23T04:56:07.000+00:00
-        created_at:
-          lt: 2000-01-23T04:56:07.000+00:00
-          gte: 2000-01-23T04:56:07.000+00:00
-          eq: 2000-01-23T04:56:07.000+00:00
-          lte: 2000-01-23T04:56:07.000+00:00
-          gt: 2000-01-23T04:56:07.000+00:00
         invoice_id: invoice_id
-        sort_key: created_at
         customer_id: customer_id
         sort_descending: false
         page_size: 60
@@ -16063,6 +16919,9 @@ components:
           $ref: '#/components/schemas/IntRangeFilter'
         search:
           $ref: '#/components/schemas/SearchFilter'
+        payment_method_id:
+          nullable: true
+          type: string
       title: PaymentIntentQueryParams
     PaymentIntentStatus:
       enum:
@@ -16348,6 +17207,7 @@ components:
         id: pm_dev_abc123
         customer_id: customer_id
         card_type: card_type
+        display_name: display_name
         object: ""
       properties:
         id:
@@ -16393,8 +17253,13 @@ components:
         last_four:
           nullable: true
           type: string
+        display_name:
+          description: Display name for the payment method to show on the UI.
+          title: Display Name
+          type: string
       required:
       - created_at
+      - display_name
       - id
       - provider
       - updated_at
@@ -16402,7 +17267,9 @@ components:
     PaymentProcessorName:
       description: PaymentProcessors are api's that we support and can charge.
       enum:
+      - airwallex
       - authorize_net
+      - checkout_com
       - braintree
       - stripe
       - foobar
@@ -16419,6 +17286,7 @@ components:
       - apple_pay
       - credit_card
       - google_pay
+      - stripe_link
       title: PaymentProviderType
       type: string
     PortalSessionExternal:
@@ -16549,6 +17417,7 @@ components:
           id: id
           flat_amount_atom: 1
           object: ""
+        name: name
         contract_term_multiple: 7
         price_type: recurring
         listed_exclusively_for_customers:
@@ -16598,6 +17467,9 @@ components:
           type: string
         product:
           $ref: '#/components/schemas/ProductExternal'
+        name:
+          nullable: true
+          type: string
         internal_description:
           nullable: true
           type: string
@@ -16965,6 +17837,7 @@ components:
             id: id
             flat_amount_atom: 1
             object: ""
+          name: name
           contract_term_multiple: 7
           price_type: recurring
           listed_exclusively_for_customers:
@@ -17022,6 +17895,7 @@ components:
             id: id
             flat_amount_atom: 1
             object: ""
+          name: name
           contract_term_multiple: 7
           price_type: recurring
           listed_exclusively_for_customers:
@@ -17301,9 +18175,18 @@ components:
         expand:
         - expand
         - expand
+        search:
+          ilike: ilike
+          eq: eq
         page_number: 1
         is_active: true
         code: code
+        expires_at:
+          lt: 2000-01-23T04:56:07.000+00:00
+          gte: 2000-01-23T04:56:07.000+00:00
+          eq: 2000-01-23T04:56:07.000+00:00
+          lte: 2000-01-23T04:56:07.000+00:00
+          gt: 2000-01-23T04:56:07.000+00:00
         updated_at:
           lt: 2000-01-23T04:56:07.000+00:00
           gte: 2000-01-23T04:56:07.000+00:00
@@ -17361,6 +18244,10 @@ components:
         code:
           nullable: true
           type: string
+        search:
+          $ref: '#/components/schemas/SearchFilter'
+        expires_at:
+          $ref: '#/components/schemas/DateTimeFilter'
       title: PromoCodeQueryParams
     PromoRestrictions:
       example:
@@ -18128,7 +19015,7 @@ components:
             metadata: "{}"
             is_active: true
             max_redemptions: 5
-            times_redeemed: 5
+            times_redeemed: 2
             created_at: 2000-01-23T04:56:07.000+00:00
             product_families:
             - product_families
@@ -18137,7 +19024,7 @@ components:
             - products
             - products
             duration: null
-            duration_in_months: 1
+            duration_in_months: 5
             is_deleted: false
             updated_at: 2000-01-23T04:56:07.000+00:00
             amount_atom_off: 0
@@ -18145,6 +19032,7 @@ components:
             percent_off: 6
             currency: null
             id: id
+            trial_days_off: 1
             object: ""
           promotion_code:
             metadata: "{}"
@@ -18188,6 +19076,7 @@ components:
         is_deleted: false
         paused_at: 2000-01-23T04:56:07.000+00:00
         updated_at: 2000-01-23T04:56:07.000+00:00
+        renews_at: 2000-01-23T04:56:07.000+00:00
         currency: null
         id: subscription_dev_abc123
         current_period_start: 2023-10-02T08:49:54.678156Z
@@ -18354,6 +19243,10 @@ components:
         custom_fields:
           nullable: true
           type: object
+        renews_at:
+          format: date-time
+          nullable: true
+          type: string
       required:
       - account_id
       - cancel_at_end
@@ -18605,6 +19498,7 @@ components:
       title: SubscriptionResumeRequest
     SubscriptionStatusEnum:
       enum:
+      - incomplete
       - trialing
       - active
       - paused
@@ -18724,6 +19618,10 @@ components:
         last_four:
           nullable: true
           type: string
+        display_name:
+          description: Display name for the payment method to show on the UI.
+          title: Display Name
+          type: string
         expiry_date:
           nullable: true
           type: string
@@ -18742,10 +19640,20 @@ components:
         card_issuer:
           nullable: true
           type: string
+        is_full_details_known:
+          description: Indicates if full details of the card are known
+          example: true
+          title: Is Full Details Known
+          type: boolean
+        cde_external_id:
+          nullable: true
+          type: string
       required:
       - created_at
+      - display_name
       - expiry_date
       - id
+      - is_full_details_known
       - provider
       - updated_at
       title: TokenizedCreditCardExternal
@@ -18783,19 +19691,26 @@ components:
       title: UpdateCouponRequest
     UpdateCustomerRequest:
       example:
+        invoice_settings:
+          email_receipt_on_paid: true
+          default_net_d: 1
         country: country
         notes: notes
         city: city
         custom_fields: "{}"
         last_name: last_name
+        language: null
         zip_code: zip_code
         coupon_id: coupon_id
         promotion_code_id: promotion_code_id
+        billing_email: billing_email
+        phone_number: phone_number
         state: state
         line3: line3
         first_name: first_name
         line2: line2
         line1: line1
+        email: email
       properties:
         first_name:
           nullable: true
@@ -18836,11 +19751,26 @@ components:
         custom_fields:
           nullable: true
           type: object
+        email:
+          nullable: true
+          type: string
+        invoice_settings:
+          $ref: '#/components/schemas/CustomerInvoiceSettings'
+        billing_email:
+          format: email
+          nullable: true
+          type: string
+        language:
+          $ref: '#/components/schemas/CustomerLanguage'
+        phone_number:
+          nullable: true
+          type: string
       title: UpdateCustomerRequest
     UpdateInvoiceRequest:
       example:
         payment_method_id: payment_method_id
-        discounts: ""
+        coupon_id: coupon_id
+        email_invoice_on_finalization: true
         custom_fields: "{}"
         description: Invoice to acme.co
       properties:
@@ -18853,11 +19783,15 @@ components:
           example: Invoice to acme.co
           title: Description
           type: string
-        discounts:
-          $ref: '#/components/schemas/Discounts'
+        coupon_id:
+          nullable: true
+          type: string
         custom_fields:
           nullable: true
           type: object
+        email_invoice_on_finalization:
+          nullable: true
+          type: boolean
       title: UpdateInvoiceRequest
     UpdatePaymentIntent:
       example:
@@ -18889,7 +19823,9 @@ components:
           units_from: 1
           flat_amount_atom: 5
         usage_type: null
+        meta: "{}"
         pricing_model: null
+        name: name
         contract_term_multiple: 5
         price_type: null
         listed_exclusively_for_customers:
@@ -18911,6 +19847,9 @@ components:
         is_active:
           nullable: true
           type: boolean
+        name:
+          nullable: true
+          type: string
         internal_description:
           nullable: true
           type: string
@@ -18955,6 +19894,9 @@ components:
           items:
             type: string
           type: array
+        meta:
+          nullable: true
+          type: object
       title: UpdatePriceRequest
     UpdateProductFamilyRequest:
       example:
@@ -19061,14 +20003,17 @@ components:
       title: UpdateSubscriptionItemRequest
     UpdateSubscriptionRequest:
       example:
-        payment_method_id: payment_method_id
-        coupon_id: coupon_id
+        new_period_end: 2000-01-23T04:56:07.000+00:00
         promotion_code: promotion_code
         custom_fields: "{}"
-        collection_method: null
+        is_preview: false
         description: description
         trial_end: 2000-01-23T04:56:07.000+00:00
+        preview_renewal_invoices: false
         trial_period_days: 0
+        payment_method_id: payment_method_id
+        coupon_id: coupon_id
+        collection_method: null
         proration_behavior: always_invoice
         items:
         - add_at_period_end: true
@@ -19125,6 +20070,24 @@ components:
         custom_fields:
           nullable: true
           type: object
+        new_period_end:
+          format: date-time
+          nullable: true
+          type: string
+        is_preview:
+          default: false
+          description: Whether the request is in preview mode (subscriptions won't
+            actually be updated)
+          example: false
+          title: Is Preview
+          type: boolean
+        preview_renewal_invoices:
+          default: false
+          description: Whether to include the preview of the renewal invoices for
+            the subscriptions in the response.
+          example: false
+          title: Preview Renewal Invoices
+          type: boolean
         items:
           items:
             $ref: '#/components/schemas/InlineSubscriptionItemUpdate'
@@ -19180,7 +20143,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -19189,7 +20152,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -19197,6 +20160,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -19240,6 +20204,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -19310,7 +20275,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -19319,7 +20284,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -19327,6 +20292,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -19370,6 +20336,7 @@ components:
           is_deleted: false
           paused_at: 2000-01-23T04:56:07.000+00:00
           updated_at: 2000-01-23T04:56:07.000+00:00
+          renews_at: 2000-01-23T04:56:07.000+00:00
           currency: null
           id: subscription_dev_abc123
           current_period_start: 2023-10-02T08:49:54.678156Z
@@ -19397,6 +20364,7 @@ components:
         - credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -19454,7 +20422,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -19463,7 +20431,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -19471,6 +20439,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -19514,6 +20483,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -19554,7 +20524,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -19563,7 +20533,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -19571,6 +20541,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -19615,7 +20586,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -19624,7 +20595,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -19632,6 +20603,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -19668,6 +20640,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -19755,6 +20728,7 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -19776,6 +20750,7 @@ components:
         - credit_note_ids:
           - credit_note_ids
           - credit_note_ids
+          metadata: "{}"
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
           total_discount_amount_atoms:
@@ -19833,7 +20808,7 @@ components:
                 metadata: "{}"
                 is_active: true
                 max_redemptions: 5
-                times_redeemed: 5
+                times_redeemed: 2
                 created_at: 2000-01-23T04:56:07.000+00:00
                 product_families:
                 - product_families
@@ -19842,7 +20817,7 @@ components:
                 - products
                 - products
                 duration: null
-                duration_in_months: 1
+                duration_in_months: 5
                 is_deleted: false
                 updated_at: 2000-01-23T04:56:07.000+00:00
                 amount_atom_off: 0
@@ -19850,6 +20825,7 @@ components:
                 percent_off: 6
                 currency: null
                 id: id
+                trial_days_off: 1
                 object: ""
               promotion_code:
                 metadata: "{}"
@@ -19893,6 +20869,7 @@ components:
             is_deleted: false
             paused_at: 2000-01-23T04:56:07.000+00:00
             updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
             currency: null
             id: subscription_dev_abc123
             current_period_start: 2023-10-02T08:49:54.678156Z
@@ -19933,7 +20910,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -19942,7 +20919,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -19950,6 +20927,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -19994,7 +20972,7 @@ components:
               metadata: "{}"
               is_active: true
               max_redemptions: 5
-              times_redeemed: 5
+              times_redeemed: 2
               created_at: 2000-01-23T04:56:07.000+00:00
               product_families:
               - product_families
@@ -20003,7 +20981,7 @@ components:
               - products
               - products
               duration: null
-              duration_in_months: 1
+              duration_in_months: 5
               is_deleted: false
               updated_at: 2000-01-23T04:56:07.000+00:00
               amount_atom_off: 0
@@ -20011,6 +20989,7 @@ components:
               percent_off: 6
               currency: null
               id: id
+              trial_days_off: 1
               object: ""
             promotion_code:
               metadata: "{}"
@@ -20047,6 +21026,7 @@ components:
             object: ""
             start_date: 2000-01-23T04:56:07.000+00:00
           period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
           is_initial_invoice_for_trial_sub: true
           currency: usd
           id: invoice_dev_abc123
@@ -20134,6 +21114,780 @@ components:
           due_date: 2000-01-23T04:56:07.000+00:00
           latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
           billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
+          period_end: 2023-11-04T19:31:08.650160Z
+          account_id: account_dev_abc123
+          invoice_pdf_url: invoice_pdf_url
+          paid_amount_atom: 6000
+          total_amount_atom: 9000
+          due_amount_atom: 8950
+          collection_method: charge_automatically
+          latest_payment_intent_id: latest_payment_intent_id
+          hosted_invoice_url: hosted_invoice_url
+          refund_ids:
+          - refund_ids
+          - refund_ids
+          receipt_pdf_url: receipt_pdf_url
+          customer_id: cus_dev_abc123
+          object: ""
+          customer: null
+          status: paid
+          net_d: 30
+        renewal_invoices:
+        - credit_note_ids:
+          - credit_note_ids
+          - credit_note_ids
+          metadata: "{}"
+          created_at: 2000-01-23T04:56:07.000+00:00
+          description: description
+          total_discount_amount_atoms:
+          - amount_atom: 9
+            object: ""
+            discount_id: discount_id
+          - amount_atom: 9
+            object: ""
+            discount_id: discount_id
+          subscription:
+            subscription_items:
+            - drop_at_end: false
+              add_at_period_end: true
+              quantity: 2
+              price_id: price_dev_abc123
+              created_at: 2000-01-23T04:56:07.000+00:00
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              price: ""
+              product_id: product_dev_xyz123
+              pending_attachment_to_subscription_id: pending_attachment_to_subscription_id
+              currency: usd
+              id: subi_dev_abc123
+              object: ""
+            - drop_at_end: false
+              add_at_period_end: true
+              quantity: 2
+              price_id: price_dev_abc123
+              created_at: 2000-01-23T04:56:07.000+00:00
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              price: ""
+              product_id: product_dev_xyz123
+              pending_attachment_to_subscription_id: pending_attachment_to_subscription_id
+              currency: usd
+              id: subi_dev_abc123
+              object: ""
+            cancelled_at: 2000-01-23T04:56:07.000+00:00
+            contract_auto_renew: true
+            metadata: "{}"
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            billing_interval: null
+            discount:
+              end_date: 2000-01-23T04:56:07.000+00:00
+              coupon:
+                redeem_by: 2000-01-23T04:56:07.000+00:00
+                promotion_codes:
+                - promotion_codes
+                - promotion_codes
+                metadata: "{}"
+                is_active: true
+                max_redemptions: 5
+                times_redeemed: 2
+                created_at: 2000-01-23T04:56:07.000+00:00
+                product_families:
+                - product_families
+                - product_families
+                products:
+                - products
+                - products
+                duration: null
+                duration_in_months: 5
+                is_deleted: false
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                amount_atom_off: 0
+                name: name
+                percent_off: 6
+                currency: null
+                id: id
+                trial_days_off: 1
+                object: ""
+              promotion_code:
+                metadata: "{}"
+                code: code
+                is_active: true
+                coupon: ""
+                max_redemptions: 1
+                times_redeemed: 5
+                created_at: 2000-01-23T04:56:07.000+00:00
+                restrictions:
+                  first_time_transaction: true
+                  minimum_amount_currency: null
+                  minimum_amount_atom: 2
+                is_deleted: false
+                expires_at: 2000-01-23T04:56:07.000+00:00
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                coupon_id: coupon_id
+                customer_ids:
+                - customer_ids
+                - customer_ids
+                max_redemptions_per_customer: 5
+                id: id
+                object: ""
+              invoice_item_id: invoice_item_id
+              created_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              promotion_code_id: promotion_code_id
+              invoice_id: invoice_id
+              id: id
+              customer_id: customer_id
+              object: ""
+              start_date: 2000-01-23T04:56:07.000+00:00
+            cancellation_details:
+              feedback: null
+              reason: reason
+              comment: comment
+            contract_start: 2000-01-23T04:56:07.000+00:00
+            is_deleted: false
+            paused_at: 2000-01-23T04:56:07.000+00:00
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
+            currency: null
+            id: subscription_dev_abc123
+            current_period_start: 2023-10-02T08:49:54.678156Z
+            cancel_at_end: true
+            default_payment_method_id: default_payment_method_id
+            billing_interval_count: 6
+            total_billing_cycles: 7
+            pause_for_cycles: 0
+            remaining_billing_cycles: 9
+            custom_fields: "{}"
+            trial_end: 2000-01-23T04:56:07.000+00:00
+            current_period_end: 2023-11-02T08:49:54.678156Z
+            pause_at_end: true
+            account_id: account_dev_abc123
+            initial_start: 2023-10-02T08:49:54.678156Z
+            resumes_at: 2000-01-23T04:56:07.000+00:00
+            name: name
+            trial_start: 2000-01-23T04:56:07.000+00:00
+            collection_method: charge_automatically
+            customer_id: cus_dev_abc123
+            object: ""
+            status: canceled
+            net_d: 3
+          subscription_id: subscription_id
+          applied_balance_amount_atom: 500
+          is_deleted: false
+          remaining_amount_atom: 0
+          tax_amount_atom: 900
+          pre_payment_credit_notes_amount: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          discounts:
+          - end_date: 2000-01-23T04:56:07.000+00:00
+            coupon:
+              redeem_by: 2000-01-23T04:56:07.000+00:00
+              promotion_codes:
+              - promotion_codes
+              - promotion_codes
+              metadata: "{}"
+              is_active: true
+              max_redemptions: 5
+              times_redeemed: 2
+              created_at: 2000-01-23T04:56:07.000+00:00
+              product_families:
+              - product_families
+              - product_families
+              products:
+              - products
+              - products
+              duration: null
+              duration_in_months: 5
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              amount_atom_off: 0
+              name: name
+              percent_off: 6
+              currency: null
+              id: id
+              trial_days_off: 1
+              object: ""
+            promotion_code:
+              metadata: "{}"
+              code: code
+              is_active: true
+              coupon: ""
+              max_redemptions: 1
+              times_redeemed: 5
+              created_at: 2000-01-23T04:56:07.000+00:00
+              restrictions:
+                first_time_transaction: true
+                minimum_amount_currency: null
+                minimum_amount_atom: 2
+              is_deleted: false
+              expires_at: 2000-01-23T04:56:07.000+00:00
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              customer_ids:
+              - customer_ids
+              - customer_ids
+              max_redemptions_per_customer: 5
+              id: id
+              object: ""
+            invoice_item_id: invoice_item_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            subscription_id: subscription_id
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            coupon_id: coupon_id
+            promotion_code_id: promotion_code_id
+            invoice_id: invoice_id
+            id: id
+            customer_id: customer_id
+            object: ""
+            start_date: 2000-01-23T04:56:07.000+00:00
+          - end_date: 2000-01-23T04:56:07.000+00:00
+            coupon:
+              redeem_by: 2000-01-23T04:56:07.000+00:00
+              promotion_codes:
+              - promotion_codes
+              - promotion_codes
+              metadata: "{}"
+              is_active: true
+              max_redemptions: 5
+              times_redeemed: 2
+              created_at: 2000-01-23T04:56:07.000+00:00
+              product_families:
+              - product_families
+              - product_families
+              products:
+              - products
+              - products
+              duration: null
+              duration_in_months: 5
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              amount_atom_off: 0
+              name: name
+              percent_off: 6
+              currency: null
+              id: id
+              trial_days_off: 1
+              object: ""
+            promotion_code:
+              metadata: "{}"
+              code: code
+              is_active: true
+              coupon: ""
+              max_redemptions: 1
+              times_redeemed: 5
+              created_at: 2000-01-23T04:56:07.000+00:00
+              restrictions:
+                first_time_transaction: true
+                minimum_amount_currency: null
+                minimum_amount_atom: 2
+              is_deleted: false
+              expires_at: 2000-01-23T04:56:07.000+00:00
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              customer_ids:
+              - customer_ids
+              - customer_ids
+              max_redemptions_per_customer: 5
+              id: id
+              object: ""
+            invoice_item_id: invoice_item_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            subscription_id: subscription_id
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            coupon_id: coupon_id
+            promotion_code_id: promotion_code_id
+            invoice_id: invoice_id
+            id: id
+            customer_id: customer_id
+            object: ""
+            start_date: 2000-01-23T04:56:07.000+00:00
+          period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
+          is_initial_invoice_for_trial_sub: true
+          currency: usd
+          id: invoice_dev_abc123
+          lines:
+          - discount_amount_atoms:
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            subscription_item_id: subscription_item_id
+            price_id: price_dev_abc123
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            proration_details_debit_invoice_item: proration_details_debit_invoice_item
+            subscription_id: subscription_id
+            amount_atom: 200
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            discounts:
+            - discounts
+            - discounts
+            period_start: 2023-11-04T19:31:08.650160Z
+            product_id: product_dev_abc123
+            invoice_id: invoice_id
+            currency: usd
+            id: invoiceitem_dev_abc123
+            subscription_cancelled_at: 2000-01-23T04:56:07.000+00:00
+            quantity: 2
+            amount_atom_considering_discount_applied: 150
+            proration: false
+            period_end: 2023-11-04T19:31:08.650160Z
+            account_id: account_dev_abc123
+            price_type: recurring
+            customer_id: cus_dev_abc123
+            object: ""
+          - discount_amount_atoms:
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            subscription_item_id: subscription_item_id
+            price_id: price_dev_abc123
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            proration_details_debit_invoice_item: proration_details_debit_invoice_item
+            subscription_id: subscription_id
+            amount_atom: 200
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            discounts:
+            - discounts
+            - discounts
+            period_start: 2023-11-04T19:31:08.650160Z
+            product_id: product_dev_abc123
+            invoice_id: invoice_id
+            currency: usd
+            id: invoiceitem_dev_abc123
+            subscription_cancelled_at: 2000-01-23T04:56:07.000+00:00
+            quantity: 2
+            amount_atom_considering_discount_applied: 150
+            proration: false
+            period_end: 2023-11-04T19:31:08.650160Z
+            account_id: account_dev_abc123
+            price_type: recurring
+            customer_id: cus_dev_abc123
+            object: ""
+          invoice_number: 3
+          default_payment_method_id: default_payment_method_id
+          comments:
+          - user_email: user_email
+            created_at: 2000-01-23T04:56:07.000+00:00
+            comment: comment
+          - user_email: user_email
+            created_at: 2000-01-23T04:56:07.000+00:00
+            comment: comment
+          paid_out_of_band: true
+          tax_processor_updated_at: 2000-01-23T04:56:07.000+00:00
+          refunded_amount_atom: 6
+          post_payment_credit_notes_amount: 8
+          custom_fields: "{}"
+          due_date: 2000-01-23T04:56:07.000+00:00
+          latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
+          billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
+          period_end: 2023-11-04T19:31:08.650160Z
+          account_id: account_dev_abc123
+          invoice_pdf_url: invoice_pdf_url
+          paid_amount_atom: 6000
+          total_amount_atom: 9000
+          due_amount_atom: 8950
+          collection_method: charge_automatically
+          latest_payment_intent_id: latest_payment_intent_id
+          hosted_invoice_url: hosted_invoice_url
+          refund_ids:
+          - refund_ids
+          - refund_ids
+          receipt_pdf_url: receipt_pdf_url
+          customer_id: cus_dev_abc123
+          object: ""
+          customer: null
+          status: paid
+          net_d: 30
+        - credit_note_ids:
+          - credit_note_ids
+          - credit_note_ids
+          metadata: "{}"
+          created_at: 2000-01-23T04:56:07.000+00:00
+          description: description
+          total_discount_amount_atoms:
+          - amount_atom: 9
+            object: ""
+            discount_id: discount_id
+          - amount_atom: 9
+            object: ""
+            discount_id: discount_id
+          subscription:
+            subscription_items:
+            - drop_at_end: false
+              add_at_period_end: true
+              quantity: 2
+              price_id: price_dev_abc123
+              created_at: 2000-01-23T04:56:07.000+00:00
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              price: ""
+              product_id: product_dev_xyz123
+              pending_attachment_to_subscription_id: pending_attachment_to_subscription_id
+              currency: usd
+              id: subi_dev_abc123
+              object: ""
+            - drop_at_end: false
+              add_at_period_end: true
+              quantity: 2
+              price_id: price_dev_abc123
+              created_at: 2000-01-23T04:56:07.000+00:00
+              deleted_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              price: ""
+              product_id: product_dev_xyz123
+              pending_attachment_to_subscription_id: pending_attachment_to_subscription_id
+              currency: usd
+              id: subi_dev_abc123
+              object: ""
+            cancelled_at: 2000-01-23T04:56:07.000+00:00
+            contract_auto_renew: true
+            metadata: "{}"
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            billing_interval: null
+            discount:
+              end_date: 2000-01-23T04:56:07.000+00:00
+              coupon:
+                redeem_by: 2000-01-23T04:56:07.000+00:00
+                promotion_codes:
+                - promotion_codes
+                - promotion_codes
+                metadata: "{}"
+                is_active: true
+                max_redemptions: 5
+                times_redeemed: 2
+                created_at: 2000-01-23T04:56:07.000+00:00
+                product_families:
+                - product_families
+                - product_families
+                products:
+                - products
+                - products
+                duration: null
+                duration_in_months: 5
+                is_deleted: false
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                amount_atom_off: 0
+                name: name
+                percent_off: 6
+                currency: null
+                id: id
+                trial_days_off: 1
+                object: ""
+              promotion_code:
+                metadata: "{}"
+                code: code
+                is_active: true
+                coupon: ""
+                max_redemptions: 1
+                times_redeemed: 5
+                created_at: 2000-01-23T04:56:07.000+00:00
+                restrictions:
+                  first_time_transaction: true
+                  minimum_amount_currency: null
+                  minimum_amount_atom: 2
+                is_deleted: false
+                expires_at: 2000-01-23T04:56:07.000+00:00
+                updated_at: 2000-01-23T04:56:07.000+00:00
+                coupon_id: coupon_id
+                customer_ids:
+                - customer_ids
+                - customer_ids
+                max_redemptions_per_customer: 5
+                id: id
+                object: ""
+              invoice_item_id: invoice_item_id
+              created_at: 2000-01-23T04:56:07.000+00:00
+              subscription_id: subscription_id
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              promotion_code_id: promotion_code_id
+              invoice_id: invoice_id
+              id: id
+              customer_id: customer_id
+              object: ""
+              start_date: 2000-01-23T04:56:07.000+00:00
+            cancellation_details:
+              feedback: null
+              reason: reason
+              comment: comment
+            contract_start: 2000-01-23T04:56:07.000+00:00
+            is_deleted: false
+            paused_at: 2000-01-23T04:56:07.000+00:00
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            renews_at: 2000-01-23T04:56:07.000+00:00
+            currency: null
+            id: subscription_dev_abc123
+            current_period_start: 2023-10-02T08:49:54.678156Z
+            cancel_at_end: true
+            default_payment_method_id: default_payment_method_id
+            billing_interval_count: 6
+            total_billing_cycles: 7
+            pause_for_cycles: 0
+            remaining_billing_cycles: 9
+            custom_fields: "{}"
+            trial_end: 2000-01-23T04:56:07.000+00:00
+            current_period_end: 2023-11-02T08:49:54.678156Z
+            pause_at_end: true
+            account_id: account_dev_abc123
+            initial_start: 2023-10-02T08:49:54.678156Z
+            resumes_at: 2000-01-23T04:56:07.000+00:00
+            name: name
+            trial_start: 2000-01-23T04:56:07.000+00:00
+            collection_method: charge_automatically
+            customer_id: cus_dev_abc123
+            object: ""
+            status: canceled
+            net_d: 3
+          subscription_id: subscription_id
+          applied_balance_amount_atom: 500
+          is_deleted: false
+          remaining_amount_atom: 0
+          tax_amount_atom: 900
+          pre_payment_credit_notes_amount: 6
+          updated_at: 2000-01-23T04:56:07.000+00:00
+          discounts:
+          - end_date: 2000-01-23T04:56:07.000+00:00
+            coupon:
+              redeem_by: 2000-01-23T04:56:07.000+00:00
+              promotion_codes:
+              - promotion_codes
+              - promotion_codes
+              metadata: "{}"
+              is_active: true
+              max_redemptions: 5
+              times_redeemed: 2
+              created_at: 2000-01-23T04:56:07.000+00:00
+              product_families:
+              - product_families
+              - product_families
+              products:
+              - products
+              - products
+              duration: null
+              duration_in_months: 5
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              amount_atom_off: 0
+              name: name
+              percent_off: 6
+              currency: null
+              id: id
+              trial_days_off: 1
+              object: ""
+            promotion_code:
+              metadata: "{}"
+              code: code
+              is_active: true
+              coupon: ""
+              max_redemptions: 1
+              times_redeemed: 5
+              created_at: 2000-01-23T04:56:07.000+00:00
+              restrictions:
+                first_time_transaction: true
+                minimum_amount_currency: null
+                minimum_amount_atom: 2
+              is_deleted: false
+              expires_at: 2000-01-23T04:56:07.000+00:00
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              customer_ids:
+              - customer_ids
+              - customer_ids
+              max_redemptions_per_customer: 5
+              id: id
+              object: ""
+            invoice_item_id: invoice_item_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            subscription_id: subscription_id
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            coupon_id: coupon_id
+            promotion_code_id: promotion_code_id
+            invoice_id: invoice_id
+            id: id
+            customer_id: customer_id
+            object: ""
+            start_date: 2000-01-23T04:56:07.000+00:00
+          - end_date: 2000-01-23T04:56:07.000+00:00
+            coupon:
+              redeem_by: 2000-01-23T04:56:07.000+00:00
+              promotion_codes:
+              - promotion_codes
+              - promotion_codes
+              metadata: "{}"
+              is_active: true
+              max_redemptions: 5
+              times_redeemed: 2
+              created_at: 2000-01-23T04:56:07.000+00:00
+              product_families:
+              - product_families
+              - product_families
+              products:
+              - products
+              - products
+              duration: null
+              duration_in_months: 5
+              is_deleted: false
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              amount_atom_off: 0
+              name: name
+              percent_off: 6
+              currency: null
+              id: id
+              trial_days_off: 1
+              object: ""
+            promotion_code:
+              metadata: "{}"
+              code: code
+              is_active: true
+              coupon: ""
+              max_redemptions: 1
+              times_redeemed: 5
+              created_at: 2000-01-23T04:56:07.000+00:00
+              restrictions:
+                first_time_transaction: true
+                minimum_amount_currency: null
+                minimum_amount_atom: 2
+              is_deleted: false
+              expires_at: 2000-01-23T04:56:07.000+00:00
+              updated_at: 2000-01-23T04:56:07.000+00:00
+              coupon_id: coupon_id
+              customer_ids:
+              - customer_ids
+              - customer_ids
+              max_redemptions_per_customer: 5
+              id: id
+              object: ""
+            invoice_item_id: invoice_item_id
+            created_at: 2000-01-23T04:56:07.000+00:00
+            subscription_id: subscription_id
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            coupon_id: coupon_id
+            promotion_code_id: promotion_code_id
+            invoice_id: invoice_id
+            id: id
+            customer_id: customer_id
+            object: ""
+            start_date: 2000-01-23T04:56:07.000+00:00
+          period_start: 2023-11-04T19:31:08.650160Z
+          email_invoice_on_finalization: false
+          is_initial_invoice_for_trial_sub: true
+          currency: usd
+          id: invoice_dev_abc123
+          lines:
+          - discount_amount_atoms:
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            subscription_item_id: subscription_item_id
+            price_id: price_dev_abc123
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            proration_details_debit_invoice_item: proration_details_debit_invoice_item
+            subscription_id: subscription_id
+            amount_atom: 200
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            discounts:
+            - discounts
+            - discounts
+            period_start: 2023-11-04T19:31:08.650160Z
+            product_id: product_dev_abc123
+            invoice_id: invoice_id
+            currency: usd
+            id: invoiceitem_dev_abc123
+            subscription_cancelled_at: 2000-01-23T04:56:07.000+00:00
+            quantity: 2
+            amount_atom_considering_discount_applied: 150
+            proration: false
+            period_end: 2023-11-04T19:31:08.650160Z
+            account_id: account_dev_abc123
+            price_type: recurring
+            customer_id: cus_dev_abc123
+            object: ""
+          - discount_amount_atoms:
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            - amount_atom: 9
+              object: ""
+              discount_id: discount_id
+            subscription_item_id: subscription_item_id
+            price_id: price_dev_abc123
+            created_at: 2000-01-23T04:56:07.000+00:00
+            description: description
+            proration_details_debit_invoice_item: proration_details_debit_invoice_item
+            subscription_id: subscription_id
+            amount_atom: 200
+            is_deleted: false
+            updated_at: 2000-01-23T04:56:07.000+00:00
+            discounts:
+            - discounts
+            - discounts
+            period_start: 2023-11-04T19:31:08.650160Z
+            product_id: product_dev_abc123
+            invoice_id: invoice_id
+            currency: usd
+            id: invoiceitem_dev_abc123
+            subscription_cancelled_at: 2000-01-23T04:56:07.000+00:00
+            quantity: 2
+            amount_atom_considering_discount_applied: 150
+            proration: false
+            period_end: 2023-11-04T19:31:08.650160Z
+            account_id: account_dev_abc123
+            price_type: recurring
+            customer_id: cus_dev_abc123
+            object: ""
+          invoice_number: 3
+          default_payment_method_id: default_payment_method_id
+          comments:
+          - user_email: user_email
+            created_at: 2000-01-23T04:56:07.000+00:00
+            comment: comment
+          - user_email: user_email
+            created_at: 2000-01-23T04:56:07.000+00:00
+            comment: comment
+          paid_out_of_band: true
+          tax_processor_updated_at: 2000-01-23T04:56:07.000+00:00
+          refunded_amount_atom: 6
+          post_payment_credit_notes_amount: 8
+          custom_fields: "{}"
+          due_date: 2000-01-23T04:56:07.000+00:00
+          latest_payment_attempt_failure_message: latest_payment_attempt_failure_message
+          billing_reason: subscription_create
+          paid_at: 2000-01-23T04:56:07.000+00:00
           period_end: 2023-11-04T19:31:08.650160Z
           account_id: account_dev_abc123
           invoice_pdf_url: invoice_pdf_url
@@ -20158,6 +21912,10 @@ components:
             $ref: '#/components/schemas/SubscriptionExternal'
           type: array
         invoices:
+          items:
+            $ref: '#/components/schemas/InvoiceExternal'
+          type: array
+        renewal_invoices:
           items:
             $ref: '#/components/schemas/InvoiceExternal'
           type: array
@@ -20201,16 +21959,6 @@ components:
       - $ref: '#/components/schemas/TokenizedCreditCardExternal'
       - $ref: '#/components/schemas/PaymentMethodExternal'
       title: Response Get Payment Method Payment Methods  Payment Method Id  Get
-    Discounts:
-      anyOf:
-      - type: string
-      - $ref: '#/components/schemas/InvoiceDiscountOptions'
-      description: "The coupons to redeem into discounts for the invoice. If not specified,\
-        \ inherits the discount from one of its ancestors. Pass 'null' to not apply\
-        \ any discounts to this invoice."
-      example: ""
-      nullable: true
-      title: Discounts
     ListResponse_Union_TokenizedCreditCardExternal__PaymentMethodExternal___data_inner:
       anyOf:
       - $ref: '#/components/schemas/TokenizedCreditCardExternal'

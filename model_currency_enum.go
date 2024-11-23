@@ -22,12 +22,20 @@ type CurrencyEnum string
 const (
 	CURRENCYENUM_USD CurrencyEnum = "usd"
 	CURRENCYENUM_BRL CurrencyEnum = "brl"
+	CURRENCYENUM_EUR CurrencyEnum = "eur"
+	CURRENCYENUM_GBP CurrencyEnum = "gbp"
+	CURRENCYENUM_AUD CurrencyEnum = "aud"
+	CURRENCYENUM_CAD CurrencyEnum = "cad"
 )
 
 // All allowed values of CurrencyEnum enum
 var AllowedCurrencyEnumEnumValues = []CurrencyEnum{
 	"usd",
 	"brl",
+	"eur",
+	"gbp",
+	"aud",
+	"cad",
 }
 
 func (v *CurrencyEnum) UnmarshalJSON(src []byte) error {

@@ -23,6 +23,14 @@
 
 * `CHARGE_DELETED` (value: `"charge.deleted"`)
 
+* `CHARGE_SUCCEEDED` (value: `"charge.succeeded"`)
+
+* `CHARGE_FAILED` (value: `"charge.failed"`)
+
+* `CHARGE_PENDING` (value: `"charge.pending"`)
+
+* `CHARGE_REFUNDED` (value: `"charge.refunded"`)
+
 * `COUPON_CREATED` (value: `"coupon.created"`)
 
 * `COUPON_UPDATED` (value: `"coupon.updated"`)
@@ -34,12 +42,6 @@
 * `CREDIT_NOTE_UPDATED` (value: `"credit_note.updated"`)
 
 * `CREDIT_NOTE_DELETED` (value: `"credit_note.deleted"`)
-
-* `CREDIT_NOTE_ITEM_CREATED` (value: `"credit_note_item.created"`)
-
-* `CREDIT_NOTE_ITEM_UPDATED` (value: `"credit_note_item.updated"`)
-
-* `CREDIT_NOTE_ITEM_DELETED` (value: `"credit_note_item.deleted"`)
 
 * `CUSTOMER_CREATED` (value: `"customer.created"`)
 
@@ -53,23 +55,11 @@
 
 * `CUSTOMER_BALANCE_TRANSACTION_DELETED` (value: `"customer_balance_transaction.deleted"`)
 
-* `DELIVERY_ATTEMPT_CREATED` (value: `"delivery_attempt.created"`)
-
-* `DELIVERY_ATTEMPT_UPDATED` (value: `"delivery_attempt.updated"`)
-
-* `DELIVERY_ATTEMPT_DELETED` (value: `"delivery_attempt.deleted"`)
-
 * `DISCOUNT_CREATED` (value: `"discount.created"`)
 
 * `DISCOUNT_UPDATED` (value: `"discount.updated"`)
 
 * `DISCOUNT_DELETED` (value: `"discount.deleted"`)
-
-* `EVENT_CREATED` (value: `"event.created"`)
-
-* `EVENT_UPDATED` (value: `"event.updated"`)
-
-* `EVENT_DELETED` (value: `"event.deleted"`)
 
 * `INVITE_CREATED` (value: `"invite.created"`)
 
@@ -86,6 +76,16 @@
 * `INVOICE_CREATED` (value: `"invoice.created"`)
 
 * `INVOICE_UPDATED` (value: `"invoice.updated"`)
+
+* `INVOICE_FINALIZED` (value: `"invoice.finalized"`)
+
+* `INVOICE_PAID` (value: `"invoice.paid"`)
+
+* `INVOICE_PAST_DUE` (value: `"invoice.past_due"`)
+
+* `INVOICE_VOIDED` (value: `"invoice.voided"`)
+
+* `INVOICE_UNCOLLECTIBLE` (value: `"invoice.uncollectible"`)
 
 * `INVOICE_DELETED` (value: `"invoice.deleted"`)
 
@@ -109,6 +109,14 @@
 
 * `PAYMENT_INTENT_DELETED` (value: `"payment_intent.deleted"`)
 
+* `PAYMENT_INTENT_SUCCEEDED` (value: `"payment_intent.succeeded"`)
+
+* `PAYMENT_INTENT_PROCESSING` (value: `"payment_intent.processing"`)
+
+* `PAYMENT_INTENT_REQUIRES_ACTION` (value: `"payment_intent.requires_action"`)
+
+* `PAYMENT_INTENT_FAILED` (value: `"payment_intent.failed"`)
+
 * `PAYMENT_METHOD_CREATED` (value: `"payment_method.created"`)
 
 * `PAYMENT_METHOD_UPDATED` (value: `"payment_method.updated"`)
@@ -126,12 +134,6 @@
 * `PRICE_UPDATED` (value: `"price.updated"`)
 
 * `PRICE_DELETED` (value: `"price.deleted"`)
-
-* `PRICE_TIER_CREATED` (value: `"price_tier.created"`)
-
-* `PRICE_TIER_UPDATED` (value: `"price_tier.updated"`)
-
-* `PRICE_TIER_DELETED` (value: `"price_tier.deleted"`)
 
 * `PRODUCT_CREATED` (value: `"product.created"`)
 
@@ -156,6 +158,18 @@
 * `CUSTOMER_SUBSCRIPTION_UPDATED` (value: `"customer.subscription.updated"`)
 
 * `CUSTOMER_SUBSCRIPTION_DELETED` (value: `"customer.subscription.deleted"`)
+
+* `CUSTOMER_SUBSCRIPTION_CANCELED` (value: `"customer.subscription.canceled"`)
+
+* `CUSTOMER_SUBSCRIPTION_ACTIVATED` (value: `"customer.subscription.activated"`)
+
+* `CUSTOMER_SUBSCRIPTION_PAUSED` (value: `"customer.subscription.paused"`)
+
+* `CUSTOMER_SUBSCRIPTION_RESUMED` (value: `"customer.subscription.resumed"`)
+
+* `CUSTOMER_SUBSCRIPTION_PAST_DUE` (value: `"customer.subscription.past_due"`)
+
+* `CUSTOMER_SUBSCRIPTION_TRIALING` (value: `"customer.subscription.trialing"`)
 
 * `CUSTOMER_SUBSCRIPTION_TRIAL_WILL_END` (value: `"customer.subscription.trial_will_end"`)
 

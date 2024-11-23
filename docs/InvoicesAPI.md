@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**MarkInvoiceAsUncollectible**](InvoicesAPI.md#MarkInvoiceAsUncollectible) | **Post** /invoices/{invoice_external_id}/mark_uncollectible | Mark Invoice As Uncollectible
 [**MarkInvoiceAsVoid**](InvoicesAPI.md#MarkInvoiceAsVoid) | **Post** /invoices/{invoice_external_id}/void | Mark Invoice As Void
 [**PayInvoice**](InvoicesAPI.md#PayInvoice) | **Post** /invoices/{invoice_external_id}/pay | Pay Invoice
+[**PreviewNextInvoice**](InvoicesAPI.md#PreviewNextInvoice) | **Get** /invoices/preview_next_invoice/{subscription_id} | Preview Next Invoice
 [**SearchInvoices**](InvoicesAPI.md#SearchInvoices) | **Post** /invoices/search | Search Invoices
 [**UpdateInvoice**](InvoicesAPI.md#UpdateInvoice) | **Put** /invoices/{invoice_id} | Update Invoice
 
@@ -109,7 +110,7 @@ import (
 )
 
 func main() {
-    createInvoiceRequest := *openapiclient.NewCreateInvoiceRequest("subscription_dev_abc123") // CreateInvoiceRequest | 
+    createInvoiceRequest := *openapiclient.NewCreateInvoiceRequest("CustomerId_example") // CreateInvoiceRequest | 
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)
@@ -627,6 +628,74 @@ Name | Type | Description  | Notes
 ### HTTP request headers
 
 - **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PreviewNextInvoice
+
+> InvoiceExternal PreviewNextInvoice(ctx, subscriptionId).Execute()
+
+Preview Next Invoice
+
+### Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "os"
+    openapiclient "github.com/getopenpay/getopenpay-go"
+)
+
+func main() {
+    subscriptionId := "subscriptionId_example" // string | 
+
+    configuration := openapiclient.NewConfiguration()
+    apiClient := openapiclient.NewAPIClient(configuration)
+    resp, r, err := apiClient.InvoicesAPI.PreviewNextInvoice(context.Background(), subscriptionId).Execute()
+    if err != nil {
+        fmt.Fprintf(os.Stderr, "Error when calling `InvoicesAPI.PreviewNextInvoice``: %v\n", err)
+        fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+    }
+    // response from `PreviewNextInvoice`: InvoiceExternal
+    fmt.Fprintf(os.Stdout, "Response from `InvoicesAPI.PreviewNextInvoice`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**subscriptionId** | **string** |  | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPreviewNextInvoiceRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+
+### Return type
+
+[**InvoiceExternal**](InvoiceExternal.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)

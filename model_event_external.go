@@ -36,6 +36,7 @@ type EventExternal struct {
 	RequestId NullableString `json:"request_id"`
 	RequestIdempotencyKey NullableString `json:"request_idempotency_key"`
 	PendingWebhooks int32 `json:"pending_webhooks"`
+	User NullableString `json:"user,omitempty"`
 }
 
 type _EventExternal EventExternal
@@ -387,6 +388,48 @@ func (o *EventExternal) SetPendingWebhooks(v int32) {
 	o.PendingWebhooks = v
 }
 
+// GetUser returns the User field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *EventExternal) GetUser() string {
+	if o == nil || IsNil(o.User.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.User.Get()
+}
+
+// GetUserOk returns a tuple with the User field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *EventExternal) GetUserOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.User.Get(), o.User.IsSet()
+}
+
+// HasUser returns a boolean if a field has been set.
+func (o *EventExternal) HasUser() bool {
+	if o != nil && o.User.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetUser gets a reference to the given NullableString and assigns it to the User field.
+func (o *EventExternal) SetUser(v string) {
+	o.User.Set(&v)
+}
+// SetUserNil sets the value for User to be an explicit nil
+func (o *EventExternal) SetUserNil() {
+	o.User.Set(nil)
+}
+
+// UnsetUser ensures that no value is present for User, not even an explicit nil
+func (o *EventExternal) UnsetUser() {
+	o.User.Unset()
+}
+
 func (o EventExternal) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -415,6 +458,9 @@ func (o EventExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["request_id"] = o.RequestId.Get()
 	toSerialize["request_idempotency_key"] = o.RequestIdempotencyKey.Get()
 	toSerialize["pending_webhooks"] = o.PendingWebhooks
+	if o.User.IsSet() {
+		toSerialize["user"] = o.User.Get()
+	}
 	return toSerialize, nil
 }
 

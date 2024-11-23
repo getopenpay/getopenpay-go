@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Coupons** | Pointer to **[]string** |  | [optional] 
+**Coupon** | Pointer to **NullableString** |  | [optional] 
 **Discount** | Pointer to **NullableString** |  | [optional] 
 
 ## Methods
@@ -26,31 +26,41 @@ NewInvoiceDiscountOptionsWithDefaults instantiates a new InvoiceDiscountOptions 
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetCoupons
+### GetCoupon
 
-`func (o *InvoiceDiscountOptions) GetCoupons() []string`
+`func (o *InvoiceDiscountOptions) GetCoupon() string`
 
-GetCoupons returns the Coupons field if non-nil, zero value otherwise.
+GetCoupon returns the Coupon field if non-nil, zero value otherwise.
 
-### GetCouponsOk
+### GetCouponOk
 
-`func (o *InvoiceDiscountOptions) GetCouponsOk() (*[]string, bool)`
+`func (o *InvoiceDiscountOptions) GetCouponOk() (*string, bool)`
 
-GetCouponsOk returns a tuple with the Coupons field if it's non-nil, zero value otherwise
+GetCouponOk returns a tuple with the Coupon field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetCoupons
+### SetCoupon
 
-`func (o *InvoiceDiscountOptions) SetCoupons(v []string)`
+`func (o *InvoiceDiscountOptions) SetCoupon(v string)`
 
-SetCoupons sets Coupons field to given value.
+SetCoupon sets Coupon field to given value.
 
-### HasCoupons
+### HasCoupon
 
-`func (o *InvoiceDiscountOptions) HasCoupons() bool`
+`func (o *InvoiceDiscountOptions) HasCoupon() bool`
 
-HasCoupons returns a boolean if a field has been set.
+HasCoupon returns a boolean if a field has been set.
 
+### SetCouponNil
+
+`func (o *InvoiceDiscountOptions) SetCouponNil(b bool)`
+
+ SetCouponNil sets the value for Coupon to be an explicit nil
+
+### UnsetCoupon
+`func (o *InvoiceDiscountOptions) UnsetCoupon()`
+
+UnsetCoupon ensures that no value is present for Coupon, not even an explicit nil
 ### GetDiscount
 
 `func (o *InvoiceDiscountOptions) GetDiscount() string`

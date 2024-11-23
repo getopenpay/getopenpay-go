@@ -6,8 +6,9 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **PaymentMethodId** | Pointer to **NullableString** |  | [optional] 
 **Description** | Pointer to **string** | Description for newly created invoice | [optional] [default to "Manual creation of invoice"]
-**Discounts** | Pointer to [**NullableDiscounts**](Discounts.md) |  | [optional] 
+**CouponId** | Pointer to **NullableString** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**EmailInvoiceOnFinalization** | Pointer to **NullableBool** |  | [optional] 
 
 ## Methods
 
@@ -88,41 +89,41 @@ SetDescription sets Description field to given value.
 
 HasDescription returns a boolean if a field has been set.
 
-### GetDiscounts
+### GetCouponId
 
-`func (o *UpdateInvoiceRequest) GetDiscounts() Discounts`
+`func (o *UpdateInvoiceRequest) GetCouponId() string`
 
-GetDiscounts returns the Discounts field if non-nil, zero value otherwise.
+GetCouponId returns the CouponId field if non-nil, zero value otherwise.
 
-### GetDiscountsOk
+### GetCouponIdOk
 
-`func (o *UpdateInvoiceRequest) GetDiscountsOk() (*Discounts, bool)`
+`func (o *UpdateInvoiceRequest) GetCouponIdOk() (*string, bool)`
 
-GetDiscountsOk returns a tuple with the Discounts field if it's non-nil, zero value otherwise
+GetCouponIdOk returns a tuple with the CouponId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetDiscounts
+### SetCouponId
 
-`func (o *UpdateInvoiceRequest) SetDiscounts(v Discounts)`
+`func (o *UpdateInvoiceRequest) SetCouponId(v string)`
 
-SetDiscounts sets Discounts field to given value.
+SetCouponId sets CouponId field to given value.
 
-### HasDiscounts
+### HasCouponId
 
-`func (o *UpdateInvoiceRequest) HasDiscounts() bool`
+`func (o *UpdateInvoiceRequest) HasCouponId() bool`
 
-HasDiscounts returns a boolean if a field has been set.
+HasCouponId returns a boolean if a field has been set.
 
-### SetDiscountsNil
+### SetCouponIdNil
 
-`func (o *UpdateInvoiceRequest) SetDiscountsNil(b bool)`
+`func (o *UpdateInvoiceRequest) SetCouponIdNil(b bool)`
 
- SetDiscountsNil sets the value for Discounts to be an explicit nil
+ SetCouponIdNil sets the value for CouponId to be an explicit nil
 
-### UnsetDiscounts
-`func (o *UpdateInvoiceRequest) UnsetDiscounts()`
+### UnsetCouponId
+`func (o *UpdateInvoiceRequest) UnsetCouponId()`
 
-UnsetDiscounts ensures that no value is present for Discounts, not even an explicit nil
+UnsetCouponId ensures that no value is present for CouponId, not even an explicit nil
 ### GetCustomFields
 
 `func (o *UpdateInvoiceRequest) GetCustomFields() map[string]interface{}`
@@ -158,6 +159,41 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *UpdateInvoiceRequest) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetEmailInvoiceOnFinalization
+
+`func (o *UpdateInvoiceRequest) GetEmailInvoiceOnFinalization() bool`
+
+GetEmailInvoiceOnFinalization returns the EmailInvoiceOnFinalization field if non-nil, zero value otherwise.
+
+### GetEmailInvoiceOnFinalizationOk
+
+`func (o *UpdateInvoiceRequest) GetEmailInvoiceOnFinalizationOk() (*bool, bool)`
+
+GetEmailInvoiceOnFinalizationOk returns a tuple with the EmailInvoiceOnFinalization field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEmailInvoiceOnFinalization
+
+`func (o *UpdateInvoiceRequest) SetEmailInvoiceOnFinalization(v bool)`
+
+SetEmailInvoiceOnFinalization sets EmailInvoiceOnFinalization field to given value.
+
+### HasEmailInvoiceOnFinalization
+
+`func (o *UpdateInvoiceRequest) HasEmailInvoiceOnFinalization() bool`
+
+HasEmailInvoiceOnFinalization returns a boolean if a field has been set.
+
+### SetEmailInvoiceOnFinalizationNil
+
+`func (o *UpdateInvoiceRequest) SetEmailInvoiceOnFinalizationNil(b bool)`
+
+ SetEmailInvoiceOnFinalizationNil sets the value for EmailInvoiceOnFinalization to be an explicit nil
+
+### UnsetEmailInvoiceOnFinalization
+`func (o *UpdateInvoiceRequest) UnsetEmailInvoiceOnFinalization()`
+
+UnsetEmailInvoiceOnFinalization ensures that no value is present for EmailInvoiceOnFinalization, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

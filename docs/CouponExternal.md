@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **IsActive** | **bool** |  | 
 **AmountAtomOff** | **NullableInt32** |  | 
 **PercentOff** | **NullableInt32** |  | 
+**TrialDaysOff** | Pointer to **NullableInt32** |  | [optional] 
 **Currency** | Pointer to [**NullableCurrencyEnum**](CurrencyEnum.md) |  | [optional] 
 **Duration** | [**CouponDuration**](CouponDuration.md) |  | 
 **DurationInMonths** | **NullableInt32** |  | 
@@ -253,6 +254,41 @@ SetPercentOff sets PercentOff field to given value.
 `func (o *CouponExternal) UnsetPercentOff()`
 
 UnsetPercentOff ensures that no value is present for PercentOff, not even an explicit nil
+### GetTrialDaysOff
+
+`func (o *CouponExternal) GetTrialDaysOff() int32`
+
+GetTrialDaysOff returns the TrialDaysOff field if non-nil, zero value otherwise.
+
+### GetTrialDaysOffOk
+
+`func (o *CouponExternal) GetTrialDaysOffOk() (*int32, bool)`
+
+GetTrialDaysOffOk returns a tuple with the TrialDaysOff field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetTrialDaysOff
+
+`func (o *CouponExternal) SetTrialDaysOff(v int32)`
+
+SetTrialDaysOff sets TrialDaysOff field to given value.
+
+### HasTrialDaysOff
+
+`func (o *CouponExternal) HasTrialDaysOff() bool`
+
+HasTrialDaysOff returns a boolean if a field has been set.
+
+### SetTrialDaysOffNil
+
+`func (o *CouponExternal) SetTrialDaysOffNil(b bool)`
+
+ SetTrialDaysOffNil sets the value for TrialDaysOff to be an explicit nil
+
+### UnsetTrialDaysOff
+`func (o *CouponExternal) UnsetTrialDaysOff()`
+
+UnsetTrialDaysOff ensures that no value is present for TrialDaysOff, not even an explicit nil
 ### GetCurrency
 
 `func (o *CouponExternal) GetCurrency() CurrencyEnum`

@@ -4,7 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**Coupons** | Pointer to **interface{}** |  | [optional] 
+**Coupon** | Pointer to **interface{}** |  | [optional] 
 **Discount** | Pointer to **interface{}** |  | [optional] 
 
 ## Methods
@@ -26,41 +26,41 @@ NewDiscountsWithDefaults instantiates a new Discounts object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetCoupons
+### GetCoupon
 
-`func (o *Discounts) GetCoupons() interface{}`
+`func (o *Discounts) GetCoupon() interface{}`
 
-GetCoupons returns the Coupons field if non-nil, zero value otherwise.
+GetCoupon returns the Coupon field if non-nil, zero value otherwise.
 
-### GetCouponsOk
+### GetCouponOk
 
-`func (o *Discounts) GetCouponsOk() (*interface{}, bool)`
+`func (o *Discounts) GetCouponOk() (*interface{}, bool)`
 
-GetCouponsOk returns a tuple with the Coupons field if it's non-nil, zero value otherwise
+GetCouponOk returns a tuple with the Coupon field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetCoupons
+### SetCoupon
 
-`func (o *Discounts) SetCoupons(v interface{})`
+`func (o *Discounts) SetCoupon(v interface{})`
 
-SetCoupons sets Coupons field to given value.
+SetCoupon sets Coupon field to given value.
 
-### HasCoupons
+### HasCoupon
 
-`func (o *Discounts) HasCoupons() bool`
+`func (o *Discounts) HasCoupon() bool`
 
-HasCoupons returns a boolean if a field has been set.
+HasCoupon returns a boolean if a field has been set.
 
-### SetCouponsNil
+### SetCouponNil
 
-`func (o *Discounts) SetCouponsNil(b bool)`
+`func (o *Discounts) SetCouponNil(b bool)`
 
- SetCouponsNil sets the value for Coupons to be an explicit nil
+ SetCouponNil sets the value for Coupon to be an explicit nil
 
-### UnsetCoupons
-`func (o *Discounts) UnsetCoupons()`
+### UnsetCoupon
+`func (o *Discounts) UnsetCoupon()`
 
-UnsetCoupons ensures that no value is present for Coupons, not even an explicit nil
+UnsetCoupon ensures that no value is present for Coupon, not even an explicit nil
 ### GetDiscount
 
 `func (o *Discounts) GetDiscount() interface{}`

@@ -12,7 +12,7 @@ Method | HTTP request | Description
 [**GetCustomerBalanceTransactions**](CustomersAPI.md#GetCustomerBalanceTransactions) | **Get** /customers/{customer_id}/balance-transactions | Get Customer Balance Transactions
 [**ListCustomerPaymentMethods**](CustomersAPI.md#ListCustomerPaymentMethods) | **Post** /customers/{customer_id}/payment-methods | List Customer Payment Methods
 [**ListCustomers**](CustomersAPI.md#ListCustomers) | **Post** /customers/list | List Customers
-[**ListValidSubscriptions**](CustomersAPI.md#ListValidSubscriptions) | **Post** /customers{customer_id}/list_valid_subscriptions | List Valid Subscriptions
+[**ListValidSubscriptions**](CustomersAPI.md#ListValidSubscriptions) | **Post** /customers/{customer_id}/list_valid_subscriptions | List Valid Subscriptions
 [**SearchCustomers**](CustomersAPI.md#SearchCustomers) | **Post** /customers/search | Search Customers
 [**UpdateCustomer**](CustomersAPI.md#UpdateCustomer) | **Put** /customers/{customer_external_id} | Update Customer
 
@@ -242,7 +242,7 @@ import (
 
 func main() {
     customerId := "customerId_example" // string | 
-    expand := []string{"Inner_example"} // []string |  (optional)
+    expand := []*string{"Inner_example"} // []*string |  (optional)
 
     configuration := openapiclient.NewConfiguration()
     apiClient := openapiclient.NewAPIClient(configuration)

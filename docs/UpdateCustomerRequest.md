@@ -17,6 +17,11 @@ Name | Type | Description | Notes
 **PromotionCodeId** | Pointer to **NullableString** |  | [optional] 
 **Notes** | Pointer to **NullableString** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**Email** | Pointer to **NullableString** |  | [optional] 
+**InvoiceSettings** | Pointer to [**NullableCustomerInvoiceSettings**](CustomerInvoiceSettings.md) |  | [optional] 
+**BillingEmail** | Pointer to **NullableString** |  | [optional] 
+**Language** | Pointer to [**NullableCustomerLanguage**](CustomerLanguage.md) |  | [optional] 
+**PhoneNumber** | Pointer to **NullableString** |  | [optional] 
 
 ## Methods
 
@@ -492,6 +497,181 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *UpdateCustomerRequest) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetEmail
+
+`func (o *UpdateCustomerRequest) GetEmail() string`
+
+GetEmail returns the Email field if non-nil, zero value otherwise.
+
+### GetEmailOk
+
+`func (o *UpdateCustomerRequest) GetEmailOk() (*string, bool)`
+
+GetEmailOk returns a tuple with the Email field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEmail
+
+`func (o *UpdateCustomerRequest) SetEmail(v string)`
+
+SetEmail sets Email field to given value.
+
+### HasEmail
+
+`func (o *UpdateCustomerRequest) HasEmail() bool`
+
+HasEmail returns a boolean if a field has been set.
+
+### SetEmailNil
+
+`func (o *UpdateCustomerRequest) SetEmailNil(b bool)`
+
+ SetEmailNil sets the value for Email to be an explicit nil
+
+### UnsetEmail
+`func (o *UpdateCustomerRequest) UnsetEmail()`
+
+UnsetEmail ensures that no value is present for Email, not even an explicit nil
+### GetInvoiceSettings
+
+`func (o *UpdateCustomerRequest) GetInvoiceSettings() CustomerInvoiceSettings`
+
+GetInvoiceSettings returns the InvoiceSettings field if non-nil, zero value otherwise.
+
+### GetInvoiceSettingsOk
+
+`func (o *UpdateCustomerRequest) GetInvoiceSettingsOk() (*CustomerInvoiceSettings, bool)`
+
+GetInvoiceSettingsOk returns a tuple with the InvoiceSettings field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInvoiceSettings
+
+`func (o *UpdateCustomerRequest) SetInvoiceSettings(v CustomerInvoiceSettings)`
+
+SetInvoiceSettings sets InvoiceSettings field to given value.
+
+### HasInvoiceSettings
+
+`func (o *UpdateCustomerRequest) HasInvoiceSettings() bool`
+
+HasInvoiceSettings returns a boolean if a field has been set.
+
+### SetInvoiceSettingsNil
+
+`func (o *UpdateCustomerRequest) SetInvoiceSettingsNil(b bool)`
+
+ SetInvoiceSettingsNil sets the value for InvoiceSettings to be an explicit nil
+
+### UnsetInvoiceSettings
+`func (o *UpdateCustomerRequest) UnsetInvoiceSettings()`
+
+UnsetInvoiceSettings ensures that no value is present for InvoiceSettings, not even an explicit nil
+### GetBillingEmail
+
+`func (o *UpdateCustomerRequest) GetBillingEmail() string`
+
+GetBillingEmail returns the BillingEmail field if non-nil, zero value otherwise.
+
+### GetBillingEmailOk
+
+`func (o *UpdateCustomerRequest) GetBillingEmailOk() (*string, bool)`
+
+GetBillingEmailOk returns a tuple with the BillingEmail field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetBillingEmail
+
+`func (o *UpdateCustomerRequest) SetBillingEmail(v string)`
+
+SetBillingEmail sets BillingEmail field to given value.
+
+### HasBillingEmail
+
+`func (o *UpdateCustomerRequest) HasBillingEmail() bool`
+
+HasBillingEmail returns a boolean if a field has been set.
+
+### SetBillingEmailNil
+
+`func (o *UpdateCustomerRequest) SetBillingEmailNil(b bool)`
+
+ SetBillingEmailNil sets the value for BillingEmail to be an explicit nil
+
+### UnsetBillingEmail
+`func (o *UpdateCustomerRequest) UnsetBillingEmail()`
+
+UnsetBillingEmail ensures that no value is present for BillingEmail, not even an explicit nil
+### GetLanguage
+
+`func (o *UpdateCustomerRequest) GetLanguage() CustomerLanguage`
+
+GetLanguage returns the Language field if non-nil, zero value otherwise.
+
+### GetLanguageOk
+
+`func (o *UpdateCustomerRequest) GetLanguageOk() (*CustomerLanguage, bool)`
+
+GetLanguageOk returns a tuple with the Language field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLanguage
+
+`func (o *UpdateCustomerRequest) SetLanguage(v CustomerLanguage)`
+
+SetLanguage sets Language field to given value.
+
+### HasLanguage
+
+`func (o *UpdateCustomerRequest) HasLanguage() bool`
+
+HasLanguage returns a boolean if a field has been set.
+
+### SetLanguageNil
+
+`func (o *UpdateCustomerRequest) SetLanguageNil(b bool)`
+
+ SetLanguageNil sets the value for Language to be an explicit nil
+
+### UnsetLanguage
+`func (o *UpdateCustomerRequest) UnsetLanguage()`
+
+UnsetLanguage ensures that no value is present for Language, not even an explicit nil
+### GetPhoneNumber
+
+`func (o *UpdateCustomerRequest) GetPhoneNumber() string`
+
+GetPhoneNumber returns the PhoneNumber field if non-nil, zero value otherwise.
+
+### GetPhoneNumberOk
+
+`func (o *UpdateCustomerRequest) GetPhoneNumberOk() (*string, bool)`
+
+GetPhoneNumberOk returns a tuple with the PhoneNumber field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPhoneNumber
+
+`func (o *UpdateCustomerRequest) SetPhoneNumber(v string)`
+
+SetPhoneNumber sets PhoneNumber field to given value.
+
+### HasPhoneNumber
+
+`func (o *UpdateCustomerRequest) HasPhoneNumber() bool`
+
+HasPhoneNumber returns a boolean if a field has been set.
+
+### SetPhoneNumberNil
+
+`func (o *UpdateCustomerRequest) SetPhoneNumberNil(b bool)`
+
+ SetPhoneNumberNil sets the value for PhoneNumber to be an explicit nil
+
+### UnsetPhoneNumber
+`func (o *UpdateCustomerRequest) UnsetPhoneNumber()`
+
+UnsetPhoneNumber ensures that no value is present for PhoneNumber, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

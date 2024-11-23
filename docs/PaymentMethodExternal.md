@@ -15,12 +15,13 @@ Name | Type | Description | Notes
 **Provider** | [**PaymentProviderType**](PaymentProviderType.md) |  | 
 **CardType** | Pointer to **NullableString** |  | [optional] 
 **LastFour** | Pointer to **NullableString** |  | [optional] 
+**DisplayName** | **string** | Display name for the payment method to show on the UI. | 
 
 ## Methods
 
 ### NewPaymentMethodExternal
 
-`func NewPaymentMethodExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, ) *PaymentMethodExternal`
+`func NewPaymentMethodExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, displayName string, ) *PaymentMethodExternal`
 
 NewPaymentMethodExternal instantiates a new PaymentMethodExternal object
 This constructor will assign default values to properties that have it defined,
@@ -340,6 +341,26 @@ HasLastFour returns a boolean if a field has been set.
 `func (o *PaymentMethodExternal) UnsetLastFour()`
 
 UnsetLastFour ensures that no value is present for LastFour, not even an explicit nil
+### GetDisplayName
+
+`func (o *PaymentMethodExternal) GetDisplayName() string`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *PaymentMethodExternal) GetDisplayNameOk() (*string, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *PaymentMethodExternal) SetDisplayName(v string)`
+
+SetDisplayName sets DisplayName field to given value.
+
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

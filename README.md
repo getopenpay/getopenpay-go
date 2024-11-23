@@ -1,14 +1,3 @@
-# Quick start
-
-1. Go into `sanity_test.go` and replace `TODO_ADD_BEARER_KEY` with your secret token
-
-2.
-```shell
-go build
-
-go test -v
-```
-
 # Go API client for getopenpay
 
 super charge your subscription management.
@@ -32,7 +21,7 @@ go get golang.org/x/net/context
 Put the package under your project folder and add the following in import:
 
 ```golang
-import getopenpay "github.com/GIT_USER_ID/GIT_REPO_ID"
+import getopenpay "github.com/getopenpay/getopenpay-go"
 ```
 
 To use a proxy, set the environment variable `HTTP_PROXY`:
@@ -112,7 +101,7 @@ Class | Method | HTTP request | Description
 *CustomersAPI* | [**GetCustomerBalanceTransactions**](docs/CustomersAPI.md#getcustomerbalancetransactions) | **Get** /customers/{customer_id}/balance-transactions | Get Customer Balance Transactions
 *CustomersAPI* | [**ListCustomerPaymentMethods**](docs/CustomersAPI.md#listcustomerpaymentmethods) | **Post** /customers/{customer_id}/payment-methods | List Customer Payment Methods
 *CustomersAPI* | [**ListCustomers**](docs/CustomersAPI.md#listcustomers) | **Post** /customers/list | List Customers
-*CustomersAPI* | [**ListValidSubscriptions**](docs/CustomersAPI.md#listvalidsubscriptions) | **Post** /customers{customer_id}/list_valid_subscriptions | List Valid Subscriptions
+*CustomersAPI* | [**ListValidSubscriptions**](docs/CustomersAPI.md#listvalidsubscriptions) | **Post** /customers/{customer_id}/list_valid_subscriptions | List Valid Subscriptions
 *CustomersAPI* | [**SearchCustomers**](docs/CustomersAPI.md#searchcustomers) | **Post** /customers/search | Search Customers
 *CustomersAPI* | [**UpdateCustomer**](docs/CustomersAPI.md#updatecustomer) | **Put** /customers/{customer_external_id} | Update Customer
 *DisputesAPI* | [**CreateDispute**](docs/DisputesAPI.md#createdispute) | **Post** /dispute/ | Create Dispute
@@ -132,6 +121,7 @@ Class | Method | HTTP request | Description
 *InvoicesAPI* | [**MarkInvoiceAsUncollectible**](docs/InvoicesAPI.md#markinvoiceasuncollectible) | **Post** /invoices/{invoice_external_id}/mark_uncollectible | Mark Invoice As Uncollectible
 *InvoicesAPI* | [**MarkInvoiceAsVoid**](docs/InvoicesAPI.md#markinvoiceasvoid) | **Post** /invoices/{invoice_external_id}/void | Mark Invoice As Void
 *InvoicesAPI* | [**PayInvoice**](docs/InvoicesAPI.md#payinvoice) | **Post** /invoices/{invoice_external_id}/pay | Pay Invoice
+*InvoicesAPI* | [**PreviewNextInvoice**](docs/InvoicesAPI.md#previewnextinvoice) | **Get** /invoices/preview_next_invoice/{subscription_id} | Preview Next Invoice
 *InvoicesAPI* | [**SearchInvoices**](docs/InvoicesAPI.md#searchinvoices) | **Post** /invoices/search | Search Invoices
 *InvoicesAPI* | [**UpdateInvoice**](docs/InvoicesAPI.md#updateinvoice) | **Put** /invoices/{invoice_id} | Update Invoice
 *PaymentIntentsAPI* | [**GetPaymentIntent**](docs/PaymentIntentsAPI.md#getpaymentintent) | **Get** /payment-intents/{payment_intent_id} | Get Payment Intent
@@ -148,6 +138,7 @@ Class | Method | HTTP request | Description
 *PaymentMethodsAPI* | [**GetPaymentMethod**](docs/PaymentMethodsAPI.md#getpaymentmethod) | **Get** /payment-methods/{payment_method_id} | Get Payment Method
 *PricesAPI* | [**CreatePriceForProduct**](docs/PricesAPI.md#createpriceforproduct) | **Post** /prices/ | Create Price For Product
 *PricesAPI* | [**DeletePriceForProduct**](docs/PricesAPI.md#deletepriceforproduct) | **Delete** /prices/{price_id} | Delete Price For Product
+*PricesAPI* | [**GetPriceAddOns**](docs/PricesAPI.md#getpriceaddons) | **Get** /prices/{price_id}/add-ons | Get Price Add Ons
 *PricesAPI* | [**GetPriceForProduct**](docs/PricesAPI.md#getpriceforproduct) | **Get** /prices/{price_id} | Get Price For Product
 *PricesAPI* | [**ListPrices**](docs/PricesAPI.md#listprices) | **Post** /prices/list | List Prices
 *PricesAPI* | [**SearchPrices**](docs/PricesAPI.md#searchprices) | **Post** /prices/search | Search Prices
@@ -242,8 +233,12 @@ Class | Method | HTTP request | Description
  - [CustomerBalanceTransactionExternal](docs/CustomerBalanceTransactionExternal.md)
  - [CustomerBalanceTransactionType](docs/CustomerBalanceTransactionType.md)
  - [CustomerExternal](docs/CustomerExternal.md)
+ - [CustomerInvoiceSettings](docs/CustomerInvoiceSettings.md)
+ - [CustomerLanguage](docs/CustomerLanguage.md)
  - [CustomerPaymentMethodQueryParams](docs/CustomerPaymentMethodQueryParams.md)
  - [CustomerQueryParams](docs/CustomerQueryParams.md)
+ - [CustomerStatus](docs/CustomerStatus.md)
+ - [CustomerTotalAmount](docs/CustomerTotalAmount.md)
  - [DateTimeFilter](docs/DateTimeFilter.md)
  - [DeleteInvoiceItemResponse](docs/DeleteInvoiceItemResponse.md)
  - [DeletePriceResponse](docs/DeletePriceResponse.md)
@@ -251,8 +246,8 @@ Class | Method | HTTP request | Description
  - [DeleteSubscriptionItemRequest](docs/DeleteSubscriptionItemRequest.md)
  - [DeleteSubscriptionItemResponse](docs/DeleteSubscriptionItemResponse.md)
  - [DeleteSubscriptionRequest](docs/DeleteSubscriptionRequest.md)
+ - [DeleteSubscriptionResponse](docs/DeleteSubscriptionResponse.md)
  - [DiscountExternal](docs/DiscountExternal.md)
- - [Discounts](docs/Discounts.md)
  - [DisputeExternal](docs/DisputeExternal.md)
  - [EnumConfigField](docs/EnumConfigField.md)
  - [EventExternal](docs/EventExternal.md)
@@ -264,7 +259,6 @@ Class | Method | HTTP request | Description
  - [IntRangeFilter](docs/IntRangeFilter.md)
  - [InvoiceComment](docs/InvoiceComment.md)
  - [InvoiceDiscountAmountsExternal](docs/InvoiceDiscountAmountsExternal.md)
- - [InvoiceDiscountOptions](docs/InvoiceDiscountOptions.md)
  - [InvoiceExternal](docs/InvoiceExternal.md)
  - [InvoiceItemDiscountAmountsExternal](docs/InvoiceItemDiscountAmountsExternal.md)
  - [InvoiceItemDiscountAmountsPublic](docs/InvoiceItemDiscountAmountsPublic.md)
@@ -275,6 +269,7 @@ Class | Method | HTTP request | Description
  - [InvoiceQueryParams](docs/InvoiceQueryParams.md)
  - [InvoiceSettings](docs/InvoiceSettings.md)
  - [InvoiceStatusEnum](docs/InvoiceStatusEnum.md)
+ - [InvoiceType](docs/InvoiceType.md)
  - [ListActiveSubParams](docs/ListActiveSubParams.md)
  - [ListResponseChargeExternal](docs/ListResponseChargeExternal.md)
  - [ListResponseCheckoutSessionExternal](docs/ListResponseCheckoutSessionExternal.md)

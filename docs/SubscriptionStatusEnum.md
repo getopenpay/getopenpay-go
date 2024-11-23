@@ -3,6 +3,8 @@
 ## Enum
 
 
+* `INCOMPLETE` (value: `"incomplete"`)
+
 * `TRIALING` (value: `"trialing"`)
 
 * `ACTIVE` (value: `"active"`)

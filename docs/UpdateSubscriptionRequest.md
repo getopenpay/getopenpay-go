@@ -15,6 +15,9 @@ Name | Type | Description | Notes
 **CollectionMethod** | Pointer to [**NullableCollectionMethodEnum**](CollectionMethodEnum.md) |  | [optional] 
 **NetD** | Pointer to **NullableInt32** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**NewPeriodEnd** | Pointer to **NullableTime** |  | [optional] 
+**IsPreview** | Pointer to **bool** | Whether the request is in preview mode (subscriptions won&#39;t actually be updated) | [optional] [default to false]
+**PreviewRenewalInvoices** | Pointer to **bool** | Whether to include the preview of the renewal invoices for the subscriptions in the response. | [optional] [default to false]
 **Items** | Pointer to [**[]InlineSubscriptionItemUpdate**](InlineSubscriptionItemUpdate.md) |  | [optional] 
 
 ## Methods
@@ -411,6 +414,91 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *UpdateSubscriptionRequest) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetNewPeriodEnd
+
+`func (o *UpdateSubscriptionRequest) GetNewPeriodEnd() time.Time`
+
+GetNewPeriodEnd returns the NewPeriodEnd field if non-nil, zero value otherwise.
+
+### GetNewPeriodEndOk
+
+`func (o *UpdateSubscriptionRequest) GetNewPeriodEndOk() (*time.Time, bool)`
+
+GetNewPeriodEndOk returns a tuple with the NewPeriodEnd field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNewPeriodEnd
+
+`func (o *UpdateSubscriptionRequest) SetNewPeriodEnd(v time.Time)`
+
+SetNewPeriodEnd sets NewPeriodEnd field to given value.
+
+### HasNewPeriodEnd
+
+`func (o *UpdateSubscriptionRequest) HasNewPeriodEnd() bool`
+
+HasNewPeriodEnd returns a boolean if a field has been set.
+
+### SetNewPeriodEndNil
+
+`func (o *UpdateSubscriptionRequest) SetNewPeriodEndNil(b bool)`
+
+ SetNewPeriodEndNil sets the value for NewPeriodEnd to be an explicit nil
+
+### UnsetNewPeriodEnd
+`func (o *UpdateSubscriptionRequest) UnsetNewPeriodEnd()`
+
+UnsetNewPeriodEnd ensures that no value is present for NewPeriodEnd, not even an explicit nil
+### GetIsPreview
+
+`func (o *UpdateSubscriptionRequest) GetIsPreview() bool`
+
+GetIsPreview returns the IsPreview field if non-nil, zero value otherwise.
+
+### GetIsPreviewOk
+
+`func (o *UpdateSubscriptionRequest) GetIsPreviewOk() (*bool, bool)`
+
+GetIsPreviewOk returns a tuple with the IsPreview field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsPreview
+
+`func (o *UpdateSubscriptionRequest) SetIsPreview(v bool)`
+
+SetIsPreview sets IsPreview field to given value.
+
+### HasIsPreview
+
+`func (o *UpdateSubscriptionRequest) HasIsPreview() bool`
+
+HasIsPreview returns a boolean if a field has been set.
+
+### GetPreviewRenewalInvoices
+
+`func (o *UpdateSubscriptionRequest) GetPreviewRenewalInvoices() bool`
+
+GetPreviewRenewalInvoices returns the PreviewRenewalInvoices field if non-nil, zero value otherwise.
+
+### GetPreviewRenewalInvoicesOk
+
+`func (o *UpdateSubscriptionRequest) GetPreviewRenewalInvoicesOk() (*bool, bool)`
+
+GetPreviewRenewalInvoicesOk returns a tuple with the PreviewRenewalInvoices field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPreviewRenewalInvoices
+
+`func (o *UpdateSubscriptionRequest) SetPreviewRenewalInvoices(v bool)`
+
+SetPreviewRenewalInvoices sets PreviewRenewalInvoices field to given value.
+
+### HasPreviewRenewalInvoices
+
+`func (o *UpdateSubscriptionRequest) HasPreviewRenewalInvoices() bool`
+
+HasPreviewRenewalInvoices returns a boolean if a field has been set.
+
 ### GetItems
 
 `func (o *UpdateSubscriptionRequest) GetItems() []InlineSubscriptionItemUpdate`

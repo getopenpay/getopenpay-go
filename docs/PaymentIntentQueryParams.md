@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **InvoiceId** | Pointer to **NullableString** |  | [optional] 
 **AmountAtom** | Pointer to [**NullableIntRangeFilter**](IntRangeFilter.md) |  | [optional] 
 **Search** | Pointer to [**NullableSearchFilter**](SearchFilter.md) |  | [optional] 
+**PaymentMethodId** | Pointer to **NullableString** |  | [optional] 
 
 ## Methods
 
@@ -406,6 +407,41 @@ HasSearch returns a boolean if a field has been set.
 `func (o *PaymentIntentQueryParams) UnsetSearch()`
 
 UnsetSearch ensures that no value is present for Search, not even an explicit nil
+### GetPaymentMethodId
+
+`func (o *PaymentIntentQueryParams) GetPaymentMethodId() string`
+
+GetPaymentMethodId returns the PaymentMethodId field if non-nil, zero value otherwise.
+
+### GetPaymentMethodIdOk
+
+`func (o *PaymentIntentQueryParams) GetPaymentMethodIdOk() (*string, bool)`
+
+GetPaymentMethodIdOk returns a tuple with the PaymentMethodId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPaymentMethodId
+
+`func (o *PaymentIntentQueryParams) SetPaymentMethodId(v string)`
+
+SetPaymentMethodId sets PaymentMethodId field to given value.
+
+### HasPaymentMethodId
+
+`func (o *PaymentIntentQueryParams) HasPaymentMethodId() bool`
+
+HasPaymentMethodId returns a boolean if a field has been set.
+
+### SetPaymentMethodIdNil
+
+`func (o *PaymentIntentQueryParams) SetPaymentMethodIdNil(b bool)`
+
+ SetPaymentMethodIdNil sets the value for PaymentMethodId to be an explicit nil
+
+### UnsetPaymentMethodId
+`func (o *PaymentIntentQueryParams) UnsetPaymentMethodId()`
+
+UnsetPaymentMethodId ensures that no value is present for PaymentMethodId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -20,14 +20,20 @@ var _ MappedNullable = &CreateInvoiceRequest{}
 
 // CreateInvoiceRequest struct for CreateInvoiceRequest
 type CreateInvoiceRequest struct {
-	// Unique identifier of the subscription. The created invoice will only include pending invoice items for that subscription. The subscription’s billing cycle and regular subscription events won’t be affected.
-	SubscriptionId string `json:"subscription_id"`
+	SubscriptionId NullableString `json:"subscription_id,omitempty"`
 	PaymentMethodId NullableString `json:"payment_method_id,omitempty"`
 	CollectionMethod NullableCollectionMethodEnum `json:"collection_method,omitempty"`
 	// Description for newly created invoice
 	Description *string `json:"description,omitempty"`
-	Discounts NullableDiscounts `json:"discounts,omitempty"`
+	CouponId NullableString `json:"coupon_id,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	SelectedProductPriceQuantity []SelectedPriceQuantity `json:"selected_product_price_quantity,omitempty"`
+	InvoiceType *InvoiceType `json:"invoice_type,omitempty"`
+	// The external id of the customer.
+	CustomerId string `json:"customer_id"`
+	NetD NullableInt32 `json:"net_d,omitempty"`
+	EmailInvoiceOnFinalization NullableBool `json:"email_invoice_on_finalization,omitempty"`
+	FinalizeInvoiceImmediately NullableBool `json:"finalize_invoice_immediately,omitempty"`
 }
 
 type _CreateInvoiceRequest CreateInvoiceRequest
@@ -36,11 +42,13 @@ type _CreateInvoiceRequest CreateInvoiceRequest
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCreateInvoiceRequest(subscriptionId string) *CreateInvoiceRequest {
+func NewCreateInvoiceRequest(customerId string) *CreateInvoiceRequest {
 	this := CreateInvoiceRequest{}
-	this.SubscriptionId = subscriptionId
 	var description string = "Manual creation of invoice"
 	this.Description = &description
+	var invoiceType InvoiceType = INVOICETYPE_STANDARD
+	this.InvoiceType = &invoiceType
+	this.CustomerId = customerId
 	return &this
 }
 
@@ -51,31 +59,51 @@ func NewCreateInvoiceRequestWithDefaults() *CreateInvoiceRequest {
 	this := CreateInvoiceRequest{}
 	var description string = "Manual creation of invoice"
 	this.Description = &description
+	var invoiceType InvoiceType = INVOICETYPE_STANDARD
+	this.InvoiceType = &invoiceType
 	return &this
 }
 
-// GetSubscriptionId returns the SubscriptionId field value
+// GetSubscriptionId returns the SubscriptionId field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *CreateInvoiceRequest) GetSubscriptionId() string {
-	if o == nil {
+	if o == nil || IsNil(o.SubscriptionId.Get()) {
 		var ret string
 		return ret
 	}
-
-	return o.SubscriptionId
+	return *o.SubscriptionId.Get()
 }
 
-// GetSubscriptionIdOk returns a tuple with the SubscriptionId field value
+// GetSubscriptionIdOk returns a tuple with the SubscriptionId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *CreateInvoiceRequest) GetSubscriptionIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.SubscriptionId, true
+	return o.SubscriptionId.Get(), o.SubscriptionId.IsSet()
 }
 
-// SetSubscriptionId sets field value
+// HasSubscriptionId returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasSubscriptionId() bool {
+	if o != nil && o.SubscriptionId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetSubscriptionId gets a reference to the given NullableString and assigns it to the SubscriptionId field.
 func (o *CreateInvoiceRequest) SetSubscriptionId(v string) {
-	o.SubscriptionId = v
+	o.SubscriptionId.Set(&v)
+}
+// SetSubscriptionIdNil sets the value for SubscriptionId to be an explicit nil
+func (o *CreateInvoiceRequest) SetSubscriptionIdNil() {
+	o.SubscriptionId.Set(nil)
+}
+
+// UnsetSubscriptionId ensures that no value is present for SubscriptionId, not even an explicit nil
+func (o *CreateInvoiceRequest) UnsetSubscriptionId() {
+	o.SubscriptionId.Unset()
 }
 
 // GetPaymentMethodId returns the PaymentMethodId field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -194,46 +222,46 @@ func (o *CreateInvoiceRequest) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetDiscounts returns the Discounts field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *CreateInvoiceRequest) GetDiscounts() Discounts {
-	if o == nil || IsNil(o.Discounts.Get()) {
-		var ret Discounts
+// GetCouponId returns the CouponId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateInvoiceRequest) GetCouponId() string {
+	if o == nil || IsNil(o.CouponId.Get()) {
+		var ret string
 		return ret
 	}
-	return *o.Discounts.Get()
+	return *o.CouponId.Get()
 }
 
-// GetDiscountsOk returns a tuple with the Discounts field value if set, nil otherwise
+// GetCouponIdOk returns a tuple with the CouponId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *CreateInvoiceRequest) GetDiscountsOk() (*Discounts, bool) {
+func (o *CreateInvoiceRequest) GetCouponIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Discounts.Get(), o.Discounts.IsSet()
+	return o.CouponId.Get(), o.CouponId.IsSet()
 }
 
-// HasDiscounts returns a boolean if a field has been set.
-func (o *CreateInvoiceRequest) HasDiscounts() bool {
-	if o != nil && o.Discounts.IsSet() {
+// HasCouponId returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasCouponId() bool {
+	if o != nil && o.CouponId.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetDiscounts gets a reference to the given NullableDiscounts and assigns it to the Discounts field.
-func (o *CreateInvoiceRequest) SetDiscounts(v Discounts) {
-	o.Discounts.Set(&v)
+// SetCouponId gets a reference to the given NullableString and assigns it to the CouponId field.
+func (o *CreateInvoiceRequest) SetCouponId(v string) {
+	o.CouponId.Set(&v)
 }
-// SetDiscountsNil sets the value for Discounts to be an explicit nil
-func (o *CreateInvoiceRequest) SetDiscountsNil() {
-	o.Discounts.Set(nil)
+// SetCouponIdNil sets the value for CouponId to be an explicit nil
+func (o *CreateInvoiceRequest) SetCouponIdNil() {
+	o.CouponId.Set(nil)
 }
 
-// UnsetDiscounts ensures that no value is present for Discounts, not even an explicit nil
-func (o *CreateInvoiceRequest) UnsetDiscounts() {
-	o.Discounts.Unset()
+// UnsetCouponId ensures that no value is present for CouponId, not even an explicit nil
+func (o *CreateInvoiceRequest) UnsetCouponId() {
+	o.CouponId.Unset()
 }
 
 // GetCustomFields returns the CustomFields field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -269,6 +297,220 @@ func (o *CreateInvoiceRequest) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetSelectedProductPriceQuantity returns the SelectedProductPriceQuantity field value if set, zero value otherwise.
+func (o *CreateInvoiceRequest) GetSelectedProductPriceQuantity() []SelectedPriceQuantity {
+	if o == nil || IsNil(o.SelectedProductPriceQuantity) {
+		var ret []SelectedPriceQuantity
+		return ret
+	}
+	return o.SelectedProductPriceQuantity
+}
+
+// GetSelectedProductPriceQuantityOk returns a tuple with the SelectedProductPriceQuantity field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateInvoiceRequest) GetSelectedProductPriceQuantityOk() ([]SelectedPriceQuantity, bool) {
+	if o == nil || IsNil(o.SelectedProductPriceQuantity) {
+		return nil, false
+	}
+	return o.SelectedProductPriceQuantity, true
+}
+
+// HasSelectedProductPriceQuantity returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasSelectedProductPriceQuantity() bool {
+	if o != nil && !IsNil(o.SelectedProductPriceQuantity) {
+		return true
+	}
+
+	return false
+}
+
+// SetSelectedProductPriceQuantity gets a reference to the given []SelectedPriceQuantity and assigns it to the SelectedProductPriceQuantity field.
+func (o *CreateInvoiceRequest) SetSelectedProductPriceQuantity(v []SelectedPriceQuantity) {
+	o.SelectedProductPriceQuantity = v
+}
+
+// GetInvoiceType returns the InvoiceType field value if set, zero value otherwise.
+func (o *CreateInvoiceRequest) GetInvoiceType() InvoiceType {
+	if o == nil || IsNil(o.InvoiceType) {
+		var ret InvoiceType
+		return ret
+	}
+	return *o.InvoiceType
+}
+
+// GetInvoiceTypeOk returns a tuple with the InvoiceType field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreateInvoiceRequest) GetInvoiceTypeOk() (*InvoiceType, bool) {
+	if o == nil || IsNil(o.InvoiceType) {
+		return nil, false
+	}
+	return o.InvoiceType, true
+}
+
+// HasInvoiceType returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasInvoiceType() bool {
+	if o != nil && !IsNil(o.InvoiceType) {
+		return true
+	}
+
+	return false
+}
+
+// SetInvoiceType gets a reference to the given InvoiceType and assigns it to the InvoiceType field.
+func (o *CreateInvoiceRequest) SetInvoiceType(v InvoiceType) {
+	o.InvoiceType = &v
+}
+
+// GetCustomerId returns the CustomerId field value
+func (o *CreateInvoiceRequest) GetCustomerId() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.CustomerId
+}
+
+// GetCustomerIdOk returns a tuple with the CustomerId field value
+// and a boolean to check if the value has been set.
+func (o *CreateInvoiceRequest) GetCustomerIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.CustomerId, true
+}
+
+// SetCustomerId sets field value
+func (o *CreateInvoiceRequest) SetCustomerId(v string) {
+	o.CustomerId = v
+}
+
+// GetNetD returns the NetD field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateInvoiceRequest) GetNetD() int32 {
+	if o == nil || IsNil(o.NetD.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.NetD.Get()
+}
+
+// GetNetDOk returns a tuple with the NetD field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreateInvoiceRequest) GetNetDOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.NetD.Get(), o.NetD.IsSet()
+}
+
+// HasNetD returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasNetD() bool {
+	if o != nil && o.NetD.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetNetD gets a reference to the given NullableInt32 and assigns it to the NetD field.
+func (o *CreateInvoiceRequest) SetNetD(v int32) {
+	o.NetD.Set(&v)
+}
+// SetNetDNil sets the value for NetD to be an explicit nil
+func (o *CreateInvoiceRequest) SetNetDNil() {
+	o.NetD.Set(nil)
+}
+
+// UnsetNetD ensures that no value is present for NetD, not even an explicit nil
+func (o *CreateInvoiceRequest) UnsetNetD() {
+	o.NetD.Unset()
+}
+
+// GetEmailInvoiceOnFinalization returns the EmailInvoiceOnFinalization field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateInvoiceRequest) GetEmailInvoiceOnFinalization() bool {
+	if o == nil || IsNil(o.EmailInvoiceOnFinalization.Get()) {
+		var ret bool
+		return ret
+	}
+	return *o.EmailInvoiceOnFinalization.Get()
+}
+
+// GetEmailInvoiceOnFinalizationOk returns a tuple with the EmailInvoiceOnFinalization field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreateInvoiceRequest) GetEmailInvoiceOnFinalizationOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.EmailInvoiceOnFinalization.Get(), o.EmailInvoiceOnFinalization.IsSet()
+}
+
+// HasEmailInvoiceOnFinalization returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasEmailInvoiceOnFinalization() bool {
+	if o != nil && o.EmailInvoiceOnFinalization.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetEmailInvoiceOnFinalization gets a reference to the given NullableBool and assigns it to the EmailInvoiceOnFinalization field.
+func (o *CreateInvoiceRequest) SetEmailInvoiceOnFinalization(v bool) {
+	o.EmailInvoiceOnFinalization.Set(&v)
+}
+// SetEmailInvoiceOnFinalizationNil sets the value for EmailInvoiceOnFinalization to be an explicit nil
+func (o *CreateInvoiceRequest) SetEmailInvoiceOnFinalizationNil() {
+	o.EmailInvoiceOnFinalization.Set(nil)
+}
+
+// UnsetEmailInvoiceOnFinalization ensures that no value is present for EmailInvoiceOnFinalization, not even an explicit nil
+func (o *CreateInvoiceRequest) UnsetEmailInvoiceOnFinalization() {
+	o.EmailInvoiceOnFinalization.Unset()
+}
+
+// GetFinalizeInvoiceImmediately returns the FinalizeInvoiceImmediately field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateInvoiceRequest) GetFinalizeInvoiceImmediately() bool {
+	if o == nil || IsNil(o.FinalizeInvoiceImmediately.Get()) {
+		var ret bool
+		return ret
+	}
+	return *o.FinalizeInvoiceImmediately.Get()
+}
+
+// GetFinalizeInvoiceImmediatelyOk returns a tuple with the FinalizeInvoiceImmediately field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreateInvoiceRequest) GetFinalizeInvoiceImmediatelyOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.FinalizeInvoiceImmediately.Get(), o.FinalizeInvoiceImmediately.IsSet()
+}
+
+// HasFinalizeInvoiceImmediately returns a boolean if a field has been set.
+func (o *CreateInvoiceRequest) HasFinalizeInvoiceImmediately() bool {
+	if o != nil && o.FinalizeInvoiceImmediately.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetFinalizeInvoiceImmediately gets a reference to the given NullableBool and assigns it to the FinalizeInvoiceImmediately field.
+func (o *CreateInvoiceRequest) SetFinalizeInvoiceImmediately(v bool) {
+	o.FinalizeInvoiceImmediately.Set(&v)
+}
+// SetFinalizeInvoiceImmediatelyNil sets the value for FinalizeInvoiceImmediately to be an explicit nil
+func (o *CreateInvoiceRequest) SetFinalizeInvoiceImmediatelyNil() {
+	o.FinalizeInvoiceImmediately.Set(nil)
+}
+
+// UnsetFinalizeInvoiceImmediately ensures that no value is present for FinalizeInvoiceImmediately, not even an explicit nil
+func (o *CreateInvoiceRequest) UnsetFinalizeInvoiceImmediately() {
+	o.FinalizeInvoiceImmediately.Unset()
+}
+
 func (o CreateInvoiceRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -279,7 +521,9 @@ func (o CreateInvoiceRequest) MarshalJSON() ([]byte, error) {
 
 func (o CreateInvoiceRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	toSerialize["subscription_id"] = o.SubscriptionId
+	if o.SubscriptionId.IsSet() {
+		toSerialize["subscription_id"] = o.SubscriptionId.Get()
+	}
 	if o.PaymentMethodId.IsSet() {
 		toSerialize["payment_method_id"] = o.PaymentMethodId.Get()
 	}
@@ -289,11 +533,27 @@ func (o CreateInvoiceRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Discounts.IsSet() {
-		toSerialize["discounts"] = o.Discounts.Get()
+	if o.CouponId.IsSet() {
+		toSerialize["coupon_id"] = o.CouponId.Get()
 	}
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if !IsNil(o.SelectedProductPriceQuantity) {
+		toSerialize["selected_product_price_quantity"] = o.SelectedProductPriceQuantity
+	}
+	if !IsNil(o.InvoiceType) {
+		toSerialize["invoice_type"] = o.InvoiceType
+	}
+	toSerialize["customer_id"] = o.CustomerId
+	if o.NetD.IsSet() {
+		toSerialize["net_d"] = o.NetD.Get()
+	}
+	if o.EmailInvoiceOnFinalization.IsSet() {
+		toSerialize["email_invoice_on_finalization"] = o.EmailInvoiceOnFinalization.Get()
+	}
+	if o.FinalizeInvoiceImmediately.IsSet() {
+		toSerialize["finalize_invoice_immediately"] = o.FinalizeInvoiceImmediately.Get()
 	}
 	return toSerialize, nil
 }
@@ -303,7 +563,7 @@ func (o *CreateInvoiceRequest) UnmarshalJSON(bytes []byte) (err error) {
 	// by unmarshalling the object into a generic map with string keys and checking
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
-		"subscription_id",
+		"customer_id",
 	}
 
 	allProperties := make(map[string]interface{})

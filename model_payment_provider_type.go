@@ -25,6 +25,7 @@ const (
 	PAYMENTPROVIDERTYPE_APPLE_PAY PaymentProviderType = "apple_pay"
 	PAYMENTPROVIDERTYPE_CREDIT_CARD PaymentProviderType = "credit_card"
 	PAYMENTPROVIDERTYPE_GOOGLE_PAY PaymentProviderType = "google_pay"
+	PAYMENTPROVIDERTYPE_STRIPE_LINK PaymentProviderType = "stripe_link"
 )
 
 // All allowed values of PaymentProviderType enum
@@ -34,6 +35,7 @@ var AllowedPaymentProviderTypeEnumValues = []PaymentProviderType{
 	"apple_pay",
 	"credit_card",
 	"google_pay",
+	"stripe_link",
 }
 
 func (v *PaymentProviderType) UnmarshalJSON(src []byte) error {

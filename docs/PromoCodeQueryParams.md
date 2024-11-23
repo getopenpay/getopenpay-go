@@ -14,6 +14,8 @@ Name | Type | Description | Notes
 **CouponId** | Pointer to **NullableString** |  | [optional] 
 **IsActive** | Pointer to **NullableBool** |  | [optional] 
 **Code** | Pointer to **NullableString** |  | [optional] 
+**Search** | Pointer to [**NullableSearchFilter**](SearchFilter.md) |  | [optional] 
+**ExpiresAt** | Pointer to [**NullableDateTimeFilter**](DateTimeFilter.md) |  | [optional] 
 
 ## Methods
 
@@ -334,6 +336,76 @@ HasCode returns a boolean if a field has been set.
 `func (o *PromoCodeQueryParams) UnsetCode()`
 
 UnsetCode ensures that no value is present for Code, not even an explicit nil
+### GetSearch
+
+`func (o *PromoCodeQueryParams) GetSearch() SearchFilter`
+
+GetSearch returns the Search field if non-nil, zero value otherwise.
+
+### GetSearchOk
+
+`func (o *PromoCodeQueryParams) GetSearchOk() (*SearchFilter, bool)`
+
+GetSearchOk returns a tuple with the Search field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSearch
+
+`func (o *PromoCodeQueryParams) SetSearch(v SearchFilter)`
+
+SetSearch sets Search field to given value.
+
+### HasSearch
+
+`func (o *PromoCodeQueryParams) HasSearch() bool`
+
+HasSearch returns a boolean if a field has been set.
+
+### SetSearchNil
+
+`func (o *PromoCodeQueryParams) SetSearchNil(b bool)`
+
+ SetSearchNil sets the value for Search to be an explicit nil
+
+### UnsetSearch
+`func (o *PromoCodeQueryParams) UnsetSearch()`
+
+UnsetSearch ensures that no value is present for Search, not even an explicit nil
+### GetExpiresAt
+
+`func (o *PromoCodeQueryParams) GetExpiresAt() DateTimeFilter`
+
+GetExpiresAt returns the ExpiresAt field if non-nil, zero value otherwise.
+
+### GetExpiresAtOk
+
+`func (o *PromoCodeQueryParams) GetExpiresAtOk() (*DateTimeFilter, bool)`
+
+GetExpiresAtOk returns a tuple with the ExpiresAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetExpiresAt
+
+`func (o *PromoCodeQueryParams) SetExpiresAt(v DateTimeFilter)`
+
+SetExpiresAt sets ExpiresAt field to given value.
+
+### HasExpiresAt
+
+`func (o *PromoCodeQueryParams) HasExpiresAt() bool`
+
+HasExpiresAt returns a boolean if a field has been set.
+
+### SetExpiresAtNil
+
+`func (o *PromoCodeQueryParams) SetExpiresAtNil(b bool)`
+
+ SetExpiresAtNil sets the value for ExpiresAt to be an explicit nil
+
+### UnsetExpiresAt
+`func (o *PromoCodeQueryParams) UnsetExpiresAt()`
+
+UnsetExpiresAt ensures that no value is present for ExpiresAt, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

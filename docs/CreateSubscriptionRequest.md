@@ -18,6 +18,7 @@ Name | Type | Description | Notes
 **CollectionMethod** | Pointer to [**CollectionMethodEnum**](CollectionMethodEnum.md) |  | [optional] [default to COLLECTIONMETHODENUM_CHARGE_AUTOMATICALLY]
 **NetD** | Pointer to **NullableInt32** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**IsPreview** | Pointer to **bool** | Whether the request is in preview mode (subscriptions won&#39;t actually be created) | [optional] [default to false]
 
 ## Methods
 
@@ -453,6 +454,31 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *CreateSubscriptionRequest) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetIsPreview
+
+`func (o *CreateSubscriptionRequest) GetIsPreview() bool`
+
+GetIsPreview returns the IsPreview field if non-nil, zero value otherwise.
+
+### GetIsPreviewOk
+
+`func (o *CreateSubscriptionRequest) GetIsPreviewOk() (*bool, bool)`
+
+GetIsPreviewOk returns a tuple with the IsPreview field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsPreview
+
+`func (o *CreateSubscriptionRequest) SetIsPreview(v bool)`
+
+SetIsPreview sets IsPreview field to given value.
+
+### HasIsPreview
+
+`func (o *CreateSubscriptionRequest) HasIsPreview() bool`
+
+HasIsPreview returns a boolean if a field has been set.
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

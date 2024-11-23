@@ -16,6 +16,7 @@ Name | Type | Description | Notes
 **RequestId** | **NullableString** |  | 
 **RequestIdempotencyKey** | **NullableString** |  | 
 **PendingWebhooks** | **int32** |  | 
+**User** | Pointer to **NullableString** |  | [optional] 
 
 ## Methods
 
@@ -326,6 +327,41 @@ and a boolean to check if the value has been set.
 SetPendingWebhooks sets PendingWebhooks field to given value.
 
 
+### GetUser
+
+`func (o *EventExternal) GetUser() string`
+
+GetUser returns the User field if non-nil, zero value otherwise.
+
+### GetUserOk
+
+`func (o *EventExternal) GetUserOk() (*string, bool)`
+
+GetUserOk returns a tuple with the User field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUser
+
+`func (o *EventExternal) SetUser(v string)`
+
+SetUser sets User field to given value.
+
+### HasUser
+
+`func (o *EventExternal) HasUser() bool`
+
+HasUser returns a boolean if a field has been set.
+
+### SetUserNil
+
+`func (o *EventExternal) SetUserNil(b bool)`
+
+ SetUserNil sets the value for User to be an explicit nil
+
+### UnsetUser
+`func (o *EventExternal) UnsetUser()`
+
+UnsetUser ensures that no value is present for User, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

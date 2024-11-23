@@ -44,6 +44,7 @@ type InvoiceExternal struct {
 	// Due date to pay the invoice.
 	DueDate time.Time `json:"due_date"`
 	LatestPaymentIntentId NullableString `json:"latest_payment_intent_id,omitempty"`
+	PaidAt NullableTime `json:"paid_at,omitempty"`
 	// End of the usage period during which invoice_items were added to this invoice. It is in 'ISO 8601' format.
 	PeriodEnd time.Time `json:"period_end"`
 	// Start of the usage period during which invoice_items were added to this invoice. It is in 'ISO 8601' format.
@@ -61,7 +62,7 @@ type InvoiceExternal struct {
 	Lines []InvoiceItemExternal `json:"lines"`
 	PrePaymentCreditNotesAmount NullableInt32 `json:"pre_payment_credit_notes_amount,omitempty"`
 	PostPaymentCreditNotesAmount NullableInt32 `json:"post_payment_credit_notes_amount,omitempty"`
-	CreditNoteIds []string `json:"credit_note_ids,omitempty"`
+	CreditNoteIds []*string `json:"credit_note_ids,omitempty"`
 	// Amount applied from customer balance either from credit or debit. It is in atomic units (in USD this is cents).
 	AppliedBalanceAmountAtom int32 `json:"applied_balance_amount_atom"`
 	// Final amount due at this time for this invoice. It isin atomic units (in USD this is cents).
@@ -85,7 +86,10 @@ type InvoiceExternal struct {
 	IsInitialInvoiceForTrialSub bool `json:"is_initial_invoice_for_trial_sub"`
 	// Invoice number
 	InvoiceNumber int32 `json:"invoice_number"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	// Whether invoice should be sent to the customer upon finalizing the invoice
+	EmailInvoiceOnFinalization *bool `json:"email_invoice_on_finalization,omitempty"`
 }
 
 type _InvoiceExternal InvoiceExternal
@@ -128,6 +132,8 @@ func NewInvoiceExternal(id string, createdAt time.Time, updatedAt time.Time, acc
 	this.ReceiptPdfUrl = receiptPdfUrl
 	this.IsInitialInvoiceForTrialSub = isInitialInvoiceForTrialSub
 	this.InvoiceNumber = invoiceNumber
+	var emailInvoiceOnFinalization bool = false
+	this.EmailInvoiceOnFinalization = &emailInvoiceOnFinalization
 	return &this
 }
 
@@ -142,6 +148,8 @@ func NewInvoiceExternalWithDefaults() *InvoiceExternal {
 	this.IsDeleted = &isDeleted
 	var netD int32 = -1
 	this.NetD = &netD
+	var emailInvoiceOnFinalization bool = false
+	this.EmailInvoiceOnFinalization = &emailInvoiceOnFinalization
 	return &this
 }
 
@@ -625,6 +633,48 @@ func (o *InvoiceExternal) UnsetLatestPaymentIntentId() {
 	o.LatestPaymentIntentId.Unset()
 }
 
+// GetPaidAt returns the PaidAt field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *InvoiceExternal) GetPaidAt() time.Time {
+	if o == nil || IsNil(o.PaidAt.Get()) {
+		var ret time.Time
+		return ret
+	}
+	return *o.PaidAt.Get()
+}
+
+// GetPaidAtOk returns a tuple with the PaidAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *InvoiceExternal) GetPaidAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PaidAt.Get(), o.PaidAt.IsSet()
+}
+
+// HasPaidAt returns a boolean if a field has been set.
+func (o *InvoiceExternal) HasPaidAt() bool {
+	if o != nil && o.PaidAt.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPaidAt gets a reference to the given NullableTime and assigns it to the PaidAt field.
+func (o *InvoiceExternal) SetPaidAt(v time.Time) {
+	o.PaidAt.Set(&v)
+}
+// SetPaidAtNil sets the value for PaidAt to be an explicit nil
+func (o *InvoiceExternal) SetPaidAtNil() {
+	o.PaidAt.Set(nil)
+}
+
+// UnsetPaidAt ensures that no value is present for PaidAt, not even an explicit nil
+func (o *InvoiceExternal) UnsetPaidAt() {
+	o.PaidAt.Unset()
+}
+
 // GetPeriodEnd returns the PeriodEnd field value
 func (o *InvoiceExternal) GetPeriodEnd() time.Time {
 	if o == nil {
@@ -988,9 +1038,9 @@ func (o *InvoiceExternal) UnsetPostPaymentCreditNotesAmount() {
 }
 
 // GetCreditNoteIds returns the CreditNoteIds field value if set, zero value otherwise.
-func (o *InvoiceExternal) GetCreditNoteIds() []string {
+func (o *InvoiceExternal) GetCreditNoteIds() []*string {
 	if o == nil || IsNil(o.CreditNoteIds) {
-		var ret []string
+		var ret []*string
 		return ret
 	}
 	return o.CreditNoteIds
@@ -998,7 +1048,7 @@ func (o *InvoiceExternal) GetCreditNoteIds() []string {
 
 // GetCreditNoteIdsOk returns a tuple with the CreditNoteIds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InvoiceExternal) GetCreditNoteIdsOk() ([]string, bool) {
+func (o *InvoiceExternal) GetCreditNoteIdsOk() ([]*string, bool) {
 	if o == nil || IsNil(o.CreditNoteIds) {
 		return nil, false
 	}
@@ -1014,8 +1064,8 @@ func (o *InvoiceExternal) HasCreditNoteIds() bool {
 	return false
 }
 
-// SetCreditNoteIds gets a reference to the given []string and assigns it to the CreditNoteIds field.
-func (o *InvoiceExternal) SetCreditNoteIds(v []string) {
+// SetCreditNoteIds gets a reference to the given []*string and assigns it to the CreditNoteIds field.
+func (o *InvoiceExternal) SetCreditNoteIds(v []*string) {
 	o.CreditNoteIds = v
 }
 
@@ -1459,6 +1509,39 @@ func (o *InvoiceExternal) SetInvoiceNumber(v int32) {
 	o.InvoiceNumber = v
 }
 
+// GetMetadata returns the Metadata field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *InvoiceExternal) GetMetadata() map[string]interface{} {
+	if o == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.Metadata
+}
+
+// GetMetadataOk returns a tuple with the Metadata field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *InvoiceExternal) GetMetadataOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.Metadata) {
+		return map[string]interface{}{}, false
+	}
+	return o.Metadata, true
+}
+
+// HasMetadata returns a boolean if a field has been set.
+func (o *InvoiceExternal) HasMetadata() bool {
+	if o != nil && IsNil(o.Metadata) {
+		return true
+	}
+
+	return false
+}
+
+// SetMetadata gets a reference to the given map[string]interface{} and assigns it to the Metadata field.
+func (o *InvoiceExternal) SetMetadata(v map[string]interface{}) {
+	o.Metadata = v
+}
+
 // GetCustomFields returns the CustomFields field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *InvoiceExternal) GetCustomFields() map[string]interface{} {
 	if o == nil {
@@ -1490,6 +1573,38 @@ func (o *InvoiceExternal) HasCustomFields() bool {
 // SetCustomFields gets a reference to the given map[string]interface{} and assigns it to the CustomFields field.
 func (o *InvoiceExternal) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
+}
+
+// GetEmailInvoiceOnFinalization returns the EmailInvoiceOnFinalization field value if set, zero value otherwise.
+func (o *InvoiceExternal) GetEmailInvoiceOnFinalization() bool {
+	if o == nil || IsNil(o.EmailInvoiceOnFinalization) {
+		var ret bool
+		return ret
+	}
+	return *o.EmailInvoiceOnFinalization
+}
+
+// GetEmailInvoiceOnFinalizationOk returns a tuple with the EmailInvoiceOnFinalization field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *InvoiceExternal) GetEmailInvoiceOnFinalizationOk() (*bool, bool) {
+	if o == nil || IsNil(o.EmailInvoiceOnFinalization) {
+		return nil, false
+	}
+	return o.EmailInvoiceOnFinalization, true
+}
+
+// HasEmailInvoiceOnFinalization returns a boolean if a field has been set.
+func (o *InvoiceExternal) HasEmailInvoiceOnFinalization() bool {
+	if o != nil && !IsNil(o.EmailInvoiceOnFinalization) {
+		return true
+	}
+
+	return false
+}
+
+// SetEmailInvoiceOnFinalization gets a reference to the given bool and assigns it to the EmailInvoiceOnFinalization field.
+func (o *InvoiceExternal) SetEmailInvoiceOnFinalization(v bool) {
+	o.EmailInvoiceOnFinalization = &v
 }
 
 func (o InvoiceExternal) MarshalJSON() ([]byte, error) {
@@ -1531,6 +1646,9 @@ func (o InvoiceExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["due_date"] = o.DueDate
 	if o.LatestPaymentIntentId.IsSet() {
 		toSerialize["latest_payment_intent_id"] = o.LatestPaymentIntentId.Get()
+	}
+	if o.PaidAt.IsSet() {
+		toSerialize["paid_at"] = o.PaidAt.Get()
 	}
 	toSerialize["period_end"] = o.PeriodEnd
 	toSerialize["period_start"] = o.PeriodStart
@@ -1582,8 +1700,14 @@ func (o InvoiceExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["receipt_pdf_url"] = o.ReceiptPdfUrl
 	toSerialize["is_initial_invoice_for_trial_sub"] = o.IsInitialInvoiceForTrialSub
 	toSerialize["invoice_number"] = o.InvoiceNumber
+	if o.Metadata != nil {
+		toSerialize["metadata"] = o.Metadata
+	}
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if !IsNil(o.EmailInvoiceOnFinalization) {
+		toSerialize["email_invoice_on_finalization"] = o.EmailInvoiceOnFinalization
 	}
 	return toSerialize, nil
 }

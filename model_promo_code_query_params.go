@@ -33,6 +33,8 @@ type PromoCodeQueryParams struct {
 	CouponId NullableString `json:"coupon_id,omitempty"`
 	IsActive NullableBool `json:"is_active,omitempty"`
 	Code NullableString `json:"code,omitempty"`
+	Search NullableSearchFilter `json:"search,omitempty"`
+	ExpiresAt NullableDateTimeFilter `json:"expires_at,omitempty"`
 }
 
 // NewPromoCodeQueryParams instantiates a new PromoCodeQueryParams object
@@ -438,6 +440,90 @@ func (o *PromoCodeQueryParams) UnsetCode() {
 	o.Code.Unset()
 }
 
+// GetSearch returns the Search field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PromoCodeQueryParams) GetSearch() SearchFilter {
+	if o == nil || IsNil(o.Search.Get()) {
+		var ret SearchFilter
+		return ret
+	}
+	return *o.Search.Get()
+}
+
+// GetSearchOk returns a tuple with the Search field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PromoCodeQueryParams) GetSearchOk() (*SearchFilter, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Search.Get(), o.Search.IsSet()
+}
+
+// HasSearch returns a boolean if a field has been set.
+func (o *PromoCodeQueryParams) HasSearch() bool {
+	if o != nil && o.Search.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetSearch gets a reference to the given NullableSearchFilter and assigns it to the Search field.
+func (o *PromoCodeQueryParams) SetSearch(v SearchFilter) {
+	o.Search.Set(&v)
+}
+// SetSearchNil sets the value for Search to be an explicit nil
+func (o *PromoCodeQueryParams) SetSearchNil() {
+	o.Search.Set(nil)
+}
+
+// UnsetSearch ensures that no value is present for Search, not even an explicit nil
+func (o *PromoCodeQueryParams) UnsetSearch() {
+	o.Search.Unset()
+}
+
+// GetExpiresAt returns the ExpiresAt field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PromoCodeQueryParams) GetExpiresAt() DateTimeFilter {
+	if o == nil || IsNil(o.ExpiresAt.Get()) {
+		var ret DateTimeFilter
+		return ret
+	}
+	return *o.ExpiresAt.Get()
+}
+
+// GetExpiresAtOk returns a tuple with the ExpiresAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PromoCodeQueryParams) GetExpiresAtOk() (*DateTimeFilter, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ExpiresAt.Get(), o.ExpiresAt.IsSet()
+}
+
+// HasExpiresAt returns a boolean if a field has been set.
+func (o *PromoCodeQueryParams) HasExpiresAt() bool {
+	if o != nil && o.ExpiresAt.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetExpiresAt gets a reference to the given NullableDateTimeFilter and assigns it to the ExpiresAt field.
+func (o *PromoCodeQueryParams) SetExpiresAt(v DateTimeFilter) {
+	o.ExpiresAt.Set(&v)
+}
+// SetExpiresAtNil sets the value for ExpiresAt to be an explicit nil
+func (o *PromoCodeQueryParams) SetExpiresAtNil() {
+	o.ExpiresAt.Set(nil)
+}
+
+// UnsetExpiresAt ensures that no value is present for ExpiresAt, not even an explicit nil
+func (o *PromoCodeQueryParams) UnsetExpiresAt() {
+	o.ExpiresAt.Unset()
+}
+
 func (o PromoCodeQueryParams) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -477,6 +563,12 @@ func (o PromoCodeQueryParams) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Code.IsSet() {
 		toSerialize["code"] = o.Code.Get()
+	}
+	if o.Search.IsSet() {
+		toSerialize["search"] = o.Search.Get()
+	}
+	if o.ExpiresAt.IsSet() {
+		toSerialize["expires_at"] = o.ExpiresAt.Get()
 	}
 	return toSerialize, nil
 }

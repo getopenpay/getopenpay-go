@@ -25,6 +25,7 @@ type CreateCouponRequest struct {
 	Name string `json:"name"`
 	AmountAtomOff NullableInt32 `json:"amount_atom_off,omitempty"`
 	PercentOff NullableInt32 `json:"percent_off,omitempty"`
+	TrialDaysOff NullableInt32 `json:"trial_days_off,omitempty"`
 	Currency NullableCurrencyEnum `json:"currency,omitempty"`
 	Duration *CouponDuration `json:"duration,omitempty"`
 	DurationInMonths NullableInt32 `json:"duration_in_months,omitempty"`
@@ -170,6 +171,48 @@ func (o *CreateCouponRequest) SetPercentOffNil() {
 // UnsetPercentOff ensures that no value is present for PercentOff, not even an explicit nil
 func (o *CreateCouponRequest) UnsetPercentOff() {
 	o.PercentOff.Unset()
+}
+
+// GetTrialDaysOff returns the TrialDaysOff field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateCouponRequest) GetTrialDaysOff() int32 {
+	if o == nil || IsNil(o.TrialDaysOff.Get()) {
+		var ret int32
+		return ret
+	}
+	return *o.TrialDaysOff.Get()
+}
+
+// GetTrialDaysOffOk returns a tuple with the TrialDaysOff field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreateCouponRequest) GetTrialDaysOffOk() (*int32, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.TrialDaysOff.Get(), o.TrialDaysOff.IsSet()
+}
+
+// HasTrialDaysOff returns a boolean if a field has been set.
+func (o *CreateCouponRequest) HasTrialDaysOff() bool {
+	if o != nil && o.TrialDaysOff.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetTrialDaysOff gets a reference to the given NullableInt32 and assigns it to the TrialDaysOff field.
+func (o *CreateCouponRequest) SetTrialDaysOff(v int32) {
+	o.TrialDaysOff.Set(&v)
+}
+// SetTrialDaysOffNil sets the value for TrialDaysOff to be an explicit nil
+func (o *CreateCouponRequest) SetTrialDaysOffNil() {
+	o.TrialDaysOff.Set(nil)
+}
+
+// UnsetTrialDaysOff ensures that no value is present for TrialDaysOff, not even an explicit nil
+func (o *CreateCouponRequest) UnsetTrialDaysOff() {
+	o.TrialDaysOff.Unset()
 }
 
 // GetCurrency returns the Currency field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -484,6 +527,9 @@ func (o CreateCouponRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if o.PercentOff.IsSet() {
 		toSerialize["percent_off"] = o.PercentOff.Get()
+	}
+	if o.TrialDaysOff.IsSet() {
+		toSerialize["trial_days_off"] = o.TrialDaysOff.Get()
 	}
 	if o.Currency.IsSet() {
 		toSerialize["currency"] = o.Currency.Get()

@@ -36,6 +36,8 @@ type PaymentMethodExternal struct {
 	Provider PaymentProviderType `json:"provider"`
 	CardType NullableString `json:"card_type,omitempty"`
 	LastFour NullableString `json:"last_four,omitempty"`
+	// Display name for the payment method to show on the UI.
+	DisplayName string `json:"display_name"`
 }
 
 type _PaymentMethodExternal PaymentMethodExternal
@@ -44,7 +46,7 @@ type _PaymentMethodExternal PaymentMethodExternal
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPaymentMethodExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType) *PaymentMethodExternal {
+func NewPaymentMethodExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, displayName string) *PaymentMethodExternal {
 	this := PaymentMethodExternal{}
 	this.Id = id
 	var object ObjectName = OBJECTNAME_PAYMENT_METHOD
@@ -54,6 +56,7 @@ func NewPaymentMethodExternal(id string, createdAt time.Time, updatedAt time.Tim
 	var isDeleted bool = false
 	this.IsDeleted = &isDeleted
 	this.Provider = provider
+	this.DisplayName = displayName
 	return &this
 }
 
@@ -430,6 +433,30 @@ func (o *PaymentMethodExternal) UnsetLastFour() {
 	o.LastFour.Unset()
 }
 
+// GetDisplayName returns the DisplayName field value
+func (o *PaymentMethodExternal) GetDisplayName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DisplayName
+}
+
+// GetDisplayNameOk returns a tuple with the DisplayName field value
+// and a boolean to check if the value has been set.
+func (o *PaymentMethodExternal) GetDisplayNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DisplayName, true
+}
+
+// SetDisplayName sets field value
+func (o *PaymentMethodExternal) SetDisplayName(v string) {
+	o.DisplayName = v
+}
+
 func (o PaymentMethodExternal) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -465,6 +492,7 @@ func (o PaymentMethodExternal) ToMap() (map[string]interface{}, error) {
 	if o.LastFour.IsSet() {
 		toSerialize["last_four"] = o.LastFour.Get()
 	}
+	toSerialize["display_name"] = o.DisplayName
 	return toSerialize, nil
 }
 
@@ -477,6 +505,7 @@ func (o *PaymentMethodExternal) UnmarshalJSON(bytes []byte) (err error) {
 		"created_at",
 		"updated_at",
 		"provider",
+		"display_name",
 	}
 
 	allProperties := make(map[string]interface{})

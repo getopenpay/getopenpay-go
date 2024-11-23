@@ -35,6 +35,7 @@ type PaymentIntentQueryParams struct {
 	InvoiceId NullableString `json:"invoice_id,omitempty"`
 	AmountAtom NullableIntRangeFilter `json:"amount_atom,omitempty"`
 	Search NullableSearchFilter `json:"search,omitempty"`
+	PaymentMethodId NullableString `json:"payment_method_id,omitempty"`
 }
 
 // NewPaymentIntentQueryParams instantiates a new PaymentIntentQueryParams object
@@ -524,6 +525,48 @@ func (o *PaymentIntentQueryParams) UnsetSearch() {
 	o.Search.Unset()
 }
 
+// GetPaymentMethodId returns the PaymentMethodId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *PaymentIntentQueryParams) GetPaymentMethodId() string {
+	if o == nil || IsNil(o.PaymentMethodId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PaymentMethodId.Get()
+}
+
+// GetPaymentMethodIdOk returns a tuple with the PaymentMethodId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PaymentIntentQueryParams) GetPaymentMethodIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PaymentMethodId.Get(), o.PaymentMethodId.IsSet()
+}
+
+// HasPaymentMethodId returns a boolean if a field has been set.
+func (o *PaymentIntentQueryParams) HasPaymentMethodId() bool {
+	if o != nil && o.PaymentMethodId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPaymentMethodId gets a reference to the given NullableString and assigns it to the PaymentMethodId field.
+func (o *PaymentIntentQueryParams) SetPaymentMethodId(v string) {
+	o.PaymentMethodId.Set(&v)
+}
+// SetPaymentMethodIdNil sets the value for PaymentMethodId to be an explicit nil
+func (o *PaymentIntentQueryParams) SetPaymentMethodIdNil() {
+	o.PaymentMethodId.Set(nil)
+}
+
+// UnsetPaymentMethodId ensures that no value is present for PaymentMethodId, not even an explicit nil
+func (o *PaymentIntentQueryParams) UnsetPaymentMethodId() {
+	o.PaymentMethodId.Unset()
+}
+
 func (o PaymentIntentQueryParams) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -569,6 +612,9 @@ func (o PaymentIntentQueryParams) ToMap() (map[string]interface{}, error) {
 	}
 	if o.Search.IsSet() {
 		toSerialize["search"] = o.Search.Get()
+	}
+	if o.PaymentMethodId.IsSet() {
+		toSerialize["payment_method_id"] = o.PaymentMethodId.Get()
 	}
 	return toSerialize, nil
 }

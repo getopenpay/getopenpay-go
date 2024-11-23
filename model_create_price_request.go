@@ -24,6 +24,7 @@ type CreatePriceRequest struct {
 	ListedExclusivelyForCustomers []string `json:"listed_exclusively_for_customers,omitempty"`
 	// Whether the price can be used for new purchases.
 	IsActive bool `json:"is_active"`
+	Name NullableString `json:"name,omitempty"`
 	InternalDescription NullableString `json:"internal_description,omitempty"`
 	PricingModel PricingModel `json:"pricing_model"`
 	UnitAmountAtom NullableInt32 `json:"unit_amount_atom"`
@@ -42,6 +43,7 @@ type CreatePriceRequest struct {
 	AggregateUsage *UsageAggMethodEnum `json:"aggregate_usage,omitempty"`
 	DefaultNetD NullableInt32 `json:"default_net_d,omitempty"`
 	CanOnlyBePurchasedWith []string `json:"can_only_be_purchased_with,omitempty"`
+	Meta map[string]interface{} `json:"meta,omitempty"`
 	// Unique identifier of the product.
 	ProductId string `json:"product_id"`
 	IsDefault NullableBool `json:"is_default,omitempty"`
@@ -187,6 +189,48 @@ func (o *CreatePriceRequest) GetIsActiveOk() (*bool, bool) {
 // SetIsActive sets field value
 func (o *CreatePriceRequest) SetIsActive(v bool) {
 	o.IsActive = v
+}
+
+// GetName returns the Name field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreatePriceRequest) GetName() string {
+	if o == nil || IsNil(o.Name.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Name.Get()
+}
+
+// GetNameOk returns a tuple with the Name field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreatePriceRequest) GetNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Name.Get(), o.Name.IsSet()
+}
+
+// HasName returns a boolean if a field has been set.
+func (o *CreatePriceRequest) HasName() bool {
+	if o != nil && o.Name.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetName gets a reference to the given NullableString and assigns it to the Name field.
+func (o *CreatePriceRequest) SetName(v string) {
+	o.Name.Set(&v)
+}
+// SetNameNil sets the value for Name to be an explicit nil
+func (o *CreatePriceRequest) SetNameNil() {
+	o.Name.Set(nil)
+}
+
+// UnsetName ensures that no value is present for Name, not even an explicit nil
+func (o *CreatePriceRequest) UnsetName() {
+	o.Name.Unset()
 }
 
 // GetInternalDescription returns the InternalDescription field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -739,6 +783,39 @@ func (o *CreatePriceRequest) SetCanOnlyBePurchasedWith(v []string) {
 	o.CanOnlyBePurchasedWith = v
 }
 
+// GetMeta returns the Meta field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreatePriceRequest) GetMeta() map[string]interface{} {
+	if o == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.Meta
+}
+
+// GetMetaOk returns a tuple with the Meta field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreatePriceRequest) GetMetaOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.Meta) {
+		return map[string]interface{}{}, false
+	}
+	return o.Meta, true
+}
+
+// HasMeta returns a boolean if a field has been set.
+func (o *CreatePriceRequest) HasMeta() bool {
+	if o != nil && IsNil(o.Meta) {
+		return true
+	}
+
+	return false
+}
+
+// SetMeta gets a reference to the given map[string]interface{} and assigns it to the Meta field.
+func (o *CreatePriceRequest) SetMeta(v map[string]interface{}) {
+	o.Meta = v
+}
+
 // GetProductId returns the ProductId field value
 func (o *CreatePriceRequest) GetProductId() string {
 	if o == nil {
@@ -822,6 +899,9 @@ func (o CreatePriceRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["listed_exclusively_for_customers"] = o.ListedExclusivelyForCustomers
 	}
 	toSerialize["is_active"] = o.IsActive
+	if o.Name.IsSet() {
+		toSerialize["name"] = o.Name.Get()
+	}
 	if o.InternalDescription.IsSet() {
 		toSerialize["internal_description"] = o.InternalDescription.Get()
 	}
@@ -863,6 +943,9 @@ func (o CreatePriceRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.CanOnlyBePurchasedWith) {
 		toSerialize["can_only_be_purchased_with"] = o.CanOnlyBePurchasedWith
+	}
+	if o.Meta != nil {
+		toSerialize["meta"] = o.Meta
 	}
 	toSerialize["product_id"] = o.ProductId
 	if o.IsDefault.IsSet() {

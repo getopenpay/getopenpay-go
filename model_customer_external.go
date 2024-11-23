@@ -45,6 +45,16 @@ type CustomerExternal struct {
 	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	Notes NullableString `json:"notes"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	TotalSpent []CustomerTotalAmount `json:"total_spent,omitempty"`
+	TotalRefunds []CustomerTotalAmount `json:"total_refunds,omitempty"`
+	Mrr []CustomerTotalAmount `json:"mrr,omitempty"`
+	BillingEmail NullableString `json:"billing_email,omitempty"`
+	Language *CustomerLanguage `json:"language,omitempty"`
+	InvoiceSettings NullableCustomerInvoiceSettings `json:"invoice_settings,omitempty"`
+	// Whether email should be sent or not on payment.
+	ShouldSendPaymentReceipt bool `json:"should_send_payment_receipt"`
+	Status NullableCustomerStatus `json:"status,omitempty"`
+	PhoneNumber NullableString `json:"phone_number,omitempty"`
 }
 
 type _CustomerExternal CustomerExternal
@@ -53,7 +63,7 @@ type _CustomerExternal CustomerExternal
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewCustomerExternal(id string, createdAt time.Time, updatedAt time.Time, accountId string, email string, firstName NullableString, lastName NullableString, address NullableCompleteAddress, notes NullableString) *CustomerExternal {
+func NewCustomerExternal(id string, createdAt time.Time, updatedAt time.Time, accountId string, email string, firstName NullableString, lastName NullableString, address NullableCompleteAddress, notes NullableString, shouldSendPaymentReceipt bool) *CustomerExternal {
 	this := CustomerExternal{}
 	this.Id = id
 	var object ObjectName = OBJECTNAME_CUSTOMER
@@ -68,6 +78,9 @@ func NewCustomerExternal(id string, createdAt time.Time, updatedAt time.Time, ac
 	this.LastName = lastName
 	this.Address = address
 	this.Notes = notes
+	var language CustomerLanguage = CUSTOMERLANGUAGE_EN
+	this.Language = &language
+	this.ShouldSendPaymentReceipt = shouldSendPaymentReceipt
 	return &this
 }
 
@@ -80,6 +93,8 @@ func NewCustomerExternalWithDefaults() *CustomerExternal {
 	this.Object = &object
 	var isDeleted bool = false
 	this.IsDeleted = &isDeleted
+	var language CustomerLanguage = CUSTOMERLANGUAGE_EN
+	this.Language = &language
 	return &this
 }
 
@@ -617,6 +632,326 @@ func (o *CustomerExternal) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetTotalSpent returns the TotalSpent field value if set, zero value otherwise.
+func (o *CustomerExternal) GetTotalSpent() []CustomerTotalAmount {
+	if o == nil || IsNil(o.TotalSpent) {
+		var ret []CustomerTotalAmount
+		return ret
+	}
+	return o.TotalSpent
+}
+
+// GetTotalSpentOk returns a tuple with the TotalSpent field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CustomerExternal) GetTotalSpentOk() ([]CustomerTotalAmount, bool) {
+	if o == nil || IsNil(o.TotalSpent) {
+		return nil, false
+	}
+	return o.TotalSpent, true
+}
+
+// HasTotalSpent returns a boolean if a field has been set.
+func (o *CustomerExternal) HasTotalSpent() bool {
+	if o != nil && !IsNil(o.TotalSpent) {
+		return true
+	}
+
+	return false
+}
+
+// SetTotalSpent gets a reference to the given []CustomerTotalAmount and assigns it to the TotalSpent field.
+func (o *CustomerExternal) SetTotalSpent(v []CustomerTotalAmount) {
+	o.TotalSpent = v
+}
+
+// GetTotalRefunds returns the TotalRefunds field value if set, zero value otherwise.
+func (o *CustomerExternal) GetTotalRefunds() []CustomerTotalAmount {
+	if o == nil || IsNil(o.TotalRefunds) {
+		var ret []CustomerTotalAmount
+		return ret
+	}
+	return o.TotalRefunds
+}
+
+// GetTotalRefundsOk returns a tuple with the TotalRefunds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CustomerExternal) GetTotalRefundsOk() ([]CustomerTotalAmount, bool) {
+	if o == nil || IsNil(o.TotalRefunds) {
+		return nil, false
+	}
+	return o.TotalRefunds, true
+}
+
+// HasTotalRefunds returns a boolean if a field has been set.
+func (o *CustomerExternal) HasTotalRefunds() bool {
+	if o != nil && !IsNil(o.TotalRefunds) {
+		return true
+	}
+
+	return false
+}
+
+// SetTotalRefunds gets a reference to the given []CustomerTotalAmount and assigns it to the TotalRefunds field.
+func (o *CustomerExternal) SetTotalRefunds(v []CustomerTotalAmount) {
+	o.TotalRefunds = v
+}
+
+// GetMrr returns the Mrr field value if set, zero value otherwise.
+func (o *CustomerExternal) GetMrr() []CustomerTotalAmount {
+	if o == nil || IsNil(o.Mrr) {
+		var ret []CustomerTotalAmount
+		return ret
+	}
+	return o.Mrr
+}
+
+// GetMrrOk returns a tuple with the Mrr field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CustomerExternal) GetMrrOk() ([]CustomerTotalAmount, bool) {
+	if o == nil || IsNil(o.Mrr) {
+		return nil, false
+	}
+	return o.Mrr, true
+}
+
+// HasMrr returns a boolean if a field has been set.
+func (o *CustomerExternal) HasMrr() bool {
+	if o != nil && !IsNil(o.Mrr) {
+		return true
+	}
+
+	return false
+}
+
+// SetMrr gets a reference to the given []CustomerTotalAmount and assigns it to the Mrr field.
+func (o *CustomerExternal) SetMrr(v []CustomerTotalAmount) {
+	o.Mrr = v
+}
+
+// GetBillingEmail returns the BillingEmail field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CustomerExternal) GetBillingEmail() string {
+	if o == nil || IsNil(o.BillingEmail.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.BillingEmail.Get()
+}
+
+// GetBillingEmailOk returns a tuple with the BillingEmail field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CustomerExternal) GetBillingEmailOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.BillingEmail.Get(), o.BillingEmail.IsSet()
+}
+
+// HasBillingEmail returns a boolean if a field has been set.
+func (o *CustomerExternal) HasBillingEmail() bool {
+	if o != nil && o.BillingEmail.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetBillingEmail gets a reference to the given NullableString and assigns it to the BillingEmail field.
+func (o *CustomerExternal) SetBillingEmail(v string) {
+	o.BillingEmail.Set(&v)
+}
+// SetBillingEmailNil sets the value for BillingEmail to be an explicit nil
+func (o *CustomerExternal) SetBillingEmailNil() {
+	o.BillingEmail.Set(nil)
+}
+
+// UnsetBillingEmail ensures that no value is present for BillingEmail, not even an explicit nil
+func (o *CustomerExternal) UnsetBillingEmail() {
+	o.BillingEmail.Unset()
+}
+
+// GetLanguage returns the Language field value if set, zero value otherwise.
+func (o *CustomerExternal) GetLanguage() CustomerLanguage {
+	if o == nil || IsNil(o.Language) {
+		var ret CustomerLanguage
+		return ret
+	}
+	return *o.Language
+}
+
+// GetLanguageOk returns a tuple with the Language field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CustomerExternal) GetLanguageOk() (*CustomerLanguage, bool) {
+	if o == nil || IsNil(o.Language) {
+		return nil, false
+	}
+	return o.Language, true
+}
+
+// HasLanguage returns a boolean if a field has been set.
+func (o *CustomerExternal) HasLanguage() bool {
+	if o != nil && !IsNil(o.Language) {
+		return true
+	}
+
+	return false
+}
+
+// SetLanguage gets a reference to the given CustomerLanguage and assigns it to the Language field.
+func (o *CustomerExternal) SetLanguage(v CustomerLanguage) {
+	o.Language = &v
+}
+
+// GetInvoiceSettings returns the InvoiceSettings field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CustomerExternal) GetInvoiceSettings() CustomerInvoiceSettings {
+	if o == nil || IsNil(o.InvoiceSettings.Get()) {
+		var ret CustomerInvoiceSettings
+		return ret
+	}
+	return *o.InvoiceSettings.Get()
+}
+
+// GetInvoiceSettingsOk returns a tuple with the InvoiceSettings field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CustomerExternal) GetInvoiceSettingsOk() (*CustomerInvoiceSettings, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.InvoiceSettings.Get(), o.InvoiceSettings.IsSet()
+}
+
+// HasInvoiceSettings returns a boolean if a field has been set.
+func (o *CustomerExternal) HasInvoiceSettings() bool {
+	if o != nil && o.InvoiceSettings.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetInvoiceSettings gets a reference to the given NullableCustomerInvoiceSettings and assigns it to the InvoiceSettings field.
+func (o *CustomerExternal) SetInvoiceSettings(v CustomerInvoiceSettings) {
+	o.InvoiceSettings.Set(&v)
+}
+// SetInvoiceSettingsNil sets the value for InvoiceSettings to be an explicit nil
+func (o *CustomerExternal) SetInvoiceSettingsNil() {
+	o.InvoiceSettings.Set(nil)
+}
+
+// UnsetInvoiceSettings ensures that no value is present for InvoiceSettings, not even an explicit nil
+func (o *CustomerExternal) UnsetInvoiceSettings() {
+	o.InvoiceSettings.Unset()
+}
+
+// GetShouldSendPaymentReceipt returns the ShouldSendPaymentReceipt field value
+func (o *CustomerExternal) GetShouldSendPaymentReceipt() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.ShouldSendPaymentReceipt
+}
+
+// GetShouldSendPaymentReceiptOk returns a tuple with the ShouldSendPaymentReceipt field value
+// and a boolean to check if the value has been set.
+func (o *CustomerExternal) GetShouldSendPaymentReceiptOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.ShouldSendPaymentReceipt, true
+}
+
+// SetShouldSendPaymentReceipt sets field value
+func (o *CustomerExternal) SetShouldSendPaymentReceipt(v bool) {
+	o.ShouldSendPaymentReceipt = v
+}
+
+// GetStatus returns the Status field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CustomerExternal) GetStatus() CustomerStatus {
+	if o == nil || IsNil(o.Status.Get()) {
+		var ret CustomerStatus
+		return ret
+	}
+	return *o.Status.Get()
+}
+
+// GetStatusOk returns a tuple with the Status field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CustomerExternal) GetStatusOk() (*CustomerStatus, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Status.Get(), o.Status.IsSet()
+}
+
+// HasStatus returns a boolean if a field has been set.
+func (o *CustomerExternal) HasStatus() bool {
+	if o != nil && o.Status.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetStatus gets a reference to the given NullableCustomerStatus and assigns it to the Status field.
+func (o *CustomerExternal) SetStatus(v CustomerStatus) {
+	o.Status.Set(&v)
+}
+// SetStatusNil sets the value for Status to be an explicit nil
+func (o *CustomerExternal) SetStatusNil() {
+	o.Status.Set(nil)
+}
+
+// UnsetStatus ensures that no value is present for Status, not even an explicit nil
+func (o *CustomerExternal) UnsetStatus() {
+	o.Status.Unset()
+}
+
+// GetPhoneNumber returns the PhoneNumber field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CustomerExternal) GetPhoneNumber() string {
+	if o == nil || IsNil(o.PhoneNumber.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PhoneNumber.Get()
+}
+
+// GetPhoneNumberOk returns a tuple with the PhoneNumber field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CustomerExternal) GetPhoneNumberOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PhoneNumber.Get(), o.PhoneNumber.IsSet()
+}
+
+// HasPhoneNumber returns a boolean if a field has been set.
+func (o *CustomerExternal) HasPhoneNumber() bool {
+	if o != nil && o.PhoneNumber.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPhoneNumber gets a reference to the given NullableString and assigns it to the PhoneNumber field.
+func (o *CustomerExternal) SetPhoneNumber(v string) {
+	o.PhoneNumber.Set(&v)
+}
+// SetPhoneNumberNil sets the value for PhoneNumber to be an explicit nil
+func (o *CustomerExternal) SetPhoneNumberNil() {
+	o.PhoneNumber.Set(nil)
+}
+
+// UnsetPhoneNumber ensures that no value is present for PhoneNumber, not even an explicit nil
+func (o *CustomerExternal) UnsetPhoneNumber() {
+	o.PhoneNumber.Unset()
+}
+
 func (o CustomerExternal) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -663,6 +998,31 @@ func (o CustomerExternal) ToMap() (map[string]interface{}, error) {
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
 	}
+	if !IsNil(o.TotalSpent) {
+		toSerialize["total_spent"] = o.TotalSpent
+	}
+	if !IsNil(o.TotalRefunds) {
+		toSerialize["total_refunds"] = o.TotalRefunds
+	}
+	if !IsNil(o.Mrr) {
+		toSerialize["mrr"] = o.Mrr
+	}
+	if o.BillingEmail.IsSet() {
+		toSerialize["billing_email"] = o.BillingEmail.Get()
+	}
+	if !IsNil(o.Language) {
+		toSerialize["language"] = o.Language
+	}
+	if o.InvoiceSettings.IsSet() {
+		toSerialize["invoice_settings"] = o.InvoiceSettings.Get()
+	}
+	toSerialize["should_send_payment_receipt"] = o.ShouldSendPaymentReceipt
+	if o.Status.IsSet() {
+		toSerialize["status"] = o.Status.Get()
+	}
+	if o.PhoneNumber.IsSet() {
+		toSerialize["phone_number"] = o.PhoneNumber.Get()
+	}
 	return toSerialize, nil
 }
 
@@ -680,6 +1040,7 @@ func (o *CustomerExternal) UnmarshalJSON(bytes []byte) (err error) {
 		"last_name",
 		"address",
 		"notes",
+		"should_send_payment_receipt",
 	}
 
 	allProperties := make(map[string]interface{})

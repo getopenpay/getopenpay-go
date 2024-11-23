@@ -5,7 +5,8 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Id** | **string** | Unique identifier of the invoice. | 
-**PaidAt** | **time.Time** | When the invoice is paid, in &#39;ISO 8601&#39; format. | 
+**PaidAt** | Pointer to **NullableTime** |  | [optional] 
+**CreatedAt** | **time.Time** | DateTime at which the object was created, in &#39;ISO 8601&#39; format. | 
 **Currency** | [**CurrencyEnum**](CurrencyEnum.md) |  | 
 **PaidAmountAtom** | **int32** | Total amount paid. It is in atomic units (in USD this is cents). | 
 **TaxAmountAtom** | **int32** | Total tax amount in atomic units. | 
@@ -24,12 +25,13 @@ Name | Type | Description | Notes
 **TrialEndForSub** | **NullableTime** |  | 
 **Status** | [**InvoiceStatusEnum**](InvoiceStatusEnum.md) |  | 
 **DueAmountAtom** | **int32** | Final amount due at this time for this invoice. It isin atomic units (in USD this is cents). | 
+**DueDate** | Pointer to **NullableTime** |  | [optional] 
 
 ## Methods
 
 ### NewInvoicePublic
 
-`func NewInvoicePublic(id string, paidAt time.Time, currency CurrencyEnum, paidAmountAtom int32, taxAmountAtom int32, remainingAmountAtom int32, branding map[string]interface{}, invoicePdfUrl string, receiptPdfUrl string, isInitialInvoiceForTrialSub bool, trialStartForSub NullableTime, trialEndForSub NullableTime, status InvoiceStatusEnum, dueAmountAtom int32, ) *InvoicePublic`
+`func NewInvoicePublic(id string, createdAt time.Time, currency CurrencyEnum, paidAmountAtom int32, taxAmountAtom int32, remainingAmountAtom int32, branding map[string]interface{}, invoicePdfUrl string, receiptPdfUrl string, isInitialInvoiceForTrialSub bool, trialStartForSub NullableTime, trialEndForSub NullableTime, status InvoiceStatusEnum, dueAmountAtom int32, ) *InvoicePublic`
 
 NewInvoicePublic instantiates a new InvoicePublic object
 This constructor will assign default values to properties that have it defined,
@@ -82,6 +84,41 @@ and a boolean to check if the value has been set.
 `func (o *InvoicePublic) SetPaidAt(v time.Time)`
 
 SetPaidAt sets PaidAt field to given value.
+
+### HasPaidAt
+
+`func (o *InvoicePublic) HasPaidAt() bool`
+
+HasPaidAt returns a boolean if a field has been set.
+
+### SetPaidAtNil
+
+`func (o *InvoicePublic) SetPaidAtNil(b bool)`
+
+ SetPaidAtNil sets the value for PaidAt to be an explicit nil
+
+### UnsetPaidAt
+`func (o *InvoicePublic) UnsetPaidAt()`
+
+UnsetPaidAt ensures that no value is present for PaidAt, not even an explicit nil
+### GetCreatedAt
+
+`func (o *InvoicePublic) GetCreatedAt() time.Time`
+
+GetCreatedAt returns the CreatedAt field if non-nil, zero value otherwise.
+
+### GetCreatedAtOk
+
+`func (o *InvoicePublic) GetCreatedAtOk() (*time.Time, bool)`
+
+GetCreatedAtOk returns a tuple with the CreatedAt field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCreatedAt
+
+`func (o *InvoicePublic) SetCreatedAt(v time.Time)`
+
+SetCreatedAt sets CreatedAt field to given value.
 
 
 ### GetCurrency
@@ -534,6 +571,41 @@ and a boolean to check if the value has been set.
 SetDueAmountAtom sets DueAmountAtom field to given value.
 
 
+### GetDueDate
+
+`func (o *InvoicePublic) GetDueDate() time.Time`
+
+GetDueDate returns the DueDate field if non-nil, zero value otherwise.
+
+### GetDueDateOk
+
+`func (o *InvoicePublic) GetDueDateOk() (*time.Time, bool)`
+
+GetDueDateOk returns a tuple with the DueDate field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDueDate
+
+`func (o *InvoicePublic) SetDueDate(v time.Time)`
+
+SetDueDate sets DueDate field to given value.
+
+### HasDueDate
+
+`func (o *InvoicePublic) HasDueDate() bool`
+
+HasDueDate returns a boolean if a field has been set.
+
+### SetDueDateNil
+
+`func (o *InvoicePublic) SetDueDateNil(b bool)`
+
+ SetDueDateNil sets the value for DueDate to be an explicit nil
+
+### UnsetDueDate
+`func (o *InvoicePublic) UnsetDueDate()`
+
+UnsetDueDate ensures that no value is present for DueDate, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

@@ -154,7 +154,7 @@ Name | Type | Description  | Notes
 
 ## DeleteSubscription
 
-> SubscriptionExternal DeleteSubscription(ctx, subscriptionId).DeleteSubscriptionRequest(deleteSubscriptionRequest).Execute()
+> DeleteSubscriptionResponse DeleteSubscription(ctx, subscriptionId).DeleteSubscriptionRequest(deleteSubscriptionRequest).Execute()
 
 Delete Subscription
 
@@ -181,7 +181,7 @@ func main() {
         fmt.Fprintf(os.Stderr, "Error when calling `SubscriptionsAPI.DeleteSubscription``: %v\n", err)
         fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
     }
-    // response from `DeleteSubscription`: SubscriptionExternal
+    // response from `DeleteSubscription`: DeleteSubscriptionResponse
     fmt.Fprintf(os.Stdout, "Response from `SubscriptionsAPI.DeleteSubscription`: %v\n", resp)
 }
 ```
@@ -206,7 +206,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**SubscriptionExternal**](SubscriptionExternal.md)
+[**DeleteSubscriptionResponse**](DeleteSubscriptionResponse.md)
 
 ### Authorization
 

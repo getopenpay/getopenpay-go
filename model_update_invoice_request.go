@@ -22,8 +22,9 @@ type UpdateInvoiceRequest struct {
 	PaymentMethodId NullableString `json:"payment_method_id,omitempty"`
 	// Description for newly created invoice
 	Description *string `json:"description,omitempty"`
-	Discounts NullableDiscounts `json:"discounts,omitempty"`
+	CouponId NullableString `json:"coupon_id,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	EmailInvoiceOnFinalization NullableBool `json:"email_invoice_on_finalization,omitempty"`
 }
 
 // NewUpdateInvoiceRequest instantiates a new UpdateInvoiceRequest object
@@ -121,46 +122,46 @@ func (o *UpdateInvoiceRequest) SetDescription(v string) {
 	o.Description = &v
 }
 
-// GetDiscounts returns the Discounts field value if set, zero value otherwise (both if not set or set to explicit null).
-func (o *UpdateInvoiceRequest) GetDiscounts() Discounts {
-	if o == nil || IsNil(o.Discounts.Get()) {
-		var ret Discounts
+// GetCouponId returns the CouponId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateInvoiceRequest) GetCouponId() string {
+	if o == nil || IsNil(o.CouponId.Get()) {
+		var ret string
 		return ret
 	}
-	return *o.Discounts.Get()
+	return *o.CouponId.Get()
 }
 
-// GetDiscountsOk returns a tuple with the Discounts field value if set, nil otherwise
+// GetCouponIdOk returns a tuple with the CouponId field value if set, nil otherwise
 // and a boolean to check if the value has been set.
 // NOTE: If the value is an explicit nil, `nil, true` will be returned
-func (o *UpdateInvoiceRequest) GetDiscountsOk() (*Discounts, bool) {
+func (o *UpdateInvoiceRequest) GetCouponIdOk() (*string, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return o.Discounts.Get(), o.Discounts.IsSet()
+	return o.CouponId.Get(), o.CouponId.IsSet()
 }
 
-// HasDiscounts returns a boolean if a field has been set.
-func (o *UpdateInvoiceRequest) HasDiscounts() bool {
-	if o != nil && o.Discounts.IsSet() {
+// HasCouponId returns a boolean if a field has been set.
+func (o *UpdateInvoiceRequest) HasCouponId() bool {
+	if o != nil && o.CouponId.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetDiscounts gets a reference to the given NullableDiscounts and assigns it to the Discounts field.
-func (o *UpdateInvoiceRequest) SetDiscounts(v Discounts) {
-	o.Discounts.Set(&v)
+// SetCouponId gets a reference to the given NullableString and assigns it to the CouponId field.
+func (o *UpdateInvoiceRequest) SetCouponId(v string) {
+	o.CouponId.Set(&v)
 }
-// SetDiscountsNil sets the value for Discounts to be an explicit nil
-func (o *UpdateInvoiceRequest) SetDiscountsNil() {
-	o.Discounts.Set(nil)
+// SetCouponIdNil sets the value for CouponId to be an explicit nil
+func (o *UpdateInvoiceRequest) SetCouponIdNil() {
+	o.CouponId.Set(nil)
 }
 
-// UnsetDiscounts ensures that no value is present for Discounts, not even an explicit nil
-func (o *UpdateInvoiceRequest) UnsetDiscounts() {
-	o.Discounts.Unset()
+// UnsetCouponId ensures that no value is present for CouponId, not even an explicit nil
+func (o *UpdateInvoiceRequest) UnsetCouponId() {
+	o.CouponId.Unset()
 }
 
 // GetCustomFields returns the CustomFields field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -196,6 +197,48 @@ func (o *UpdateInvoiceRequest) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetEmailInvoiceOnFinalization returns the EmailInvoiceOnFinalization field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateInvoiceRequest) GetEmailInvoiceOnFinalization() bool {
+	if o == nil || IsNil(o.EmailInvoiceOnFinalization.Get()) {
+		var ret bool
+		return ret
+	}
+	return *o.EmailInvoiceOnFinalization.Get()
+}
+
+// GetEmailInvoiceOnFinalizationOk returns a tuple with the EmailInvoiceOnFinalization field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateInvoiceRequest) GetEmailInvoiceOnFinalizationOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.EmailInvoiceOnFinalization.Get(), o.EmailInvoiceOnFinalization.IsSet()
+}
+
+// HasEmailInvoiceOnFinalization returns a boolean if a field has been set.
+func (o *UpdateInvoiceRequest) HasEmailInvoiceOnFinalization() bool {
+	if o != nil && o.EmailInvoiceOnFinalization.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetEmailInvoiceOnFinalization gets a reference to the given NullableBool and assigns it to the EmailInvoiceOnFinalization field.
+func (o *UpdateInvoiceRequest) SetEmailInvoiceOnFinalization(v bool) {
+	o.EmailInvoiceOnFinalization.Set(&v)
+}
+// SetEmailInvoiceOnFinalizationNil sets the value for EmailInvoiceOnFinalization to be an explicit nil
+func (o *UpdateInvoiceRequest) SetEmailInvoiceOnFinalizationNil() {
+	o.EmailInvoiceOnFinalization.Set(nil)
+}
+
+// UnsetEmailInvoiceOnFinalization ensures that no value is present for EmailInvoiceOnFinalization, not even an explicit nil
+func (o *UpdateInvoiceRequest) UnsetEmailInvoiceOnFinalization() {
+	o.EmailInvoiceOnFinalization.Unset()
+}
+
 func (o UpdateInvoiceRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -212,11 +255,14 @@ func (o UpdateInvoiceRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Description) {
 		toSerialize["description"] = o.Description
 	}
-	if o.Discounts.IsSet() {
-		toSerialize["discounts"] = o.Discounts.Get()
+	if o.CouponId.IsSet() {
+		toSerialize["coupon_id"] = o.CouponId.Get()
 	}
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if o.EmailInvoiceOnFinalization.IsSet() {
+		toSerialize["email_invoice_on_finalization"] = o.EmailInvoiceOnFinalization.Get()
 	}
 	return toSerialize, nil
 }

@@ -23,8 +23,9 @@ var _ MappedNullable = &InvoicePublic{}
 type InvoicePublic struct {
 	// Unique identifier of the invoice.
 	Id string `json:"id"`
-	// When the invoice is paid, in 'ISO 8601' format.
-	PaidAt time.Time `json:"paid_at"`
+	PaidAt NullableTime `json:"paid_at,omitempty"`
+	// DateTime at which the object was created, in 'ISO 8601' format.
+	CreatedAt time.Time `json:"created_at"`
 	Currency CurrencyEnum `json:"currency"`
 	// Total amount paid. It is in atomic units (in USD this is cents).
 	PaidAmountAtom int32 `json:"paid_amount_atom"`
@@ -51,6 +52,7 @@ type InvoicePublic struct {
 	Status InvoiceStatusEnum `json:"status"`
 	// Final amount due at this time for this invoice. It isin atomic units (in USD this is cents).
 	DueAmountAtom int32 `json:"due_amount_atom"`
+	DueDate NullableTime `json:"due_date,omitempty"`
 }
 
 type _InvoicePublic InvoicePublic
@@ -59,10 +61,10 @@ type _InvoicePublic InvoicePublic
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInvoicePublic(id string, paidAt time.Time, currency CurrencyEnum, paidAmountAtom int32, taxAmountAtom int32, remainingAmountAtom int32, branding map[string]interface{}, invoicePdfUrl string, receiptPdfUrl string, isInitialInvoiceForTrialSub bool, trialStartForSub NullableTime, trialEndForSub NullableTime, status InvoiceStatusEnum, dueAmountAtom int32) *InvoicePublic {
+func NewInvoicePublic(id string, createdAt time.Time, currency CurrencyEnum, paidAmountAtom int32, taxAmountAtom int32, remainingAmountAtom int32, branding map[string]interface{}, invoicePdfUrl string, receiptPdfUrl string, isInitialInvoiceForTrialSub bool, trialStartForSub NullableTime, trialEndForSub NullableTime, status InvoiceStatusEnum, dueAmountAtom int32) *InvoicePublic {
 	this := InvoicePublic{}
 	this.Id = id
-	this.PaidAt = paidAt
+	this.CreatedAt = createdAt
 	this.Currency = currency
 	this.PaidAmountAtom = paidAmountAtom
 	this.TaxAmountAtom = taxAmountAtom
@@ -110,28 +112,70 @@ func (o *InvoicePublic) SetId(v string) {
 	o.Id = v
 }
 
-// GetPaidAt returns the PaidAt field value
+// GetPaidAt returns the PaidAt field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *InvoicePublic) GetPaidAt() time.Time {
+	if o == nil || IsNil(o.PaidAt.Get()) {
+		var ret time.Time
+		return ret
+	}
+	return *o.PaidAt.Get()
+}
+
+// GetPaidAtOk returns a tuple with the PaidAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *InvoicePublic) GetPaidAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PaidAt.Get(), o.PaidAt.IsSet()
+}
+
+// HasPaidAt returns a boolean if a field has been set.
+func (o *InvoicePublic) HasPaidAt() bool {
+	if o != nil && o.PaidAt.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPaidAt gets a reference to the given NullableTime and assigns it to the PaidAt field.
+func (o *InvoicePublic) SetPaidAt(v time.Time) {
+	o.PaidAt.Set(&v)
+}
+// SetPaidAtNil sets the value for PaidAt to be an explicit nil
+func (o *InvoicePublic) SetPaidAtNil() {
+	o.PaidAt.Set(nil)
+}
+
+// UnsetPaidAt ensures that no value is present for PaidAt, not even an explicit nil
+func (o *InvoicePublic) UnsetPaidAt() {
+	o.PaidAt.Unset()
+}
+
+// GetCreatedAt returns the CreatedAt field value
+func (o *InvoicePublic) GetCreatedAt() time.Time {
 	if o == nil {
 		var ret time.Time
 		return ret
 	}
 
-	return o.PaidAt
+	return o.CreatedAt
 }
 
-// GetPaidAtOk returns a tuple with the PaidAt field value
+// GetCreatedAtOk returns a tuple with the CreatedAt field value
 // and a boolean to check if the value has been set.
-func (o *InvoicePublic) GetPaidAtOk() (*time.Time, bool) {
+func (o *InvoicePublic) GetCreatedAtOk() (*time.Time, bool) {
 	if o == nil {
 		return nil, false
 	}
-	return &o.PaidAt, true
+	return &o.CreatedAt, true
 }
 
-// SetPaidAt sets field value
-func (o *InvoicePublic) SetPaidAt(v time.Time) {
-	o.PaidAt = v
+// SetCreatedAt sets field value
+func (o *InvoicePublic) SetCreatedAt(v time.Time) {
+	o.CreatedAt = v
 }
 
 // GetCurrency returns the Currency field value
@@ -658,6 +702,48 @@ func (o *InvoicePublic) SetDueAmountAtom(v int32) {
 	o.DueAmountAtom = v
 }
 
+// GetDueDate returns the DueDate field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *InvoicePublic) GetDueDate() time.Time {
+	if o == nil || IsNil(o.DueDate.Get()) {
+		var ret time.Time
+		return ret
+	}
+	return *o.DueDate.Get()
+}
+
+// GetDueDateOk returns a tuple with the DueDate field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *InvoicePublic) GetDueDateOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.DueDate.Get(), o.DueDate.IsSet()
+}
+
+// HasDueDate returns a boolean if a field has been set.
+func (o *InvoicePublic) HasDueDate() bool {
+	if o != nil && o.DueDate.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetDueDate gets a reference to the given NullableTime and assigns it to the DueDate field.
+func (o *InvoicePublic) SetDueDate(v time.Time) {
+	o.DueDate.Set(&v)
+}
+// SetDueDateNil sets the value for DueDate to be an explicit nil
+func (o *InvoicePublic) SetDueDateNil() {
+	o.DueDate.Set(nil)
+}
+
+// UnsetDueDate ensures that no value is present for DueDate, not even an explicit nil
+func (o *InvoicePublic) UnsetDueDate() {
+	o.DueDate.Unset()
+}
+
 func (o InvoicePublic) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -669,7 +755,10 @@ func (o InvoicePublic) MarshalJSON() ([]byte, error) {
 func (o InvoicePublic) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["id"] = o.Id
-	toSerialize["paid_at"] = o.PaidAt
+	if o.PaidAt.IsSet() {
+		toSerialize["paid_at"] = o.PaidAt.Get()
+	}
+	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["currency"] = o.Currency
 	toSerialize["paid_amount_atom"] = o.PaidAmountAtom
 	toSerialize["tax_amount_atom"] = o.TaxAmountAtom
@@ -700,6 +789,9 @@ func (o InvoicePublic) ToMap() (map[string]interface{}, error) {
 	toSerialize["trial_end_for_sub"] = o.TrialEndForSub.Get()
 	toSerialize["status"] = o.Status
 	toSerialize["due_amount_atom"] = o.DueAmountAtom
+	if o.DueDate.IsSet() {
+		toSerialize["due_date"] = o.DueDate.Get()
+	}
 	return toSerialize, nil
 }
 
@@ -709,7 +801,7 @@ func (o *InvoicePublic) UnmarshalJSON(bytes []byte) (err error) {
 	// that every required field exists as a key in the generic map.
 	requiredProperties := []string{
 		"id",
-		"paid_at",
+		"created_at",
 		"currency",
 		"paid_amount_atom",
 		"tax_amount_atom",

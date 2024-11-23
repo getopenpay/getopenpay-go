@@ -3,7 +3,11 @@
 ## Enum
 
 
+* `AIRWALLEX` (value: `"airwallex"`)
+
 * `AUTHORIZE_NET` (value: `"authorize_net"`)
+
+* `CHECKOUT_COM` (value: `"checkout_com"`)
 
 * `BRAINTREE` (value: `"braintree"`)
 

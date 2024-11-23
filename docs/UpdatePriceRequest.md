@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **IsExclusive** | Pointer to **NullableBool** |  | [optional] 
 **ListedExclusivelyForCustomers** | Pointer to **[]string** |  | [optional] 
 **IsActive** | Pointer to **NullableBool** |  | [optional] 
+**Name** | Pointer to **NullableString** |  | [optional] 
 **InternalDescription** | Pointer to **NullableString** |  | [optional] 
 **PricingModel** | Pointer to [**NullablePricingModel**](PricingModel.md) |  | [optional] 
 **UnitAmountAtom** | Pointer to **NullableInt32** |  | [optional] 
@@ -23,6 +24,7 @@ Name | Type | Description | Notes
 **AggregateUsage** | Pointer to [**NullableUsageAggMethodEnum**](UsageAggMethodEnum.md) |  | [optional] 
 **DefaultNetD** | Pointer to **NullableInt32** |  | [optional] 
 **CanOnlyBePurchasedWith** | Pointer to **[]string** |  | [optional] 
+**Meta** | Pointer to **map[string]interface{}** |  | [optional] 
 
 ## Methods
 
@@ -138,6 +140,41 @@ HasIsActive returns a boolean if a field has been set.
 `func (o *UpdatePriceRequest) UnsetIsActive()`
 
 UnsetIsActive ensures that no value is present for IsActive, not even an explicit nil
+### GetName
+
+`func (o *UpdatePriceRequest) GetName() string`
+
+GetName returns the Name field if non-nil, zero value otherwise.
+
+### GetNameOk
+
+`func (o *UpdatePriceRequest) GetNameOk() (*string, bool)`
+
+GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetName
+
+`func (o *UpdatePriceRequest) SetName(v string)`
+
+SetName sets Name field to given value.
+
+### HasName
+
+`func (o *UpdatePriceRequest) HasName() bool`
+
+HasName returns a boolean if a field has been set.
+
+### SetNameNil
+
+`func (o *UpdatePriceRequest) SetNameNil(b bool)`
+
+ SetNameNil sets the value for Name to be an explicit nil
+
+### UnsetName
+`func (o *UpdatePriceRequest) UnsetName()`
+
+UnsetName ensures that no value is present for Name, not even an explicit nil
 ### GetInternalDescription
 
 `func (o *UpdatePriceRequest) GetInternalDescription() string`
@@ -678,6 +715,41 @@ SetCanOnlyBePurchasedWith sets CanOnlyBePurchasedWith field to given value.
 
 HasCanOnlyBePurchasedWith returns a boolean if a field has been set.
 
+### GetMeta
+
+`func (o *UpdatePriceRequest) GetMeta() map[string]interface{}`
+
+GetMeta returns the Meta field if non-nil, zero value otherwise.
+
+### GetMetaOk
+
+`func (o *UpdatePriceRequest) GetMetaOk() (*map[string]interface{}, bool)`
+
+GetMetaOk returns a tuple with the Meta field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMeta
+
+`func (o *UpdatePriceRequest) SetMeta(v map[string]interface{})`
+
+SetMeta sets Meta field to given value.
+
+### HasMeta
+
+`func (o *UpdatePriceRequest) HasMeta() bool`
+
+HasMeta returns a boolean if a field has been set.
+
+### SetMetaNil
+
+`func (o *UpdatePriceRequest) SetMetaNil(b bool)`
+
+ SetMetaNil sets the value for Meta to be an explicit nil
+
+### UnsetMeta
+`func (o *UpdatePriceRequest) UnsetMeta()`
+
+UnsetMeta ensures that no value is present for Meta, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

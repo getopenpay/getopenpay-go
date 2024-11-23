@@ -36,12 +36,17 @@ type TokenizedCreditCardExternal struct {
 	Provider PaymentProviderType `json:"provider"`
 	CardType NullableString `json:"card_type,omitempty"`
 	LastFour NullableString `json:"last_four,omitempty"`
+	// Display name for the payment method to show on the UI.
+	DisplayName string `json:"display_name"`
 	ExpiryDate NullableString `json:"expiry_date"`
 	CardFingerprint NullableString `json:"card_fingerprint,omitempty"`
 	CardIin NullableString `json:"card_iin,omitempty"`
 	CardCountry NullableString `json:"card_country,omitempty"`
 	CardBrand NullableString `json:"card_brand,omitempty"`
 	CardIssuer NullableString `json:"card_issuer,omitempty"`
+	// Indicates if full details of the card are known
+	IsFullDetailsKnown bool `json:"is_full_details_known"`
+	CdeExternalId NullableString `json:"cde_external_id,omitempty"`
 }
 
 type _TokenizedCreditCardExternal TokenizedCreditCardExternal
@@ -50,7 +55,7 @@ type _TokenizedCreditCardExternal TokenizedCreditCardExternal
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTokenizedCreditCardExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, expiryDate NullableString) *TokenizedCreditCardExternal {
+func NewTokenizedCreditCardExternal(id string, createdAt time.Time, updatedAt time.Time, provider PaymentProviderType, displayName string, expiryDate NullableString, isFullDetailsKnown bool) *TokenizedCreditCardExternal {
 	this := TokenizedCreditCardExternal{}
 	this.Id = id
 	var object ObjectName = OBJECTNAME_TOKENIZED_CARD_PAYMENT_METHOD
@@ -60,7 +65,9 @@ func NewTokenizedCreditCardExternal(id string, createdAt time.Time, updatedAt ti
 	var isDeleted bool = false
 	this.IsDeleted = &isDeleted
 	this.Provider = provider
+	this.DisplayName = displayName
 	this.ExpiryDate = expiryDate
+	this.IsFullDetailsKnown = isFullDetailsKnown
 	return &this
 }
 
@@ -437,6 +444,30 @@ func (o *TokenizedCreditCardExternal) UnsetLastFour() {
 	o.LastFour.Unset()
 }
 
+// GetDisplayName returns the DisplayName field value
+func (o *TokenizedCreditCardExternal) GetDisplayName() string {
+	if o == nil {
+		var ret string
+		return ret
+	}
+
+	return o.DisplayName
+}
+
+// GetDisplayNameOk returns a tuple with the DisplayName field value
+// and a boolean to check if the value has been set.
+func (o *TokenizedCreditCardExternal) GetDisplayNameOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.DisplayName, true
+}
+
+// SetDisplayName sets field value
+func (o *TokenizedCreditCardExternal) SetDisplayName(v string) {
+	o.DisplayName = v
+}
+
 // GetExpiryDate returns the ExpiryDate field value
 // If the value is explicit nil, the zero value for string will be returned
 func (o *TokenizedCreditCardExternal) GetExpiryDate() string {
@@ -673,6 +704,72 @@ func (o *TokenizedCreditCardExternal) UnsetCardIssuer() {
 	o.CardIssuer.Unset()
 }
 
+// GetIsFullDetailsKnown returns the IsFullDetailsKnown field value
+func (o *TokenizedCreditCardExternal) GetIsFullDetailsKnown() bool {
+	if o == nil {
+		var ret bool
+		return ret
+	}
+
+	return o.IsFullDetailsKnown
+}
+
+// GetIsFullDetailsKnownOk returns a tuple with the IsFullDetailsKnown field value
+// and a boolean to check if the value has been set.
+func (o *TokenizedCreditCardExternal) GetIsFullDetailsKnownOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return &o.IsFullDetailsKnown, true
+}
+
+// SetIsFullDetailsKnown sets field value
+func (o *TokenizedCreditCardExternal) SetIsFullDetailsKnown(v bool) {
+	o.IsFullDetailsKnown = v
+}
+
+// GetCdeExternalId returns the CdeExternalId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *TokenizedCreditCardExternal) GetCdeExternalId() string {
+	if o == nil || IsNil(o.CdeExternalId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.CdeExternalId.Get()
+}
+
+// GetCdeExternalIdOk returns a tuple with the CdeExternalId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *TokenizedCreditCardExternal) GetCdeExternalIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.CdeExternalId.Get(), o.CdeExternalId.IsSet()
+}
+
+// HasCdeExternalId returns a boolean if a field has been set.
+func (o *TokenizedCreditCardExternal) HasCdeExternalId() bool {
+	if o != nil && o.CdeExternalId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetCdeExternalId gets a reference to the given NullableString and assigns it to the CdeExternalId field.
+func (o *TokenizedCreditCardExternal) SetCdeExternalId(v string) {
+	o.CdeExternalId.Set(&v)
+}
+// SetCdeExternalIdNil sets the value for CdeExternalId to be an explicit nil
+func (o *TokenizedCreditCardExternal) SetCdeExternalIdNil() {
+	o.CdeExternalId.Set(nil)
+}
+
+// UnsetCdeExternalId ensures that no value is present for CdeExternalId, not even an explicit nil
+func (o *TokenizedCreditCardExternal) UnsetCdeExternalId() {
+	o.CdeExternalId.Unset()
+}
+
 func (o TokenizedCreditCardExternal) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -708,6 +805,7 @@ func (o TokenizedCreditCardExternal) ToMap() (map[string]interface{}, error) {
 	if o.LastFour.IsSet() {
 		toSerialize["last_four"] = o.LastFour.Get()
 	}
+	toSerialize["display_name"] = o.DisplayName
 	toSerialize["expiry_date"] = o.ExpiryDate.Get()
 	if o.CardFingerprint.IsSet() {
 		toSerialize["card_fingerprint"] = o.CardFingerprint.Get()
@@ -724,6 +822,10 @@ func (o TokenizedCreditCardExternal) ToMap() (map[string]interface{}, error) {
 	if o.CardIssuer.IsSet() {
 		toSerialize["card_issuer"] = o.CardIssuer.Get()
 	}
+	toSerialize["is_full_details_known"] = o.IsFullDetailsKnown
+	if o.CdeExternalId.IsSet() {
+		toSerialize["cde_external_id"] = o.CdeExternalId.Get()
+	}
 	return toSerialize, nil
 }
 
@@ -736,7 +838,9 @@ func (o *TokenizedCreditCardExternal) UnmarshalJSON(bytes []byte) (err error) {
 		"created_at",
 		"updated_at",
 		"provider",
+		"display_name",
 		"expiry_date",
+		"is_full_details_known",
 	}
 
 	allProperties := make(map[string]interface{})

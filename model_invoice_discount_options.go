@@ -19,7 +19,7 @@ var _ MappedNullable = &InvoiceDiscountOptions{}
 
 // InvoiceDiscountOptions struct for InvoiceDiscountOptions
 type InvoiceDiscountOptions struct {
-	Coupons []string `json:"coupons,omitempty"`
+	Coupon NullableString `json:"coupon,omitempty"`
 	Discount NullableString `json:"discount,omitempty"`
 }
 
@@ -40,36 +40,46 @@ func NewInvoiceDiscountOptionsWithDefaults() *InvoiceDiscountOptions {
 	return &this
 }
 
-// GetCoupons returns the Coupons field value if set, zero value otherwise.
-func (o *InvoiceDiscountOptions) GetCoupons() []string {
-	if o == nil || IsNil(o.Coupons) {
-		var ret []string
+// GetCoupon returns the Coupon field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *InvoiceDiscountOptions) GetCoupon() string {
+	if o == nil || IsNil(o.Coupon.Get()) {
+		var ret string
 		return ret
 	}
-	return o.Coupons
+	return *o.Coupon.Get()
 }
 
-// GetCouponsOk returns a tuple with the Coupons field value if set, nil otherwise
+// GetCouponOk returns a tuple with the Coupon field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *InvoiceDiscountOptions) GetCouponsOk() ([]string, bool) {
-	if o == nil || IsNil(o.Coupons) {
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *InvoiceDiscountOptions) GetCouponOk() (*string, bool) {
+	if o == nil {
 		return nil, false
 	}
-	return o.Coupons, true
+	return o.Coupon.Get(), o.Coupon.IsSet()
 }
 
-// HasCoupons returns a boolean if a field has been set.
-func (o *InvoiceDiscountOptions) HasCoupons() bool {
-	if o != nil && !IsNil(o.Coupons) {
+// HasCoupon returns a boolean if a field has been set.
+func (o *InvoiceDiscountOptions) HasCoupon() bool {
+	if o != nil && o.Coupon.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCoupons gets a reference to the given []string and assigns it to the Coupons field.
-func (o *InvoiceDiscountOptions) SetCoupons(v []string) {
-	o.Coupons = v
+// SetCoupon gets a reference to the given NullableString and assigns it to the Coupon field.
+func (o *InvoiceDiscountOptions) SetCoupon(v string) {
+	o.Coupon.Set(&v)
+}
+// SetCouponNil sets the value for Coupon to be an explicit nil
+func (o *InvoiceDiscountOptions) SetCouponNil() {
+	o.Coupon.Set(nil)
+}
+
+// UnsetCoupon ensures that no value is present for Coupon, not even an explicit nil
+func (o *InvoiceDiscountOptions) UnsetCoupon() {
+	o.Coupon.Unset()
 }
 
 // GetDiscount returns the Discount field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -124,8 +134,8 @@ func (o InvoiceDiscountOptions) MarshalJSON() ([]byte, error) {
 
 func (o InvoiceDiscountOptions) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.Coupons) {
-		toSerialize["coupons"] = o.Coupons
+	if o.Coupon.IsSet() {
+		toSerialize["coupon"] = o.Coupon.Get()
 	}
 	if o.Discount.IsSet() {
 		toSerialize["discount"] = o.Discount.Get()

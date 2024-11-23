@@ -15,18 +15,21 @@ Name | Type | Description | Notes
 **Provider** | [**PaymentProviderType**](PaymentProviderType.md) |  | 
 **CardType** | Pointer to **interface{}** |  | [optional] 
 **LastFour** | Pointer to **interface{}** |  | [optional] 
+**DisplayName** | **interface{}** | Display name for the payment method to show on the UI. | 
 **ExpiryDate** | **interface{}** |  | 
 **CardFingerprint** | Pointer to **interface{}** |  | [optional] 
 **CardIin** | Pointer to **interface{}** |  | [optional] 
 **CardCountry** | Pointer to **interface{}** |  | [optional] 
 **CardBrand** | Pointer to **interface{}** |  | [optional] 
 **CardIssuer** | Pointer to **interface{}** |  | [optional] 
+**IsFullDetailsKnown** | **interface{}** | Indicates if full details of the card are known | 
+**CdeExternalId** | Pointer to **interface{}** |  | [optional] 
 
 ## Methods
 
 ### NewResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet
 
-`func NewResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet(id interface{}, createdAt interface{}, updatedAt interface{}, provider PaymentProviderType, expiryDate interface{}, ) *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet`
+`func NewResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet(id interface{}, createdAt interface{}, updatedAt interface{}, provider PaymentProviderType, displayName interface{}, expiryDate interface{}, isFullDetailsKnown interface{}, ) *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet`
 
 NewResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet instantiates a new ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet object
 This constructor will assign default values to properties that have it defined,
@@ -376,6 +379,36 @@ HasLastFour returns a boolean if a field has been set.
 `func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) UnsetLastFour()`
 
 UnsetLastFour ensures that no value is present for LastFour, not even an explicit nil
+### GetDisplayName
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetDisplayName() interface{}`
+
+GetDisplayName returns the DisplayName field if non-nil, zero value otherwise.
+
+### GetDisplayNameOk
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetDisplayNameOk() (*interface{}, bool)`
+
+GetDisplayNameOk returns a tuple with the DisplayName field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDisplayName
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) SetDisplayName(v interface{})`
+
+SetDisplayName sets DisplayName field to given value.
+
+
+### SetDisplayNameNil
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) SetDisplayNameNil(b bool)`
+
+ SetDisplayNameNil sets the value for DisplayName to be an explicit nil
+
+### UnsetDisplayName
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) UnsetDisplayName()`
+
+UnsetDisplayName ensures that no value is present for DisplayName, not even an explicit nil
 ### GetExpiryDate
 
 `func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetExpiryDate() interface{}`
@@ -581,6 +614,71 @@ HasCardIssuer returns a boolean if a field has been set.
 `func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) UnsetCardIssuer()`
 
 UnsetCardIssuer ensures that no value is present for CardIssuer, not even an explicit nil
+### GetIsFullDetailsKnown
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetIsFullDetailsKnown() interface{}`
+
+GetIsFullDetailsKnown returns the IsFullDetailsKnown field if non-nil, zero value otherwise.
+
+### GetIsFullDetailsKnownOk
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetIsFullDetailsKnownOk() (*interface{}, bool)`
+
+GetIsFullDetailsKnownOk returns a tuple with the IsFullDetailsKnown field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIsFullDetailsKnown
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) SetIsFullDetailsKnown(v interface{})`
+
+SetIsFullDetailsKnown sets IsFullDetailsKnown field to given value.
+
+
+### SetIsFullDetailsKnownNil
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) SetIsFullDetailsKnownNil(b bool)`
+
+ SetIsFullDetailsKnownNil sets the value for IsFullDetailsKnown to be an explicit nil
+
+### UnsetIsFullDetailsKnown
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) UnsetIsFullDetailsKnown()`
+
+UnsetIsFullDetailsKnown ensures that no value is present for IsFullDetailsKnown, not even an explicit nil
+### GetCdeExternalId
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetCdeExternalId() interface{}`
+
+GetCdeExternalId returns the CdeExternalId field if non-nil, zero value otherwise.
+
+### GetCdeExternalIdOk
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) GetCdeExternalIdOk() (*interface{}, bool)`
+
+GetCdeExternalIdOk returns a tuple with the CdeExternalId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCdeExternalId
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) SetCdeExternalId(v interface{})`
+
+SetCdeExternalId sets CdeExternalId field to given value.
+
+### HasCdeExternalId
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) HasCdeExternalId() bool`
+
+HasCdeExternalId returns a boolean if a field has been set.
+
+### SetCdeExternalIdNil
+
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) SetCdeExternalIdNil(b bool)`
+
+ SetCdeExternalIdNil sets the value for CdeExternalId to be an explicit nil
+
+### UnsetCdeExternalId
+`func (o *ResponseGetPaymentMethodPaymentMethodsPaymentMethodIdGet) UnsetCdeExternalId()`
+
+UnsetCdeExternalId ensures that no value is present for CdeExternalId, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 

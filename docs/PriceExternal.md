@@ -13,6 +13,7 @@ Name | Type | Description | Notes
 **ProductName** | **string** | Name of the product associated with this price. | 
 **ProductId** | **string** | Unique identifier of the product. | 
 **Product** | Pointer to [**NullableProductExternal**](ProductExternal.md) |  | [optional] 
+**Name** | Pointer to **NullableString** |  | [optional] 
 **InternalDescription** | **NullableString** |  | 
 **BillingScheme** | [**BillingSchemeEnum**](BillingSchemeEnum.md) |  | 
 **UnitAmountAtom** | **NullableInt32** |  | 
@@ -260,6 +261,41 @@ HasProduct returns a boolean if a field has been set.
 `func (o *PriceExternal) UnsetProduct()`
 
 UnsetProduct ensures that no value is present for Product, not even an explicit nil
+### GetName
+
+`func (o *PriceExternal) GetName() string`
+
+GetName returns the Name field if non-nil, zero value otherwise.
+
+### GetNameOk
+
+`func (o *PriceExternal) GetNameOk() (*string, bool)`
+
+GetNameOk returns a tuple with the Name field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetName
+
+`func (o *PriceExternal) SetName(v string)`
+
+SetName sets Name field to given value.
+
+### HasName
+
+`func (o *PriceExternal) HasName() bool`
+
+HasName returns a boolean if a field has been set.
+
+### SetNameNil
+
+`func (o *PriceExternal) SetNameNil(b bool)`
+
+ SetNameNil sets the value for Name to be an explicit nil
+
+### UnsetName
+`func (o *PriceExternal) UnsetName()`
+
+UnsetName ensures that no value is present for Name, not even an explicit nil
 ### GetInternalDescription
 
 `func (o *PriceExternal) GetInternalDescription() string`

@@ -20,7 +20,9 @@ type PaymentProcessorName string
 
 // List of PaymentProcessorName
 const (
+	PAYMENTPROCESSORNAME_AIRWALLEX PaymentProcessorName = "airwallex"
 	PAYMENTPROCESSORNAME_AUTHORIZE_NET PaymentProcessorName = "authorize_net"
+	PAYMENTPROCESSORNAME_CHECKOUT_COM PaymentProcessorName = "checkout_com"
 	PAYMENTPROCESSORNAME_BRAINTREE PaymentProcessorName = "braintree"
 	PAYMENTPROCESSORNAME_STRIPE PaymentProcessorName = "stripe"
 	PAYMENTPROCESSORNAME_FOOBAR PaymentProcessorName = "foobar"
@@ -28,7 +30,9 @@ const (
 
 // All allowed values of PaymentProcessorName enum
 var AllowedPaymentProcessorNameEnumValues = []PaymentProcessorName{
+	"airwallex",
 	"authorize_net",
+	"checkout_com",
 	"braintree",
 	"stripe",
 	"foobar",

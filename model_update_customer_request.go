@@ -32,6 +32,11 @@ type UpdateCustomerRequest struct {
 	PromotionCodeId NullableString `json:"promotion_code_id,omitempty"`
 	Notes NullableString `json:"notes,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	Email NullableString `json:"email,omitempty"`
+	InvoiceSettings NullableCustomerInvoiceSettings `json:"invoice_settings,omitempty"`
+	BillingEmail NullableString `json:"billing_email,omitempty"`
+	Language NullableCustomerLanguage `json:"language,omitempty"`
+	PhoneNumber NullableString `json:"phone_number,omitempty"`
 }
 
 // NewUpdateCustomerRequest instantiates a new UpdateCustomerRequest object
@@ -588,6 +593,216 @@ func (o *UpdateCustomerRequest) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetEmail returns the Email field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateCustomerRequest) GetEmail() string {
+	if o == nil || IsNil(o.Email.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.Email.Get()
+}
+
+// GetEmailOk returns a tuple with the Email field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateCustomerRequest) GetEmailOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Email.Get(), o.Email.IsSet()
+}
+
+// HasEmail returns a boolean if a field has been set.
+func (o *UpdateCustomerRequest) HasEmail() bool {
+	if o != nil && o.Email.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetEmail gets a reference to the given NullableString and assigns it to the Email field.
+func (o *UpdateCustomerRequest) SetEmail(v string) {
+	o.Email.Set(&v)
+}
+// SetEmailNil sets the value for Email to be an explicit nil
+func (o *UpdateCustomerRequest) SetEmailNil() {
+	o.Email.Set(nil)
+}
+
+// UnsetEmail ensures that no value is present for Email, not even an explicit nil
+func (o *UpdateCustomerRequest) UnsetEmail() {
+	o.Email.Unset()
+}
+
+// GetInvoiceSettings returns the InvoiceSettings field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateCustomerRequest) GetInvoiceSettings() CustomerInvoiceSettings {
+	if o == nil || IsNil(o.InvoiceSettings.Get()) {
+		var ret CustomerInvoiceSettings
+		return ret
+	}
+	return *o.InvoiceSettings.Get()
+}
+
+// GetInvoiceSettingsOk returns a tuple with the InvoiceSettings field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateCustomerRequest) GetInvoiceSettingsOk() (*CustomerInvoiceSettings, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.InvoiceSettings.Get(), o.InvoiceSettings.IsSet()
+}
+
+// HasInvoiceSettings returns a boolean if a field has been set.
+func (o *UpdateCustomerRequest) HasInvoiceSettings() bool {
+	if o != nil && o.InvoiceSettings.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetInvoiceSettings gets a reference to the given NullableCustomerInvoiceSettings and assigns it to the InvoiceSettings field.
+func (o *UpdateCustomerRequest) SetInvoiceSettings(v CustomerInvoiceSettings) {
+	o.InvoiceSettings.Set(&v)
+}
+// SetInvoiceSettingsNil sets the value for InvoiceSettings to be an explicit nil
+func (o *UpdateCustomerRequest) SetInvoiceSettingsNil() {
+	o.InvoiceSettings.Set(nil)
+}
+
+// UnsetInvoiceSettings ensures that no value is present for InvoiceSettings, not even an explicit nil
+func (o *UpdateCustomerRequest) UnsetInvoiceSettings() {
+	o.InvoiceSettings.Unset()
+}
+
+// GetBillingEmail returns the BillingEmail field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateCustomerRequest) GetBillingEmail() string {
+	if o == nil || IsNil(o.BillingEmail.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.BillingEmail.Get()
+}
+
+// GetBillingEmailOk returns a tuple with the BillingEmail field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateCustomerRequest) GetBillingEmailOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.BillingEmail.Get(), o.BillingEmail.IsSet()
+}
+
+// HasBillingEmail returns a boolean if a field has been set.
+func (o *UpdateCustomerRequest) HasBillingEmail() bool {
+	if o != nil && o.BillingEmail.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetBillingEmail gets a reference to the given NullableString and assigns it to the BillingEmail field.
+func (o *UpdateCustomerRequest) SetBillingEmail(v string) {
+	o.BillingEmail.Set(&v)
+}
+// SetBillingEmailNil sets the value for BillingEmail to be an explicit nil
+func (o *UpdateCustomerRequest) SetBillingEmailNil() {
+	o.BillingEmail.Set(nil)
+}
+
+// UnsetBillingEmail ensures that no value is present for BillingEmail, not even an explicit nil
+func (o *UpdateCustomerRequest) UnsetBillingEmail() {
+	o.BillingEmail.Unset()
+}
+
+// GetLanguage returns the Language field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateCustomerRequest) GetLanguage() CustomerLanguage {
+	if o == nil || IsNil(o.Language.Get()) {
+		var ret CustomerLanguage
+		return ret
+	}
+	return *o.Language.Get()
+}
+
+// GetLanguageOk returns a tuple with the Language field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateCustomerRequest) GetLanguageOk() (*CustomerLanguage, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Language.Get(), o.Language.IsSet()
+}
+
+// HasLanguage returns a boolean if a field has been set.
+func (o *UpdateCustomerRequest) HasLanguage() bool {
+	if o != nil && o.Language.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetLanguage gets a reference to the given NullableCustomerLanguage and assigns it to the Language field.
+func (o *UpdateCustomerRequest) SetLanguage(v CustomerLanguage) {
+	o.Language.Set(&v)
+}
+// SetLanguageNil sets the value for Language to be an explicit nil
+func (o *UpdateCustomerRequest) SetLanguageNil() {
+	o.Language.Set(nil)
+}
+
+// UnsetLanguage ensures that no value is present for Language, not even an explicit nil
+func (o *UpdateCustomerRequest) UnsetLanguage() {
+	o.Language.Unset()
+}
+
+// GetPhoneNumber returns the PhoneNumber field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateCustomerRequest) GetPhoneNumber() string {
+	if o == nil || IsNil(o.PhoneNumber.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PhoneNumber.Get()
+}
+
+// GetPhoneNumberOk returns a tuple with the PhoneNumber field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateCustomerRequest) GetPhoneNumberOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PhoneNumber.Get(), o.PhoneNumber.IsSet()
+}
+
+// HasPhoneNumber returns a boolean if a field has been set.
+func (o *UpdateCustomerRequest) HasPhoneNumber() bool {
+	if o != nil && o.PhoneNumber.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPhoneNumber gets a reference to the given NullableString and assigns it to the PhoneNumber field.
+func (o *UpdateCustomerRequest) SetPhoneNumber(v string) {
+	o.PhoneNumber.Set(&v)
+}
+// SetPhoneNumberNil sets the value for PhoneNumber to be an explicit nil
+func (o *UpdateCustomerRequest) SetPhoneNumberNil() {
+	o.PhoneNumber.Set(nil)
+}
+
+// UnsetPhoneNumber ensures that no value is present for PhoneNumber, not even an explicit nil
+func (o *UpdateCustomerRequest) UnsetPhoneNumber() {
+	o.PhoneNumber.Unset()
+}
+
 func (o UpdateCustomerRequest) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -636,6 +851,21 @@ func (o UpdateCustomerRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if o.Email.IsSet() {
+		toSerialize["email"] = o.Email.Get()
+	}
+	if o.InvoiceSettings.IsSet() {
+		toSerialize["invoice_settings"] = o.InvoiceSettings.Get()
+	}
+	if o.BillingEmail.IsSet() {
+		toSerialize["billing_email"] = o.BillingEmail.Get()
+	}
+	if o.Language.IsSet() {
+		toSerialize["language"] = o.Language.Get()
+	}
+	if o.PhoneNumber.IsSet() {
+		toSerialize["phone_number"] = o.PhoneNumber.Get()
 	}
 	return toSerialize, nil
 }

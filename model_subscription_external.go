@@ -68,6 +68,7 @@ type SubscriptionExternal struct {
 	CollectionMethod CollectionMethodEnum `json:"collection_method"`
 	NetD NullableInt32 `json:"net_d"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	RenewsAt NullableTime `json:"renews_at,omitempty"`
 }
 
 type _SubscriptionExternal SubscriptionExternal
@@ -1275,6 +1276,48 @@ func (o *SubscriptionExternal) SetCustomFields(v map[string]interface{}) {
 	o.CustomFields = v
 }
 
+// GetRenewsAt returns the RenewsAt field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *SubscriptionExternal) GetRenewsAt() time.Time {
+	if o == nil || IsNil(o.RenewsAt.Get()) {
+		var ret time.Time
+		return ret
+	}
+	return *o.RenewsAt.Get()
+}
+
+// GetRenewsAtOk returns a tuple with the RenewsAt field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *SubscriptionExternal) GetRenewsAtOk() (*time.Time, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.RenewsAt.Get(), o.RenewsAt.IsSet()
+}
+
+// HasRenewsAt returns a boolean if a field has been set.
+func (o *SubscriptionExternal) HasRenewsAt() bool {
+	if o != nil && o.RenewsAt.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetRenewsAt gets a reference to the given NullableTime and assigns it to the RenewsAt field.
+func (o *SubscriptionExternal) SetRenewsAt(v time.Time) {
+	o.RenewsAt.Set(&v)
+}
+// SetRenewsAtNil sets the value for RenewsAt to be an explicit nil
+func (o *SubscriptionExternal) SetRenewsAtNil() {
+	o.RenewsAt.Set(nil)
+}
+
+// UnsetRenewsAt ensures that no value is present for RenewsAt, not even an explicit nil
+func (o *SubscriptionExternal) UnsetRenewsAt() {
+	o.RenewsAt.Unset()
+}
+
 func (o SubscriptionExternal) MarshalJSON() ([]byte, error) {
 	toSerialize,err := o.ToMap()
 	if err != nil {
@@ -1356,6 +1399,9 @@ func (o SubscriptionExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["net_d"] = o.NetD.Get()
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
+	}
+	if o.RenewsAt.IsSet() {
+		toSerialize["renews_at"] = o.RenewsAt.Get()
 	}
 	return toSerialize, nil
 }

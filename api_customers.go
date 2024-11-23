@@ -383,10 +383,10 @@ type ApiGetCustomerRequest struct {
 	ctx context.Context
 	ApiService *CustomersAPIService
 	customerId string
-	expand *[]string
+	expand *[]*string
 }
 
-func (r ApiGetCustomerRequest) Expand(expand []string) ApiGetCustomerRequest {
+func (r ApiGetCustomerRequest) Expand(expand []*string) ApiGetCustomerRequest {
 	r.expand = &expand
 	return r
 }
@@ -1025,7 +1025,7 @@ func (a *CustomersAPIService) ListValidSubscriptionsExecute(r ApiListValidSubscr
 		return localVarReturnValue, nil, &GenericOpenAPIError{error: err.Error()}
 	}
 
-	localVarPath := localBasePath + "/customers{customer_id}/list_valid_subscriptions"
+	localVarPath := localBasePath + "/customers/{customer_id}/list_valid_subscriptions"
 	localVarPath = strings.Replace(localVarPath, "{"+"customer_id"+"}", url.PathEscape(parameterValueToString(r.customerId, "customerId")), -1)
 
 	localVarHeaderParams := make(map[string]string)

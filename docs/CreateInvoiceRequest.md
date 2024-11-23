@@ -4,18 +4,24 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**SubscriptionId** | **string** | Unique identifier of the subscription. The created invoice will only include pending invoice items for that subscription. The subscription’s billing cycle and regular subscription events won’t be affected. | 
+**SubscriptionId** | Pointer to **NullableString** |  | [optional] 
 **PaymentMethodId** | Pointer to **NullableString** |  | [optional] 
 **CollectionMethod** | Pointer to [**NullableCollectionMethodEnum**](CollectionMethodEnum.md) |  | [optional] 
 **Description** | Pointer to **string** | Description for newly created invoice | [optional] [default to "Manual creation of invoice"]
-**Discounts** | Pointer to [**NullableDiscounts**](Discounts.md) |  | [optional] 
+**CouponId** | Pointer to **NullableString** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
+**SelectedProductPriceQuantity** | Pointer to [**[]SelectedPriceQuantity**](SelectedPriceQuantity.md) |  | [optional] 
+**InvoiceType** | Pointer to [**InvoiceType**](InvoiceType.md) |  | [optional] [default to INVOICETYPE_STANDARD]
+**CustomerId** | **string** | The external id of the customer. | 
+**NetD** | Pointer to **NullableInt32** |  | [optional] 
+**EmailInvoiceOnFinalization** | Pointer to **NullableBool** |  | [optional] 
+**FinalizeInvoiceImmediately** | Pointer to **NullableBool** |  | [optional] 
 
 ## Methods
 
 ### NewCreateInvoiceRequest
 
-`func NewCreateInvoiceRequest(subscriptionId string, ) *CreateInvoiceRequest`
+`func NewCreateInvoiceRequest(customerId string, ) *CreateInvoiceRequest`
 
 NewCreateInvoiceRequest instantiates a new CreateInvoiceRequest object
 This constructor will assign default values to properties that have it defined,
@@ -49,7 +55,22 @@ and a boolean to check if the value has been set.
 
 SetSubscriptionId sets SubscriptionId field to given value.
 
+### HasSubscriptionId
 
+`func (o *CreateInvoiceRequest) HasSubscriptionId() bool`
+
+HasSubscriptionId returns a boolean if a field has been set.
+
+### SetSubscriptionIdNil
+
+`func (o *CreateInvoiceRequest) SetSubscriptionIdNil(b bool)`
+
+ SetSubscriptionIdNil sets the value for SubscriptionId to be an explicit nil
+
+### UnsetSubscriptionId
+`func (o *CreateInvoiceRequest) UnsetSubscriptionId()`
+
+UnsetSubscriptionId ensures that no value is present for SubscriptionId, not even an explicit nil
 ### GetPaymentMethodId
 
 `func (o *CreateInvoiceRequest) GetPaymentMethodId() string`
@@ -145,41 +166,41 @@ SetDescription sets Description field to given value.
 
 HasDescription returns a boolean if a field has been set.
 
-### GetDiscounts
+### GetCouponId
 
-`func (o *CreateInvoiceRequest) GetDiscounts() Discounts`
+`func (o *CreateInvoiceRequest) GetCouponId() string`
 
-GetDiscounts returns the Discounts field if non-nil, zero value otherwise.
+GetCouponId returns the CouponId field if non-nil, zero value otherwise.
 
-### GetDiscountsOk
+### GetCouponIdOk
 
-`func (o *CreateInvoiceRequest) GetDiscountsOk() (*Discounts, bool)`
+`func (o *CreateInvoiceRequest) GetCouponIdOk() (*string, bool)`
 
-GetDiscountsOk returns a tuple with the Discounts field if it's non-nil, zero value otherwise
+GetCouponIdOk returns a tuple with the CouponId field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetDiscounts
+### SetCouponId
 
-`func (o *CreateInvoiceRequest) SetDiscounts(v Discounts)`
+`func (o *CreateInvoiceRequest) SetCouponId(v string)`
 
-SetDiscounts sets Discounts field to given value.
+SetCouponId sets CouponId field to given value.
 
-### HasDiscounts
+### HasCouponId
 
-`func (o *CreateInvoiceRequest) HasDiscounts() bool`
+`func (o *CreateInvoiceRequest) HasCouponId() bool`
 
-HasDiscounts returns a boolean if a field has been set.
+HasCouponId returns a boolean if a field has been set.
 
-### SetDiscountsNil
+### SetCouponIdNil
 
-`func (o *CreateInvoiceRequest) SetDiscountsNil(b bool)`
+`func (o *CreateInvoiceRequest) SetCouponIdNil(b bool)`
 
- SetDiscountsNil sets the value for Discounts to be an explicit nil
+ SetCouponIdNil sets the value for CouponId to be an explicit nil
 
-### UnsetDiscounts
-`func (o *CreateInvoiceRequest) UnsetDiscounts()`
+### UnsetCouponId
+`func (o *CreateInvoiceRequest) UnsetCouponId()`
 
-UnsetDiscounts ensures that no value is present for Discounts, not even an explicit nil
+UnsetCouponId ensures that no value is present for CouponId, not even an explicit nil
 ### GetCustomFields
 
 `func (o *CreateInvoiceRequest) GetCustomFields() map[string]interface{}`
@@ -215,6 +236,181 @@ HasCustomFields returns a boolean if a field has been set.
 `func (o *CreateInvoiceRequest) UnsetCustomFields()`
 
 UnsetCustomFields ensures that no value is present for CustomFields, not even an explicit nil
+### GetSelectedProductPriceQuantity
+
+`func (o *CreateInvoiceRequest) GetSelectedProductPriceQuantity() []SelectedPriceQuantity`
+
+GetSelectedProductPriceQuantity returns the SelectedProductPriceQuantity field if non-nil, zero value otherwise.
+
+### GetSelectedProductPriceQuantityOk
+
+`func (o *CreateInvoiceRequest) GetSelectedProductPriceQuantityOk() (*[]SelectedPriceQuantity, bool)`
+
+GetSelectedProductPriceQuantityOk returns a tuple with the SelectedProductPriceQuantity field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSelectedProductPriceQuantity
+
+`func (o *CreateInvoiceRequest) SetSelectedProductPriceQuantity(v []SelectedPriceQuantity)`
+
+SetSelectedProductPriceQuantity sets SelectedProductPriceQuantity field to given value.
+
+### HasSelectedProductPriceQuantity
+
+`func (o *CreateInvoiceRequest) HasSelectedProductPriceQuantity() bool`
+
+HasSelectedProductPriceQuantity returns a boolean if a field has been set.
+
+### GetInvoiceType
+
+`func (o *CreateInvoiceRequest) GetInvoiceType() InvoiceType`
+
+GetInvoiceType returns the InvoiceType field if non-nil, zero value otherwise.
+
+### GetInvoiceTypeOk
+
+`func (o *CreateInvoiceRequest) GetInvoiceTypeOk() (*InvoiceType, bool)`
+
+GetInvoiceTypeOk returns a tuple with the InvoiceType field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetInvoiceType
+
+`func (o *CreateInvoiceRequest) SetInvoiceType(v InvoiceType)`
+
+SetInvoiceType sets InvoiceType field to given value.
+
+### HasInvoiceType
+
+`func (o *CreateInvoiceRequest) HasInvoiceType() bool`
+
+HasInvoiceType returns a boolean if a field has been set.
+
+### GetCustomerId
+
+`func (o *CreateInvoiceRequest) GetCustomerId() string`
+
+GetCustomerId returns the CustomerId field if non-nil, zero value otherwise.
+
+### GetCustomerIdOk
+
+`func (o *CreateInvoiceRequest) GetCustomerIdOk() (*string, bool)`
+
+GetCustomerIdOk returns a tuple with the CustomerId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCustomerId
+
+`func (o *CreateInvoiceRequest) SetCustomerId(v string)`
+
+SetCustomerId sets CustomerId field to given value.
+
+
+### GetNetD
+
+`func (o *CreateInvoiceRequest) GetNetD() int32`
+
+GetNetD returns the NetD field if non-nil, zero value otherwise.
+
+### GetNetDOk
+
+`func (o *CreateInvoiceRequest) GetNetDOk() (*int32, bool)`
+
+GetNetDOk returns a tuple with the NetD field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNetD
+
+`func (o *CreateInvoiceRequest) SetNetD(v int32)`
+
+SetNetD sets NetD field to given value.
+
+### HasNetD
+
+`func (o *CreateInvoiceRequest) HasNetD() bool`
+
+HasNetD returns a boolean if a field has been set.
+
+### SetNetDNil
+
+`func (o *CreateInvoiceRequest) SetNetDNil(b bool)`
+
+ SetNetDNil sets the value for NetD to be an explicit nil
+
+### UnsetNetD
+`func (o *CreateInvoiceRequest) UnsetNetD()`
+
+UnsetNetD ensures that no value is present for NetD, not even an explicit nil
+### GetEmailInvoiceOnFinalization
+
+`func (o *CreateInvoiceRequest) GetEmailInvoiceOnFinalization() bool`
+
+GetEmailInvoiceOnFinalization returns the EmailInvoiceOnFinalization field if non-nil, zero value otherwise.
+
+### GetEmailInvoiceOnFinalizationOk
+
+`func (o *CreateInvoiceRequest) GetEmailInvoiceOnFinalizationOk() (*bool, bool)`
+
+GetEmailInvoiceOnFinalizationOk returns a tuple with the EmailInvoiceOnFinalization field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetEmailInvoiceOnFinalization
+
+`func (o *CreateInvoiceRequest) SetEmailInvoiceOnFinalization(v bool)`
+
+SetEmailInvoiceOnFinalization sets EmailInvoiceOnFinalization field to given value.
+
+### HasEmailInvoiceOnFinalization
+
+`func (o *CreateInvoiceRequest) HasEmailInvoiceOnFinalization() bool`
+
+HasEmailInvoiceOnFinalization returns a boolean if a field has been set.
+
+### SetEmailInvoiceOnFinalizationNil
+
+`func (o *CreateInvoiceRequest) SetEmailInvoiceOnFinalizationNil(b bool)`
+
+ SetEmailInvoiceOnFinalizationNil sets the value for EmailInvoiceOnFinalization to be an explicit nil
+
+### UnsetEmailInvoiceOnFinalization
+`func (o *CreateInvoiceRequest) UnsetEmailInvoiceOnFinalization()`
+
+UnsetEmailInvoiceOnFinalization ensures that no value is present for EmailInvoiceOnFinalization, not even an explicit nil
+### GetFinalizeInvoiceImmediately
+
+`func (o *CreateInvoiceRequest) GetFinalizeInvoiceImmediately() bool`
+
+GetFinalizeInvoiceImmediately returns the FinalizeInvoiceImmediately field if non-nil, zero value otherwise.
+
+### GetFinalizeInvoiceImmediatelyOk
+
+`func (o *CreateInvoiceRequest) GetFinalizeInvoiceImmediatelyOk() (*bool, bool)`
+
+GetFinalizeInvoiceImmediatelyOk returns a tuple with the FinalizeInvoiceImmediately field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFinalizeInvoiceImmediately
+
+`func (o *CreateInvoiceRequest) SetFinalizeInvoiceImmediately(v bool)`
+
+SetFinalizeInvoiceImmediately sets FinalizeInvoiceImmediately field to given value.
+
+### HasFinalizeInvoiceImmediately
+
+`func (o *CreateInvoiceRequest) HasFinalizeInvoiceImmediately() bool`
+
+HasFinalizeInvoiceImmediately returns a boolean if a field has been set.
+
+### SetFinalizeInvoiceImmediatelyNil
+
+`func (o *CreateInvoiceRequest) SetFinalizeInvoiceImmediatelyNil(b bool)`
+
+ SetFinalizeInvoiceImmediatelyNil sets the value for FinalizeInvoiceImmediately to be an explicit nil
+
+### UnsetFinalizeInvoiceImmediately
+`func (o *CreateInvoiceRequest) UnsetFinalizeInvoiceImmediately()`
+
+UnsetFinalizeInvoiceImmediately ensures that no value is present for FinalizeInvoiceImmediately, not even an explicit nil
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
