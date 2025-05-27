@@ -2324,6 +2324,43 @@ paths:
       summary: Get Payment Route
       tags:
       - payment-routes
+    put:
+      operationId: update_payment_route
+      parameters:
+      - description: The payment route ID
+        explode: false
+        in: path
+        name: payment_route_id
+        required: true
+        schema:
+          description: The payment route ID
+          title: Payment Route Id
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePaymentRouteRequest'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentRouteExternal'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Update Payment Route
+      tags:
+      - payment-routes
   /prices/:
     post:
       operationId: create_price_for_product
@@ -5028,7 +5065,7 @@ components:
           default: []
           description: "If not empty, only the processors with these names will be\
             \ accepted. Valid values are: adyen, airwallex, authorize_net, checkout_com,\
-            \ braintree, stripe, foobar, pockyt, cybersource, loop."
+            \ braintree, stripe, foobar, pockyt, cybersource, loop, paypal, nmi."
           example:
           - stripe
           - authorize_net
@@ -5039,6 +5076,7 @@ components:
     CheckoutSessionExternal:
       example:
         created_at: 2000-01-23T04:56:07.000+00:00
+        language: en
         line_items:
         - amount_subtotal_atom: 1000
           amount_total_atom: 1100
@@ -5140,6 +5178,8 @@ components:
           description: "If true, indicates that this object has been deleted"
           title: Is Deleted
           type: boolean
+        language:
+          $ref: '#/components/schemas/CustomerLanguage'
         line_items:
           description: The line items purchased by the customers.
           example:
@@ -5761,6 +5801,7 @@ components:
         trial_from_price: true
         custom_fields: "{}"
         trial_end: 2000-01-23T04:56:07.000+00:00
+        language: en
         line_items:
         - quantity: "3"
           custom_fields: "{}"
@@ -5825,6 +5866,8 @@ components:
         customer_id:
           nullable: true
           type: string
+        language:
+          $ref: '#/components/schemas/CustomerLanguage'
         line_items:
           description: The line items purchased by the customer.
           items:
@@ -8217,6 +8260,7 @@ components:
         should_send_payment_receipt: true
         subscriptions: []
         last_successful_payment_intent:
+          processor_payment_intent_id: processor_payment_intent_id
           payment_processor_name: payment_processor_name
           amount_atom_received: 5
           charge_ids:
@@ -11980,6 +12024,14 @@ components:
         customer_tax_ids:
         - tax_id: 12-3456789
           tax_id_type: us_ein
+        merchant_billing_address:
+          country: country
+          city: city
+          state: state
+          line3: line3
+          line2: line2
+          line1: line1
+          zip_code: zip_code
         receipt_pdf_url: receipt_pdf_url
         provider_type_fee_amount_atom: 900
         status: paid
@@ -12054,6 +12106,8 @@ components:
           items:
             $ref: '#/components/schemas/InvoiceItemPublic'
           type: array
+        merchant_billing_address:
+          $ref: '#/components/schemas/CompleteAddress'
         merchant_tax_ids:
           description: The tax ID settings of the merchant.
           example:
@@ -12133,6 +12187,7 @@ components:
       - id
       - invoice_pdf_url
       - is_initial_invoice_for_trial_sub
+      - merchant_billing_address
       - paid_amount_atom
       - provider_type_fee_amount_atom
       - receipt_pdf_url
@@ -13128,6 +13183,7 @@ components:
         page_number: 6
         data:
         - created_at: 2000-01-23T04:56:07.000+00:00
+          language: en
           line_items:
           - amount_subtotal_atom: 1000
             amount_total_atom: 1100
@@ -13174,6 +13230,7 @@ components:
           object: account
           status: open
         - created_at: 2000-01-23T04:56:07.000+00:00
+          language: en
           line_items:
           - amount_subtotal_atom: 1000
             amount_total_atom: 1100
@@ -13391,6 +13448,7 @@ components:
           should_send_payment_receipt: true
           subscriptions: []
           last_successful_payment_intent:
+            processor_payment_intent_id: processor_payment_intent_id
             payment_processor_name: payment_processor_name
             amount_atom_received: 5
             charge_ids:
@@ -14191,6 +14249,7 @@ components:
           should_send_payment_receipt: true
           subscriptions: []
           last_successful_payment_intent:
+            processor_payment_intent_id: processor_payment_intent_id
             payment_processor_name: payment_processor_name
             amount_atom_received: 5
             charge_ids:
@@ -15963,7 +16022,8 @@ components:
       example:
         page_number: 0
         data:
-        - payment_processor_name: payment_processor_name
+        - processor_payment_intent_id: processor_payment_intent_id
+          payment_processor_name: payment_processor_name
           amount_atom_received: 5
           charge_ids:
           - charge_ids
@@ -16382,7 +16442,8 @@ components:
           customer_id: customer_id
           object: null
           status: requires_confirmation
-        - payment_processor_name: payment_processor_name
+        - processor_payment_intent_id: processor_payment_intent_id
+          payment_processor_name: payment_processor_name
           amount_atom_received: 5
           charge_ids:
           - charge_ids
@@ -18326,6 +18387,7 @@ components:
       title: PayInvoiceRequest
     PaymentIntentExternal:
       example:
+        processor_payment_intent_id: processor_payment_intent_id
         payment_processor_name: payment_processor_name
         amount_atom_received: 5
         charge_ids:
@@ -18803,6 +18865,9 @@ components:
         payment_processor_name:
           nullable: true
           type: string
+        processor_payment_intent_id:
+          nullable: true
+          type: string
         refund_ids:
           items:
             type: string
@@ -18830,6 +18895,7 @@ components:
       - last_refund_date
       - payment_method_id
       - payment_processor_name
+      - processor_payment_intent_id
       - refund_ids
       - status
       - updated_at
@@ -19369,6 +19435,8 @@ components:
       - pockyt
       - cybersource
       - loop
+      - paypal
+      - nmi
       title: PaymentProcessorName
       type: string
     PaymentProviderType:
@@ -22573,6 +22641,25 @@ components:
           nullable: true
           type: object
       title: UpdatePaymentIntent
+    UpdatePaymentRouteRequest:
+      example:
+        name: My Payment Route
+        route_configuration: "{}"
+      properties:
+        name:
+          description: The name of the payment route.
+          example: My Payment Route
+          title: Name
+          type: string
+        route_configuration:
+          description: The configuration object for the payment route. Contact the
+            OpenPay team for more information.
+          title: Route Configuration
+          type: object
+      required:
+      - name
+      - route_configuration
+      title: UpdatePaymentRouteRequest
     UpdatePriceRequest:
       example:
         billing_interval_count: 0

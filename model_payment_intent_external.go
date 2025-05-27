@@ -42,6 +42,7 @@ type PaymentIntentExternal struct {
 	Object *ObjectName `json:"object,omitempty"`
 	PaymentMethodId NullableString `json:"payment_method_id"`
 	PaymentProcessorName NullableString `json:"payment_processor_name"`
+	ProcessorPaymentIntentId NullableString `json:"processor_payment_intent_id"`
 	RefundIds []string `json:"refund_ids"`
 	Status PaymentIntentStatus `json:"status"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
@@ -54,7 +55,7 @@ type _PaymentIntentExternal PaymentIntentExternal
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewPaymentIntentExternal(amountAtom int32, amountAtomCapturable NullableInt32, amountAtomReceived NullableInt32, chargeIds []string, createdAt time.Time, currency CurrencyEnum, customerId string, declineReason NullableString, id string, invoice NullableInvoiceExternal, invoiceId NullableString, invoicePaymentProviderTypeFee NullableInt32, lastRefundDate NullableTime, paymentMethodId NullableString, paymentProcessorName NullableString, refundIds []string, status PaymentIntentStatus, updatedAt time.Time) *PaymentIntentExternal {
+func NewPaymentIntentExternal(amountAtom int32, amountAtomCapturable NullableInt32, amountAtomReceived NullableInt32, chargeIds []string, createdAt time.Time, currency CurrencyEnum, customerId string, declineReason NullableString, id string, invoice NullableInvoiceExternal, invoiceId NullableString, invoicePaymentProviderTypeFee NullableInt32, lastRefundDate NullableTime, paymentMethodId NullableString, paymentProcessorName NullableString, processorPaymentIntentId NullableString, refundIds []string, status PaymentIntentStatus, updatedAt time.Time) *PaymentIntentExternal {
 	this := PaymentIntentExternal{}
 	this.AmountAtom = amountAtom
 	this.AmountAtomCapturable = amountAtomCapturable
@@ -73,6 +74,7 @@ func NewPaymentIntentExternal(amountAtom int32, amountAtomCapturable NullableInt
 	this.LastRefundDate = lastRefundDate
 	this.PaymentMethodId = paymentMethodId
 	this.PaymentProcessorName = paymentProcessorName
+	this.ProcessorPaymentIntentId = processorPaymentIntentId
 	this.RefundIds = refundIds
 	this.Status = status
 	this.UpdatedAt = updatedAt
@@ -564,6 +566,32 @@ func (o *PaymentIntentExternal) SetPaymentProcessorName(v string) {
 	o.PaymentProcessorName.Set(&v)
 }
 
+// GetProcessorPaymentIntentId returns the ProcessorPaymentIntentId field value
+// If the value is explicit nil, the zero value for string will be returned
+func (o *PaymentIntentExternal) GetProcessorPaymentIntentId() string {
+	if o == nil || o.ProcessorPaymentIntentId.Get() == nil {
+		var ret string
+		return ret
+	}
+
+	return *o.ProcessorPaymentIntentId.Get()
+}
+
+// GetProcessorPaymentIntentIdOk returns a tuple with the ProcessorPaymentIntentId field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *PaymentIntentExternal) GetProcessorPaymentIntentIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.ProcessorPaymentIntentId.Get(), o.ProcessorPaymentIntentId.IsSet()
+}
+
+// SetProcessorPaymentIntentId sets field value
+func (o *PaymentIntentExternal) SetProcessorPaymentIntentId(v string) {
+	o.ProcessorPaymentIntentId.Set(&v)
+}
+
 // GetRefundIds returns the RefundIds field value
 func (o *PaymentIntentExternal) GetRefundIds() []string {
 	if o == nil {
@@ -670,6 +698,7 @@ func (o PaymentIntentExternal) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["payment_method_id"] = o.PaymentMethodId.Get()
 	toSerialize["payment_processor_name"] = o.PaymentProcessorName.Get()
+	toSerialize["processor_payment_intent_id"] = o.ProcessorPaymentIntentId.Get()
 	toSerialize["refund_ids"] = o.RefundIds
 	toSerialize["status"] = o.Status
 	toSerialize["updated_at"] = o.UpdatedAt
@@ -696,6 +725,7 @@ func (o *PaymentIntentExternal) UnmarshalJSON(data []byte) (err error) {
 		"last_refund_date",
 		"payment_method_id",
 		"payment_processor_name",
+		"processor_payment_intent_id",
 		"refund_ids",
 		"status",
 		"updated_at",

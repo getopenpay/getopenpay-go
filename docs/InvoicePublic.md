@@ -20,6 +20,7 @@ Name | Type | Description | Notes
 **IsInitialInvoiceForTrialSub** | **bool** | Whether this is the first invoice for a trial subscription. | 
 **LastFour** | Pointer to **NullableString** |  | [optional] 
 **Lines** | Pointer to [**[]InvoiceItemPublic**](InvoiceItemPublic.md) | List of individual line items that make up the invoice. | [optional] 
+**MerchantBillingAddress** | [**NullableCompleteAddress**](CompleteAddress.md) |  | 
 **MerchantTaxIds** | Pointer to [**[]MerchantTaxIdSetting**](MerchantTaxIdSetting.md) | The tax ID settings of the merchant. | [optional] 
 **PaidAmountAtom** | **int32** | Total amount paid. It is in atomic units (in USD this is cents). | 
 **PaidAt** | Pointer to **NullableTime** |  | [optional] 
@@ -38,7 +39,7 @@ Name | Type | Description | Notes
 
 ### NewInvoicePublic
 
-`func NewInvoicePublic(appliedBalanceAmountAtom int32, branding map[string]interface{}, createdAt time.Time, currency CurrencyEnum, dueAmountAtom int32, id string, invoicePdfUrl string, isInitialInvoiceForTrialSub bool, paidAmountAtom int32, providerTypeFeeAmountAtom int32, receiptPdfUrl string, remainingAmountAtom int32, status InvoiceStatusEnum, taxAmountAtom int32, totalAmountAtom int32, totalExcludingTaxesAmountAtom int32, trialEndForSub NullableTime, trialStartForSub NullableTime, ) *InvoicePublic`
+`func NewInvoicePublic(appliedBalanceAmountAtom int32, branding map[string]interface{}, createdAt time.Time, currency CurrencyEnum, dueAmountAtom int32, id string, invoicePdfUrl string, isInitialInvoiceForTrialSub bool, merchantBillingAddress NullableCompleteAddress, paidAmountAtom int32, providerTypeFeeAmountAtom int32, receiptPdfUrl string, remainingAmountAtom int32, status InvoiceStatusEnum, taxAmountAtom int32, totalAmountAtom int32, totalExcludingTaxesAmountAtom int32, trialEndForSub NullableTime, trialStartForSub NullableTime, ) *InvoicePublic`
 
 NewInvoicePublic instantiates a new InvoicePublic object
 This constructor will assign default values to properties that have it defined,
@@ -473,6 +474,36 @@ SetLines sets Lines field to given value.
 
 HasLines returns a boolean if a field has been set.
 
+### GetMerchantBillingAddress
+
+`func (o *InvoicePublic) GetMerchantBillingAddress() CompleteAddress`
+
+GetMerchantBillingAddress returns the MerchantBillingAddress field if non-nil, zero value otherwise.
+
+### GetMerchantBillingAddressOk
+
+`func (o *InvoicePublic) GetMerchantBillingAddressOk() (*CompleteAddress, bool)`
+
+GetMerchantBillingAddressOk returns a tuple with the MerchantBillingAddress field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetMerchantBillingAddress
+
+`func (o *InvoicePublic) SetMerchantBillingAddress(v CompleteAddress)`
+
+SetMerchantBillingAddress sets MerchantBillingAddress field to given value.
+
+
+### SetMerchantBillingAddressNil
+
+`func (o *InvoicePublic) SetMerchantBillingAddressNil(b bool)`
+
+ SetMerchantBillingAddressNil sets the value for MerchantBillingAddress to be an explicit nil
+
+### UnsetMerchantBillingAddress
+`func (o *InvoicePublic) UnsetMerchantBillingAddress()`
+
+UnsetMerchantBillingAddress ensures that no value is present for MerchantBillingAddress, not even an explicit nil
 ### GetMerchantTaxIds
 
 `func (o *InvoicePublic) GetMerchantTaxIds() []MerchantTaxIdSetting`

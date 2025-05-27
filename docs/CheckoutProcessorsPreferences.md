@@ -6,7 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FilterProviders** | Pointer to [**[]PaymentProviderType**](PaymentProviderType.md) | If not empty, the enabled providers will be filtered by this list. | [optional] [default to []]
 **IdsWhitelist** | Pointer to **[]string** | If not empty, only the processors with these ids will be accepted. | [optional] [default to []]
-**NamesWhitelist** | Pointer to **[]string** | If not empty, only the processors with these names will be accepted. Valid values are: adyen, airwallex, authorize_net, checkout_com, braintree, stripe, foobar, pockyt, cybersource, loop. | [optional] [default to []]
+**NamesWhitelist** | Pointer to **[]string** | If not empty, only the processors with these names will be accepted. Valid values are: adyen, airwallex, authorize_net, checkout_com, braintree, stripe, foobar, pockyt, cybersource, loop, paypal, nmi. | [optional] [default to []]
 
 ## Methods
 

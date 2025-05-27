@@ -48,6 +48,7 @@ type InvoicePublic struct {
 	LastFour NullableString `json:"last_four,omitempty"`
 	// List of individual line items that make up the invoice.
 	Lines []InvoiceItemPublic `json:"lines,omitempty"`
+	MerchantBillingAddress NullableCompleteAddress `json:"merchant_billing_address"`
 	// The tax ID settings of the merchant.
 	MerchantTaxIds []MerchantTaxIdSetting `json:"merchant_tax_ids,omitempty"`
 	// Total amount paid. It is in atomic units (in USD this is cents).
@@ -79,7 +80,7 @@ type _InvoicePublic InvoicePublic
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewInvoicePublic(appliedBalanceAmountAtom int32, branding map[string]interface{}, createdAt time.Time, currency CurrencyEnum, dueAmountAtom int32, id string, invoicePdfUrl string, isInitialInvoiceForTrialSub bool, paidAmountAtom int32, providerTypeFeeAmountAtom int32, receiptPdfUrl string, remainingAmountAtom int32, status InvoiceStatusEnum, taxAmountAtom int32, totalAmountAtom int32, totalExcludingTaxesAmountAtom int32, trialEndForSub NullableTime, trialStartForSub NullableTime) *InvoicePublic {
+func NewInvoicePublic(appliedBalanceAmountAtom int32, branding map[string]interface{}, createdAt time.Time, currency CurrencyEnum, dueAmountAtom int32, id string, invoicePdfUrl string, isInitialInvoiceForTrialSub bool, merchantBillingAddress NullableCompleteAddress, paidAmountAtom int32, providerTypeFeeAmountAtom int32, receiptPdfUrl string, remainingAmountAtom int32, status InvoiceStatusEnum, taxAmountAtom int32, totalAmountAtom int32, totalExcludingTaxesAmountAtom int32, trialEndForSub NullableTime, trialStartForSub NullableTime) *InvoicePublic {
 	this := InvoicePublic{}
 	this.AppliedBalanceAmountAtom = appliedBalanceAmountAtom
 	this.Branding = branding
@@ -89,6 +90,7 @@ func NewInvoicePublic(appliedBalanceAmountAtom int32, branding map[string]interf
 	this.Id = id
 	this.InvoicePdfUrl = invoicePdfUrl
 	this.IsInitialInvoiceForTrialSub = isInitialInvoiceForTrialSub
+	this.MerchantBillingAddress = merchantBillingAddress
 	this.PaidAmountAtom = paidAmountAtom
 	this.ProviderTypeFeeAmountAtom = providerTypeFeeAmountAtom
 	this.ReceiptPdfUrl = receiptPdfUrl
@@ -618,6 +620,32 @@ func (o *InvoicePublic) SetLines(v []InvoiceItemPublic) {
 	o.Lines = v
 }
 
+// GetMerchantBillingAddress returns the MerchantBillingAddress field value
+// If the value is explicit nil, the zero value for CompleteAddress will be returned
+func (o *InvoicePublic) GetMerchantBillingAddress() CompleteAddress {
+	if o == nil || o.MerchantBillingAddress.Get() == nil {
+		var ret CompleteAddress
+		return ret
+	}
+
+	return *o.MerchantBillingAddress.Get()
+}
+
+// GetMerchantBillingAddressOk returns a tuple with the MerchantBillingAddress field value
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *InvoicePublic) GetMerchantBillingAddressOk() (*CompleteAddress, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.MerchantBillingAddress.Get(), o.MerchantBillingAddress.IsSet()
+}
+
+// SetMerchantBillingAddress sets field value
+func (o *InvoicePublic) SetMerchantBillingAddress(v CompleteAddress) {
+	o.MerchantBillingAddress.Set(&v)
+}
+
 // GetMerchantTaxIds returns the MerchantTaxIds field value if set, zero value otherwise.
 func (o *InvoicePublic) GetMerchantTaxIds() []MerchantTaxIdSetting {
 	if o == nil || IsNil(o.MerchantTaxIds) {
@@ -1010,6 +1038,7 @@ func (o InvoicePublic) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Lines) {
 		toSerialize["lines"] = o.Lines
 	}
+	toSerialize["merchant_billing_address"] = o.MerchantBillingAddress.Get()
 	if !IsNil(o.MerchantTaxIds) {
 		toSerialize["merchant_tax_ids"] = o.MerchantTaxIds
 	}
@@ -1045,6 +1074,7 @@ func (o *InvoicePublic) UnmarshalJSON(data []byte) (err error) {
 		"id",
 		"invoice_pdf_url",
 		"is_initial_invoice_for_trial_sub",
+		"merchant_billing_address",
 		"paid_amount_atom",
 		"provider_type_fee_amount_atom",
 		"receipt_pdf_url",

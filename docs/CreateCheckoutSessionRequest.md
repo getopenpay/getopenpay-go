@@ -11,6 +11,7 @@ Name | Type | Description | Notes
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
 **CustomerEmail** | Pointer to **NullableString** |  | [optional] 
 **CustomerId** | Pointer to **NullableString** |  | [optional] 
+**Language** | Pointer to [**NullableCustomerLanguage**](CustomerLanguage.md) |  | [optional] 
 **LineItems** | Pointer to [**[]CreateCheckoutLineItem**](CreateCheckoutLineItem.md) | The line items purchased by the customer. | [optional] 
 **Mode** | [**CheckoutMode**](CheckoutMode.md) | The mode of the Checkout Session. Possible values: payment (one-time payments), setup (collect payment info), subscription (recurring payments). | 
 **ReturnUrl** | Pointer to **NullableString** |  | [optional] 
@@ -283,6 +284,41 @@ HasCustomerId returns a boolean if a field has been set.
 `func (o *CreateCheckoutSessionRequest) UnsetCustomerId()`
 
 UnsetCustomerId ensures that no value is present for CustomerId, not even an explicit nil
+### GetLanguage
+
+`func (o *CreateCheckoutSessionRequest) GetLanguage() CustomerLanguage`
+
+GetLanguage returns the Language field if non-nil, zero value otherwise.
+
+### GetLanguageOk
+
+`func (o *CreateCheckoutSessionRequest) GetLanguageOk() (*CustomerLanguage, bool)`
+
+GetLanguageOk returns a tuple with the Language field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLanguage
+
+`func (o *CreateCheckoutSessionRequest) SetLanguage(v CustomerLanguage)`
+
+SetLanguage sets Language field to given value.
+
+### HasLanguage
+
+`func (o *CreateCheckoutSessionRequest) HasLanguage() bool`
+
+HasLanguage returns a boolean if a field has been set.
+
+### SetLanguageNil
+
+`func (o *CreateCheckoutSessionRequest) SetLanguageNil(b bool)`
+
+ SetLanguageNil sets the value for Language to be an explicit nil
+
+### UnsetLanguage
+`func (o *CreateCheckoutSessionRequest) UnsetLanguage()`
+
+UnsetLanguage ensures that no value is present for Language, not even an explicit nil
 ### GetLineItems
 
 `func (o *CreateCheckoutSessionRequest) GetLineItems() []CreateCheckoutLineItem`

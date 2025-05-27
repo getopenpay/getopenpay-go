@@ -29,6 +29,7 @@ type CreateCheckoutSessionRequest struct {
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
 	CustomerEmail NullableString `json:"customer_email,omitempty"`
 	CustomerId NullableString `json:"customer_id,omitempty"`
+	Language NullableCustomerLanguage `json:"language,omitempty"`
 	// The line items purchased by the customer.
 	LineItems []CreateCheckoutLineItem `json:"line_items,omitempty"`
 	// The mode of the Checkout Session. Possible values: payment (one-time payments), setup (collect payment info), subscription (recurring payments).
@@ -345,6 +346,48 @@ func (o *CreateCheckoutSessionRequest) UnsetCustomerId() {
 	o.CustomerId.Unset()
 }
 
+// GetLanguage returns the Language field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CreateCheckoutSessionRequest) GetLanguage() CustomerLanguage {
+	if o == nil || IsNil(o.Language.Get()) {
+		var ret CustomerLanguage
+		return ret
+	}
+	return *o.Language.Get()
+}
+
+// GetLanguageOk returns a tuple with the Language field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CreateCheckoutSessionRequest) GetLanguageOk() (*CustomerLanguage, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Language.Get(), o.Language.IsSet()
+}
+
+// HasLanguage returns a boolean if a field has been set.
+func (o *CreateCheckoutSessionRequest) HasLanguage() bool {
+	if o != nil && o.Language.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetLanguage gets a reference to the given NullableCustomerLanguage and assigns it to the Language field.
+func (o *CreateCheckoutSessionRequest) SetLanguage(v CustomerLanguage) {
+	o.Language.Set(&v)
+}
+// SetLanguageNil sets the value for Language to be an explicit nil
+func (o *CreateCheckoutSessionRequest) SetLanguageNil() {
+	o.Language.Set(nil)
+}
+
+// UnsetLanguage ensures that no value is present for Language, not even an explicit nil
+func (o *CreateCheckoutSessionRequest) UnsetLanguage() {
+	o.Language.Unset()
+}
+
 // GetLineItems returns the LineItems field value if set, zero value otherwise.
 func (o *CreateCheckoutSessionRequest) GetLineItems() []CreateCheckoutLineItem {
 	if o == nil || IsNil(o.LineItems) {
@@ -641,6 +684,9 @@ func (o CreateCheckoutSessionRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if o.CustomerId.IsSet() {
 		toSerialize["customer_id"] = o.CustomerId.Get()
+	}
+	if o.Language.IsSet() {
+		toSerialize["language"] = o.Language.Get()
 	}
 	if !IsNil(o.LineItems) {
 		toSerialize["line_items"] = o.LineItems

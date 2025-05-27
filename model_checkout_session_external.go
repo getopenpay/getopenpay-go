@@ -42,6 +42,7 @@ type CheckoutSessionExternal struct {
 	Id string `json:"id"`
 	// If true, indicates that this object has been deleted
 	IsDeleted *bool `json:"is_deleted,omitempty"`
+	Language NullableCustomerLanguage `json:"language,omitempty"`
 	// The line items purchased by the customers.
 	LineItems []CheckoutSessionLineItemExternal `json:"line_items"`
 	// The mode of the Checkout Session.
@@ -482,6 +483,48 @@ func (o *CheckoutSessionExternal) HasIsDeleted() bool {
 // SetIsDeleted gets a reference to the given bool and assigns it to the IsDeleted field.
 func (o *CheckoutSessionExternal) SetIsDeleted(v bool) {
 	o.IsDeleted = &v
+}
+
+// GetLanguage returns the Language field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CheckoutSessionExternal) GetLanguage() CustomerLanguage {
+	if o == nil || IsNil(o.Language.Get()) {
+		var ret CustomerLanguage
+		return ret
+	}
+	return *o.Language.Get()
+}
+
+// GetLanguageOk returns a tuple with the Language field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CheckoutSessionExternal) GetLanguageOk() (*CustomerLanguage, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Language.Get(), o.Language.IsSet()
+}
+
+// HasLanguage returns a boolean if a field has been set.
+func (o *CheckoutSessionExternal) HasLanguage() bool {
+	if o != nil && o.Language.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetLanguage gets a reference to the given NullableCustomerLanguage and assigns it to the Language field.
+func (o *CheckoutSessionExternal) SetLanguage(v CustomerLanguage) {
+	o.Language.Set(&v)
+}
+// SetLanguageNil sets the value for Language to be an explicit nil
+func (o *CheckoutSessionExternal) SetLanguageNil() {
+	o.Language.Set(nil)
+}
+
+// UnsetLanguage ensures that no value is present for Language, not even an explicit nil
+func (o *CheckoutSessionExternal) UnsetLanguage() {
+	o.Language.Unset()
 }
 
 // GetLineItems returns the LineItems field value
@@ -938,6 +981,9 @@ func (o CheckoutSessionExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["id"] = o.Id
 	if !IsNil(o.IsDeleted) {
 		toSerialize["is_deleted"] = o.IsDeleted
+	}
+	if o.Language.IsSet() {
+		toSerialize["language"] = o.Language.Get()
 	}
 	toSerialize["line_items"] = o.LineItems
 	toSerialize["mode"] = o.Mode

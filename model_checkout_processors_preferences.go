@@ -23,7 +23,7 @@ type CheckoutProcessorsPreferences struct {
 	FilterProviders []PaymentProviderType `json:"filter_providers,omitempty"`
 	// If not empty, only the processors with these ids will be accepted.
 	IdsWhitelist []string `json:"ids_whitelist,omitempty"`
-	// If not empty, only the processors with these names will be accepted. Valid values are: adyen, airwallex, authorize_net, checkout_com, braintree, stripe, foobar, pockyt, cybersource, loop.
+	// If not empty, only the processors with these names will be accepted. Valid values are: adyen, airwallex, authorize_net, checkout_com, braintree, stripe, foobar, pockyt, cybersource, loop, paypal, nmi.
 	NamesWhitelist []string `json:"names_whitelist,omitempty"`
 }
 

@@ -30,6 +30,8 @@ const (
 	PAYMENTPROCESSORNAME_POCKYT PaymentProcessorName = "pockyt"
 	PAYMENTPROCESSORNAME_CYBERSOURCE PaymentProcessorName = "cybersource"
 	PAYMENTPROCESSORNAME_LOOP PaymentProcessorName = "loop"
+	PAYMENTPROCESSORNAME_PAYPAL PaymentProcessorName = "paypal"
+	PAYMENTPROCESSORNAME_NMI PaymentProcessorName = "nmi"
 )
 
 // All allowed values of PaymentProcessorName enum
@@ -44,6 +46,8 @@ var AllowedPaymentProcessorNameEnumValues = []PaymentProcessorName{
 	"pockyt",
 	"cybersource",
 	"loop",
+	"paypal",
+	"nmi",
 }
 
 func (v *PaymentProcessorName) UnmarshalJSON(src []byte) error {

@@ -17,6 +17,7 @@ Name | Type | Description | Notes
 **CustomerId** | **NullableString** |  | 
 **Id** | **string** | Unique Identifier of the checkout session. | 
 **IsDeleted** | Pointer to **bool** | If true, indicates that this object has been deleted | [optional] [default to false]
+**Language** | Pointer to [**NullableCustomerLanguage**](CustomerLanguage.md) |  | [optional] 
 **LineItems** | [**[]CheckoutSessionLineItemExternal**](CheckoutSessionLineItemExternal.md) | The line items purchased by the customers. | 
 **Mode** | [**CheckoutMode**](CheckoutMode.md) | The mode of the Checkout Session. | 
 **Object** | Pointer to [**ObjectName**](ObjectName.md) |  | [optional] 
@@ -393,6 +394,41 @@ SetIsDeleted sets IsDeleted field to given value.
 
 HasIsDeleted returns a boolean if a field has been set.
 
+### GetLanguage
+
+`func (o *CheckoutSessionExternal) GetLanguage() CustomerLanguage`
+
+GetLanguage returns the Language field if non-nil, zero value otherwise.
+
+### GetLanguageOk
+
+`func (o *CheckoutSessionExternal) GetLanguageOk() (*CustomerLanguage, bool)`
+
+GetLanguageOk returns a tuple with the Language field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetLanguage
+
+`func (o *CheckoutSessionExternal) SetLanguage(v CustomerLanguage)`
+
+SetLanguage sets Language field to given value.
+
+### HasLanguage
+
+`func (o *CheckoutSessionExternal) HasLanguage() bool`
+
+HasLanguage returns a boolean if a field has been set.
+
+### SetLanguageNil
+
+`func (o *CheckoutSessionExternal) SetLanguageNil(b bool)`
+
+ SetLanguageNil sets the value for Language to be an explicit nil
+
+### UnsetLanguage
+`func (o *CheckoutSessionExternal) UnsetLanguage()`
+
+UnsetLanguage ensures that no value is present for Language, not even an explicit nil
 ### GetLineItems
 
 `func (o *CheckoutSessionExternal) GetLineItems() []CheckoutSessionLineItemExternal`

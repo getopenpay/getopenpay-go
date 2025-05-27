@@ -22,6 +22,7 @@ Name | Type | Description | Notes
 **Object** | Pointer to [**ObjectName**](ObjectName.md) |  | [optional] 
 **PaymentMethodId** | **NullableString** |  | 
 **PaymentProcessorName** | **NullableString** |  | 
+**ProcessorPaymentIntentId** | **NullableString** |  | 
 **RefundIds** | **[]string** |  | 
 **Status** | [**PaymentIntentStatus**](PaymentIntentStatus.md) |  | 
 **UpdatedAt** | **time.Time** | DateTime at which the object was updated, in &#39;ISO 8601&#39; format. | 
@@ -30,7 +31,7 @@ Name | Type | Description | Notes
 
 ### NewPaymentIntentExternal
 
-`func NewPaymentIntentExternal(amountAtom int32, amountAtomCapturable NullableInt32, amountAtomReceived NullableInt32, chargeIds []string, createdAt time.Time, currency CurrencyEnum, customerId string, declineReason NullableString, id string, invoice NullableInvoiceExternal, invoiceId NullableString, invoicePaymentProviderTypeFee NullableInt32, lastRefundDate NullableTime, paymentMethodId NullableString, paymentProcessorName NullableString, refundIds []string, status PaymentIntentStatus, updatedAt time.Time, ) *PaymentIntentExternal`
+`func NewPaymentIntentExternal(amountAtom int32, amountAtomCapturable NullableInt32, amountAtomReceived NullableInt32, chargeIds []string, createdAt time.Time, currency CurrencyEnum, customerId string, declineReason NullableString, id string, invoice NullableInvoiceExternal, invoiceId NullableString, invoicePaymentProviderTypeFee NullableInt32, lastRefundDate NullableTime, paymentMethodId NullableString, paymentProcessorName NullableString, processorPaymentIntentId NullableString, refundIds []string, status PaymentIntentStatus, updatedAt time.Time, ) *PaymentIntentExternal`
 
 NewPaymentIntentExternal instantiates a new PaymentIntentExternal object
 This constructor will assign default values to properties that have it defined,
@@ -520,6 +521,36 @@ SetPaymentProcessorName sets PaymentProcessorName field to given value.
 `func (o *PaymentIntentExternal) UnsetPaymentProcessorName()`
 
 UnsetPaymentProcessorName ensures that no value is present for PaymentProcessorName, not even an explicit nil
+### GetProcessorPaymentIntentId
+
+`func (o *PaymentIntentExternal) GetProcessorPaymentIntentId() string`
+
+GetProcessorPaymentIntentId returns the ProcessorPaymentIntentId field if non-nil, zero value otherwise.
+
+### GetProcessorPaymentIntentIdOk
+
+`func (o *PaymentIntentExternal) GetProcessorPaymentIntentIdOk() (*string, bool)`
+
+GetProcessorPaymentIntentIdOk returns a tuple with the ProcessorPaymentIntentId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProcessorPaymentIntentId
+
+`func (o *PaymentIntentExternal) SetProcessorPaymentIntentId(v string)`
+
+SetProcessorPaymentIntentId sets ProcessorPaymentIntentId field to given value.
+
+
+### SetProcessorPaymentIntentIdNil
+
+`func (o *PaymentIntentExternal) SetProcessorPaymentIntentIdNil(b bool)`
+
+ SetProcessorPaymentIntentIdNil sets the value for ProcessorPaymentIntentId to be an explicit nil
+
+### UnsetProcessorPaymentIntentId
+`func (o *PaymentIntentExternal) UnsetProcessorPaymentIntentId()`
+
+UnsetProcessorPaymentIntentId ensures that no value is present for ProcessorPaymentIntentId, not even an explicit nil
 ### GetRefundIds
 
 `func (o *PaymentIntentExternal) GetRefundIds() []string`

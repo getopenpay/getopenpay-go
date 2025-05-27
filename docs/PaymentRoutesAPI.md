@@ -8,6 +8,7 @@ Method | HTTP request | Description
 [**DeletePaymentRoute**](PaymentRoutesAPI.md#DeletePaymentRoute) | **Delete** /payment-routes/{payment_route_id} | Delete Payment Route
 [**GetPaymentRoute**](PaymentRoutesAPI.md#GetPaymentRoute) | **Get** /payment-routes/{payment_route_id} | Get Payment Route
 [**ListPaymentRoutes**](PaymentRoutesAPI.md#ListPaymentRoutes) | **Post** /payment-routes/list | List Payment Routes
+[**UpdatePaymentRoute**](PaymentRoutesAPI.md#UpdatePaymentRoute) | **Put** /payment-routes/{payment_route_id} | Update Payment Route
 
 
 
@@ -267,6 +268,76 @@ Other parameters are passed through a pointer to a apiListPaymentRoutesRequest s
 ### HTTP request headers
 
 - **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## UpdatePaymentRoute
+
+> PaymentRouteExternal UpdatePaymentRoute(ctx, paymentRouteId).UpdatePaymentRouteRequest(updatePaymentRouteRequest).Execute()
+
+Update Payment Route
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/getopenpay/getopenpay-go"
+)
+
+func main() {
+	paymentRouteId := "paymentRouteId_example" // string | The payment route ID
+	updatePaymentRouteRequest := *openapiclient.NewUpdatePaymentRouteRequest("My Payment Route", map[string]interface{}(123)) // UpdatePaymentRouteRequest | 
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.PaymentRoutesAPI.UpdatePaymentRoute(context.Background(), paymentRouteId).UpdatePaymentRouteRequest(updatePaymentRouteRequest).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `PaymentRoutesAPI.UpdatePaymentRoute``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `UpdatePaymentRoute`: PaymentRouteExternal
+	fmt.Fprintf(os.Stdout, "Response from `PaymentRoutesAPI.UpdatePaymentRoute`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+**ctx** | **context.Context** | context for authentication, logging, cancellation, deadlines, tracing, etc.
+**paymentRouteId** | **string** | The payment route ID | 
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiUpdatePaymentRouteRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+
+ **updatePaymentRouteRequest** | [**UpdatePaymentRouteRequest**](UpdatePaymentRouteRequest.md) |  | 
+
+### Return type
+
+[**PaymentRouteExternal**](PaymentRouteExternal.md)
+
+### Authorization
+
+[HTTPBearer](../README.md#HTTPBearer)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
 - **Accept**: application/json
 
 [[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
