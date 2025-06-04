@@ -48,6 +48,20 @@ func Test_getopenpay_PricesAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test PricesAPIService FindPriceByAmount", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		var amount string
+
+		resp, httpRes, err := apiClient.PricesAPI.FindPriceByAmount(context.Background(), amount).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test PricesAPIService GetPriceAddOns", func(t *testing.T) {
 
 		t.Skip("skip test")  // remove to run test

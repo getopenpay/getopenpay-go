@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **CustomerId** | **string** |  | 
 **InvoiceUrls** | **[]string** |  | 
+**ProcessorsUsed** | Pointer to **[]string** |  | [optional] 
 **SubscriptionIds** | **[]string** |  | 
 
 ## Methods
@@ -67,6 +68,41 @@ and a boolean to check if the value has been set.
 SetInvoiceUrls sets InvoiceUrls field to given value.
 
 
+### GetProcessorsUsed
+
+`func (o *CheckoutSuccessResponse) GetProcessorsUsed() []string`
+
+GetProcessorsUsed returns the ProcessorsUsed field if non-nil, zero value otherwise.
+
+### GetProcessorsUsedOk
+
+`func (o *CheckoutSuccessResponse) GetProcessorsUsedOk() (*[]string, bool)`
+
+GetProcessorsUsedOk returns a tuple with the ProcessorsUsed field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetProcessorsUsed
+
+`func (o *CheckoutSuccessResponse) SetProcessorsUsed(v []string)`
+
+SetProcessorsUsed sets ProcessorsUsed field to given value.
+
+### HasProcessorsUsed
+
+`func (o *CheckoutSuccessResponse) HasProcessorsUsed() bool`
+
+HasProcessorsUsed returns a boolean if a field has been set.
+
+### SetProcessorsUsedNil
+
+`func (o *CheckoutSuccessResponse) SetProcessorsUsedNil(b bool)`
+
+ SetProcessorsUsedNil sets the value for ProcessorsUsed to be an explicit nil
+
+### UnsetProcessorsUsed
+`func (o *CheckoutSuccessResponse) UnsetProcessorsUsed()`
+
+UnsetProcessorsUsed ensures that no value is present for ProcessorsUsed, not even an explicit nil
 ### GetSubscriptionIds
 
 `func (o *CheckoutSuccessResponse) GetSubscriptionIds() []string`

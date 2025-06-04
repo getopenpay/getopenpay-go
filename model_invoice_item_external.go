@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -68,6 +67,7 @@ type InvoiceItemExternal struct {
 	SubscriptionItemId NullableString `json:"subscription_item_id,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoiceItemExternal InvoiceItemExternal
@@ -888,6 +888,11 @@ func (o InvoiceItemExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["subscription_item_id"] = o.SubscriptionItemId.Get()
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -936,15 +941,46 @@ func (o *InvoiceItemExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varInvoiceItemExternal := _InvoiceItemExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoiceItemExternal)
+	err = json.Unmarshal(data, &varInvoiceItemExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoiceItemExternal(varInvoiceItemExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "amount_atom_considering_discount_applied")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "discount_amount_atoms")
+		delete(additionalProperties, "discounts")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "period_end")
+		delete(additionalProperties, "period_start")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "price_type")
+		delete(additionalProperties, "product_id")
+		delete(additionalProperties, "proration")
+		delete(additionalProperties, "proration_details_debit_invoice_item")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "subscription_cancelled_at")
+		delete(additionalProperties, "subscription_id")
+		delete(additionalProperties, "subscription_item_description")
+		delete(additionalProperties, "subscription_item_id")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

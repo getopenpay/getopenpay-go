@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CreateCheckoutLineItem struct {
 	PriceId string `json:"price_id"`
 	// The quantity of the line item being purchased.
 	Quantity int32 `json:"quantity"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCheckoutLineItem CreateCheckoutLineItem
@@ -191,6 +191,11 @@ func (o CreateCheckoutLineItem) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["price_id"] = o.PriceId
 	toSerialize["quantity"] = o.Quantity
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -219,15 +224,23 @@ func (o *CreateCheckoutLineItem) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCheckoutLineItem := _CreateCheckoutLineItem{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCheckoutLineItem)
+	err = json.Unmarshal(data, &varCreateCheckoutLineItem)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCheckoutLineItem(varCreateCheckoutLineItem)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "quantity")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

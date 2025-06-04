@@ -23,7 +23,10 @@ type SubscriptionResumeRequest struct {
 	IsPreview *bool `json:"is_preview,omitempty"`
 	// Determines how to handle prorations when the subscription is resumed.
 	ProrationBehavior *ProrationEnum `json:"proration_behavior,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SubscriptionResumeRequest SubscriptionResumeRequest
 
 // NewSubscriptionResumeRequest instantiates a new SubscriptionResumeRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -126,7 +129,34 @@ func (o SubscriptionResumeRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ProrationBehavior) {
 		toSerialize["proration_behavior"] = o.ProrationBehavior
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SubscriptionResumeRequest) UnmarshalJSON(data []byte) (err error) {
+	varSubscriptionResumeRequest := _SubscriptionResumeRequest{}
+
+	err = json.Unmarshal(data, &varSubscriptionResumeRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SubscriptionResumeRequest(varSubscriptionResumeRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "is_preview")
+		delete(additionalProperties, "proration_behavior")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSubscriptionResumeRequest struct {

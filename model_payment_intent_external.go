@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -47,6 +46,7 @@ type PaymentIntentExternal struct {
 	Status PaymentIntentStatus `json:"status"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaymentIntentExternal PaymentIntentExternal
@@ -702,6 +702,11 @@ func (o PaymentIntentExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["refund_ids"] = o.RefundIds
 	toSerialize["status"] = o.Status
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -747,15 +752,41 @@ func (o *PaymentIntentExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPaymentIntentExternal := _PaymentIntentExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaymentIntentExternal)
+	err = json.Unmarshal(data, &varPaymentIntentExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaymentIntentExternal(varPaymentIntentExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "amount_atom_capturable")
+		delete(additionalProperties, "amount_atom_received")
+		delete(additionalProperties, "charge_ids")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "decline_reason")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "invoice_payment_provider_type_fee")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "last_refund_date")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "payment_processor_name")
+		delete(additionalProperties, "processor_payment_intent_id")
+		delete(additionalProperties, "refund_ids")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

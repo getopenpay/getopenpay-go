@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -42,6 +41,7 @@ type InvoiceItemPublic struct {
 	// Quantity of the line item.
 	Quantity int32 `json:"quantity"`
 	SubscriptionItemDescription NullableString `json:"subscription_item_description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoiceItemPublic InvoiceItemPublic
@@ -389,6 +389,11 @@ func (o InvoiceItemPublic) ToMap() (map[string]interface{}, error) {
 	if o.SubscriptionItemDescription.IsSet() {
 		toSerialize["subscription_item_description"] = o.SubscriptionItemDescription.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -424,15 +429,30 @@ func (o *InvoiceItemPublic) UnmarshalJSON(data []byte) (err error) {
 
 	varInvoiceItemPublic := _InvoiceItemPublic{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoiceItemPublic)
+	err = json.Unmarshal(data, &varInvoiceItemPublic)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoiceItemPublic(varInvoiceItemPublic)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "amount_atom_considering_discount_applied")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "discount_amount_atoms")
+		delete(additionalProperties, "discounts")
+		delete(additionalProperties, "invoice_item_description")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "period_end")
+		delete(additionalProperties, "price_tiers")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "subscription_item_description")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

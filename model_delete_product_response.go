@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DeleteProductResponse struct {
 	Message *string `json:"message,omitempty"`
 	// Unique identifier of the product.
 	ProductId string `json:"product_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DeleteProductResponse DeleteProductResponse
@@ -121,6 +121,11 @@ func (o DeleteProductResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["message"] = o.Message
 	}
 	toSerialize["product_id"] = o.ProductId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -148,15 +153,21 @@ func (o *DeleteProductResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varDeleteProductResponse := _DeleteProductResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDeleteProductResponse)
+	err = json.Unmarshal(data, &varDeleteProductResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DeleteProductResponse(varDeleteProductResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "product_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

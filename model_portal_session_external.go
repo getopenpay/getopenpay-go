@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -41,6 +40,7 @@ type PortalSessionExternal struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	// The short-lived URL of the session that gives customers access to the customer portal.
 	Url string `json:"url"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PortalSessionExternal PortalSessionExternal
@@ -354,6 +354,11 @@ func (o PortalSessionExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["token"] = o.Token
 	toSerialize["updated_at"] = o.UpdatedAt
 	toSerialize["url"] = o.Url
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -388,15 +393,29 @@ func (o *PortalSessionExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPortalSessionExternal := _PortalSessionExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPortalSessionExternal)
+	err = json.Unmarshal(data, &varPortalSessionExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PortalSessionExternal(varPortalSessionExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "return_url")
+		delete(additionalProperties, "token")
+		delete(additionalProperties, "updated_at")
+		delete(additionalProperties, "url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

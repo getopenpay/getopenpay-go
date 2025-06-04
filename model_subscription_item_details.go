@@ -21,7 +21,10 @@ var _ MappedNullable = &SubscriptionItemDetails{}
 type SubscriptionItemDetails struct {
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
 	Description NullableString `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SubscriptionItemDetails SubscriptionItemDetails
 
 // NewSubscriptionItemDetails instantiates a new SubscriptionItemDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -131,7 +134,34 @@ func (o SubscriptionItemDetails) ToMap() (map[string]interface{}, error) {
 	if o.Description.IsSet() {
 		toSerialize["description"] = o.Description.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SubscriptionItemDetails) UnmarshalJSON(data []byte) (err error) {
+	varSubscriptionItemDetails := _SubscriptionItemDetails{}
+
+	err = json.Unmarshal(data, &varSubscriptionItemDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SubscriptionItemDetails(varSubscriptionItemDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSubscriptionItemDetails struct {

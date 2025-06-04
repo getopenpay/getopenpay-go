@@ -20,7 +20,10 @@ var _ MappedNullable = &UpdateChargeRequest{}
 // UpdateChargeRequest struct for UpdateChargeRequest
 type UpdateChargeRequest struct {
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateChargeRequest UpdateChargeRequest
 
 // NewUpdateChargeRequest instantiates a new UpdateChargeRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o UpdateChargeRequest) ToMap() (map[string]interface{}, error) {
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateChargeRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdateChargeRequest := _UpdateChargeRequest{}
+
+	err = json.Unmarshal(data, &varUpdateChargeRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateChargeRequest(varUpdateChargeRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "custom_fields")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateChargeRequest struct {

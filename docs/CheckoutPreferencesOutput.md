@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **FallbackCascadePreferences** | Pointer to [**[]FallbackConfigurationOutput**](FallbackConfigurationOutput.md) | This object contains a list of price groups that will be used to fall back to if the selected product price quantity fails to be created. Processor preferences here will override the processor preferences in the processor_preferences field. | [optional] [default to []]
 **FallbackCascadeSelectedProductPriceQuantity** | Pointer to [**[][]SelectedPriceQuantity**]([]SelectedPriceQuantity.md) | This object contains a list of price groups that will be used to fall back to if the selected product price quantity fails to be created. | [optional] [default to []]
+**OverrideFeatureRolloutSettings** | Pointer to **map[string]interface{}** |  | [optional] 
 **ProcessorPreferences** | Pointer to [**NullableCheckoutProcessorsPreferences**](CheckoutProcessorsPreferences.md) |  | [optional] 
 **Unused** | Pointer to **NullableString** |  | [optional] 
 
@@ -78,6 +79,41 @@ SetFallbackCascadeSelectedProductPriceQuantity sets FallbackCascadeSelectedProdu
 
 HasFallbackCascadeSelectedProductPriceQuantity returns a boolean if a field has been set.
 
+### GetOverrideFeatureRolloutSettings
+
+`func (o *CheckoutPreferencesOutput) GetOverrideFeatureRolloutSettings() map[string]interface{}`
+
+GetOverrideFeatureRolloutSettings returns the OverrideFeatureRolloutSettings field if non-nil, zero value otherwise.
+
+### GetOverrideFeatureRolloutSettingsOk
+
+`func (o *CheckoutPreferencesOutput) GetOverrideFeatureRolloutSettingsOk() (*map[string]interface{}, bool)`
+
+GetOverrideFeatureRolloutSettingsOk returns a tuple with the OverrideFeatureRolloutSettings field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOverrideFeatureRolloutSettings
+
+`func (o *CheckoutPreferencesOutput) SetOverrideFeatureRolloutSettings(v map[string]interface{})`
+
+SetOverrideFeatureRolloutSettings sets OverrideFeatureRolloutSettings field to given value.
+
+### HasOverrideFeatureRolloutSettings
+
+`func (o *CheckoutPreferencesOutput) HasOverrideFeatureRolloutSettings() bool`
+
+HasOverrideFeatureRolloutSettings returns a boolean if a field has been set.
+
+### SetOverrideFeatureRolloutSettingsNil
+
+`func (o *CheckoutPreferencesOutput) SetOverrideFeatureRolloutSettingsNil(b bool)`
+
+ SetOverrideFeatureRolloutSettingsNil sets the value for OverrideFeatureRolloutSettings to be an explicit nil
+
+### UnsetOverrideFeatureRolloutSettings
+`func (o *CheckoutPreferencesOutput) UnsetOverrideFeatureRolloutSettings()`
+
+UnsetOverrideFeatureRolloutSettings ensures that no value is present for OverrideFeatureRolloutSettings, not even an explicit nil
 ### GetProcessorPreferences
 
 `func (o *CheckoutPreferencesOutput) GetProcessorPreferences() CheckoutProcessorsPreferences`

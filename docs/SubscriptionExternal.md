@@ -33,6 +33,7 @@ Name | Type | Description | Notes
 **PauseAtEnd** | Pointer to **NullableBool** |  | [optional] 
 **PauseForCycles** | Pointer to **NullableInt32** |  | [optional] 
 **PausedAt** | Pointer to **NullableTime** |  | [optional] 
+**PaymentRouteId** | Pointer to **NullableString** |  | [optional] 
 **RemainingBillingCycles** | Pointer to **NullableInt32** |  | [optional] 
 **RenewsAt** | Pointer to **NullableTime** |  | [optional] 
 **ResumesAt** | Pointer to **NullableTime** |  | [optional] 
@@ -882,6 +883,41 @@ HasPausedAt returns a boolean if a field has been set.
 `func (o *SubscriptionExternal) UnsetPausedAt()`
 
 UnsetPausedAt ensures that no value is present for PausedAt, not even an explicit nil
+### GetPaymentRouteId
+
+`func (o *SubscriptionExternal) GetPaymentRouteId() string`
+
+GetPaymentRouteId returns the PaymentRouteId field if non-nil, zero value otherwise.
+
+### GetPaymentRouteIdOk
+
+`func (o *SubscriptionExternal) GetPaymentRouteIdOk() (*string, bool)`
+
+GetPaymentRouteIdOk returns a tuple with the PaymentRouteId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPaymentRouteId
+
+`func (o *SubscriptionExternal) SetPaymentRouteId(v string)`
+
+SetPaymentRouteId sets PaymentRouteId field to given value.
+
+### HasPaymentRouteId
+
+`func (o *SubscriptionExternal) HasPaymentRouteId() bool`
+
+HasPaymentRouteId returns a boolean if a field has been set.
+
+### SetPaymentRouteIdNil
+
+`func (o *SubscriptionExternal) SetPaymentRouteIdNil(b bool)`
+
+ SetPaymentRouteIdNil sets the value for PaymentRouteId to be an explicit nil
+
+### UnsetPaymentRouteId
+`func (o *SubscriptionExternal) UnsetPaymentRouteId()`
+
+UnsetPaymentRouteId ensures that no value is present for PaymentRouteId, not even an explicit nil
 ### GetRemainingBillingCycles
 
 `func (o *SubscriptionExternal) GetRemainingBillingCycles() int32`

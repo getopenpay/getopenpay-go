@@ -40,7 +40,10 @@ type SubscriptionQueryParams struct {
 	// Current statuses of the subscription.
 	Statuses []SubscriptionStatusEnum `json:"statuses,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SubscriptionQueryParams SubscriptionQueryParams
 
 // NewSubscriptionQueryParams instantiates a new SubscriptionQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -700,7 +703,47 @@ func (o SubscriptionQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SubscriptionQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varSubscriptionQueryParams := _SubscriptionQueryParams{}
+
+	err = json.Unmarshal(data, &varSubscriptionQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SubscriptionQueryParams(varSubscriptionQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "current_period_end")
+		delete(additionalProperties, "current_period_start")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "product_id")
+		delete(additionalProperties, "search")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "statuses")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSubscriptionQueryParams struct {

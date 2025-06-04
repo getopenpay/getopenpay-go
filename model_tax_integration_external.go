@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type TaxIntegrationExternal struct {
 	Object *ObjectName `json:"object,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TaxIntegrationExternal TaxIntegrationExternal
@@ -298,6 +298,11 @@ func (o TaxIntegrationExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["object"] = o.Object
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -330,15 +335,27 @@ func (o *TaxIntegrationExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varTaxIntegrationExternal := _TaxIntegrationExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTaxIntegrationExternal)
+	err = json.Unmarshal(data, &varTaxIntegrationExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TaxIntegrationExternal(varTaxIntegrationExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "accounting_tz")
+		delete(additionalProperties, "api_keys")
+		delete(additionalProperties, "api_name")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

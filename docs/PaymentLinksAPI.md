@@ -209,7 +209,7 @@ Name | Type | Description  | Notes
 
 ## OpenPaymentLinkPagePublic
 
-> interface{} OpenPaymentLinkPagePublic(ctx, secureToken).RefId(refId).Execute()
+> interface{} OpenPaymentLinkPagePublic(ctx, secureToken).RefId(refId).CustomerId(customerId).Execute()
 
 Open Payment Link Page Public
 
@@ -228,10 +228,11 @@ import (
 func main() {
 	secureToken := "00000000-aaaa-bbbb-cccc-dddddddddddd" // string | Secure token of the payment link.
 	refId := "ORDER-12345" // string | Optional reference ID for the payment link (optional)
+	customerId := "cus_dev_abc123" // string | Optional ID for the customer using the payment link (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PaymentLinksAPI.OpenPaymentLinkPagePublic(context.Background(), secureToken).RefId(refId).Execute()
+	resp, r, err := apiClient.PaymentLinksAPI.OpenPaymentLinkPagePublic(context.Background(), secureToken).RefId(refId).CustomerId(customerId).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `PaymentLinksAPI.OpenPaymentLinkPagePublic``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -258,6 +259,7 @@ Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
 
  **refId** | **string** | Optional reference ID for the payment link | 
+ **customerId** | **string** | Optional ID for the customer using the payment link | 
 
 ### Return type
 

@@ -45,7 +45,10 @@ type UpdatePriceRequest struct {
 	TrialPeriodDays NullableInt32 `json:"trial_period_days,omitempty"`
 	UnitAmountAtom NullableInt32 `json:"unit_amount_atom,omitempty"`
 	UsageType NullableUsageTypeEnum `json:"usage_type,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdatePriceRequest UpdatePriceRequest
 
 // NewUpdatePriceRequest instantiates a new UpdatePriceRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -1061,7 +1064,55 @@ func (o UpdatePriceRequest) ToMap() (map[string]interface{}, error) {
 	if o.UsageType.IsSet() {
 		toSerialize["usage_type"] = o.UsageType.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdatePriceRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdatePriceRequest := _UpdatePriceRequest{}
+
+	err = json.Unmarshal(data, &varUpdatePriceRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdatePriceRequest(varUpdatePriceRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "aggregate_usage")
+		delete(additionalProperties, "billing_interval")
+		delete(additionalProperties, "billing_interval_count")
+		delete(additionalProperties, "can_only_be_purchased_with")
+		delete(additionalProperties, "contract_auto_renew")
+		delete(additionalProperties, "contract_term_multiple")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "default_net_d")
+		delete(additionalProperties, "internal_description")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_exclusive")
+		delete(additionalProperties, "listed_exclusively_for_customers")
+		delete(additionalProperties, "meta")
+		delete(additionalProperties, "meter_id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "price_tiers")
+		delete(additionalProperties, "price_type")
+		delete(additionalProperties, "pricing_model")
+		delete(additionalProperties, "transform_quantity_divide_by")
+		delete(additionalProperties, "trial_period_days")
+		delete(additionalProperties, "unit_amount_atom")
+		delete(additionalProperties, "usage_type")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdatePriceRequest struct {

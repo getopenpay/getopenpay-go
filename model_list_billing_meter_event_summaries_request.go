@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -35,6 +34,7 @@ type ListBillingMeterEventSummariesRequest struct {
 	// The timestamp from when to start aggregating meter events (inclusive). Must be aligned with minute boundaries.
 	StartTime time.Time `json:"start_time"`
 	ValueGroupingWindow NullableMeterEventValueGroupingWindow `json:"value_grouping_window,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListBillingMeterEventSummariesRequest ListBillingMeterEventSummariesRequest
@@ -293,6 +293,11 @@ func (o ListBillingMeterEventSummariesRequest) ToMap() (map[string]interface{}, 
 	if o.ValueGroupingWindow.IsSet() {
 		toSerialize["value_grouping_window"] = o.ValueGroupingWindow.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -323,15 +328,26 @@ func (o *ListBillingMeterEventSummariesRequest) UnmarshalJSON(data []byte) (err 
 
 	varListBillingMeterEventSummariesRequest := _ListBillingMeterEventSummariesRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListBillingMeterEventSummariesRequest)
+	err = json.Unmarshal(data, &varListBillingMeterEventSummariesRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListBillingMeterEventSummariesRequest(varListBillingMeterEventSummariesRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "end_time")
+		delete(additionalProperties, "meter_id")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "start_time")
+		delete(additionalProperties, "value_grouping_window")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

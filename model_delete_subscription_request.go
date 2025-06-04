@@ -28,7 +28,10 @@ type DeleteSubscriptionRequest struct {
 	IsPreview *bool `json:"is_preview,omitempty"`
 	// Will generate a proration invoice_item that credits remaining unused time until the subscription period end, also creates invoice_item for un-invoiced metered usage.Setting this to false will not invoice for un-invoiced metered usage.
 	Prorate *bool `json:"prorate,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DeleteSubscriptionRequest DeleteSubscriptionRequest
 
 // NewDeleteSubscriptionRequest instantiates a new DeleteSubscriptionRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -258,7 +261,37 @@ func (o DeleteSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Prorate) {
 		toSerialize["prorate"] = o.Prorate
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DeleteSubscriptionRequest) UnmarshalJSON(data []byte) (err error) {
+	varDeleteSubscriptionRequest := _DeleteSubscriptionRequest{}
+
+	err = json.Unmarshal(data, &varDeleteSubscriptionRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DeleteSubscriptionRequest(varDeleteSubscriptionRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cancel_unpaid_invoices")
+		delete(additionalProperties, "cancellation_details")
+		delete(additionalProperties, "full_refund")
+		delete(additionalProperties, "is_preview")
+		delete(additionalProperties, "prorate")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDeleteSubscriptionRequest struct {

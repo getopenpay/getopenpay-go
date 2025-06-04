@@ -28,6 +28,7 @@ Name | Type | Description | Notes
 **SubscriptionId** | Pointer to **NullableString** |  | [optional] 
 **SubscriptionIds** | **[]string** |  | 
 **SuccessUrl** | **NullableString** |  | 
+**SuccessfulAttemptId** | Pointer to **NullableString** |  | [optional] 
 **TaxAmountAtom** | **int32** | The integer amount representing the tax amount for the line items. | 
 **TrialEnd** | **NullableTime** |  | 
 **TrialFromPrice** | **NullableBool** |  | 
@@ -689,6 +690,41 @@ SetSuccessUrl sets SuccessUrl field to given value.
 `func (o *CheckoutSessionExternal) UnsetSuccessUrl()`
 
 UnsetSuccessUrl ensures that no value is present for SuccessUrl, not even an explicit nil
+### GetSuccessfulAttemptId
+
+`func (o *CheckoutSessionExternal) GetSuccessfulAttemptId() string`
+
+GetSuccessfulAttemptId returns the SuccessfulAttemptId field if non-nil, zero value otherwise.
+
+### GetSuccessfulAttemptIdOk
+
+`func (o *CheckoutSessionExternal) GetSuccessfulAttemptIdOk() (*string, bool)`
+
+GetSuccessfulAttemptIdOk returns a tuple with the SuccessfulAttemptId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSuccessfulAttemptId
+
+`func (o *CheckoutSessionExternal) SetSuccessfulAttemptId(v string)`
+
+SetSuccessfulAttemptId sets SuccessfulAttemptId field to given value.
+
+### HasSuccessfulAttemptId
+
+`func (o *CheckoutSessionExternal) HasSuccessfulAttemptId() bool`
+
+HasSuccessfulAttemptId returns a boolean if a field has been set.
+
+### SetSuccessfulAttemptIdNil
+
+`func (o *CheckoutSessionExternal) SetSuccessfulAttemptIdNil(b bool)`
+
+ SetSuccessfulAttemptIdNil sets the value for SuccessfulAttemptId to be an explicit nil
+
+### UnsetSuccessfulAttemptId
+`func (o *CheckoutSessionExternal) UnsetSuccessfulAttemptId()`
+
+UnsetSuccessfulAttemptId ensures that no value is present for SuccessfulAttemptId, not even an explicit nil
 ### GetTaxAmountAtom
 
 `func (o *CheckoutSessionExternal) GetTaxAmountAtom() int32`

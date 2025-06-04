@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -41,6 +40,7 @@ type DisputeExternal struct {
 	TheirPaymentIntentId string `json:"their_payment_intent_id"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DisputeExternal DisputeExternal
@@ -409,6 +409,11 @@ func (o DisputeExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["their_dispute_id"] = o.TheirDisputeId
 	toSerialize["their_payment_intent_id"] = o.TheirPaymentIntentId
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -442,15 +447,30 @@ func (o *DisputeExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varDisputeExternal := _DisputeExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDisputeExternal)
+	err = json.Unmarshal(data, &varDisputeExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DisputeExternal(varDisputeExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "payment_intent_id")
+		delete(additionalProperties, "reason")
+		delete(additionalProperties, "their_dispute_id")
+		delete(additionalProperties, "their_payment_intent_id")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

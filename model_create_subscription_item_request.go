@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CreateSubscriptionItemRequest struct {
 	Quantity *int32 `json:"quantity,omitempty"`
 	// The identifier of the subscription to modify
 	SubscriptionId string `json:"subscription_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateSubscriptionItemRequest CreateSubscriptionItemRequest
@@ -310,6 +310,11 @@ func (o CreateSubscriptionItemRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["quantity"] = o.Quantity
 	}
 	toSerialize["subscription_id"] = o.SubscriptionId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -338,15 +343,26 @@ func (o *CreateSubscriptionItemRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateSubscriptionItemRequest := _CreateSubscriptionItemRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateSubscriptionItemRequest)
+	err = json.Unmarshal(data, &varCreateSubscriptionItemRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateSubscriptionItemRequest(varCreateSubscriptionItemRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "add_at_period_end")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "proration_behavior")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "subscription_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type InvoiceComment struct {
 	// Creation date of the comment.
 	CreatedAt time.Time `json:"created_at"`
 	UserEmail NullableString `json:"user_email"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoiceComment InvoiceComment
@@ -138,6 +138,11 @@ func (o InvoiceComment) ToMap() (map[string]interface{}, error) {
 	toSerialize["comment"] = o.Comment
 	toSerialize["created_at"] = o.CreatedAt
 	toSerialize["user_email"] = o.UserEmail.Get()
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -167,15 +172,22 @@ func (o *InvoiceComment) UnmarshalJSON(data []byte) (err error) {
 
 	varInvoiceComment := _InvoiceComment{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoiceComment)
+	err = json.Unmarshal(data, &varInvoiceComment)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoiceComment(varInvoiceComment)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "comment")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "user_email")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

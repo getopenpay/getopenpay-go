@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -38,6 +37,7 @@ type EventExternal struct {
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
 	User NullableString `json:"user,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventExternal EventExternal
@@ -458,6 +458,11 @@ func (o EventExternal) ToMap() (map[string]interface{}, error) {
 	if o.User.IsSet() {
 		toSerialize["user"] = o.User.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -494,15 +499,32 @@ func (o *EventExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varEventExternal := _EventExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventExternal)
+	err = json.Unmarshal(data, &varEventExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventExternal(varEventExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "data_previous")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "pending_webhooks")
+		delete(additionalProperties, "request_id")
+		delete(additionalProperties, "request_idempotency_key")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "updated_at")
+		delete(additionalProperties, "user")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

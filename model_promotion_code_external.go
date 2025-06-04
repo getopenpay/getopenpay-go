@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -43,6 +42,7 @@ type PromotionCodeExternal struct {
 	TimesRedeemed NullableInt32 `json:"times_redeemed,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PromotionCodeExternal PromotionCodeExternal
@@ -609,6 +609,11 @@ func (o PromotionCodeExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["times_redeemed"] = o.TimesRedeemed.Get()
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -643,15 +648,35 @@ func (o *PromotionCodeExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPromotionCodeExternal := _PromotionCodeExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPromotionCodeExternal)
+	err = json.Unmarshal(data, &varPromotionCodeExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PromotionCodeExternal(varPromotionCodeExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "coupon")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_ids")
+		delete(additionalProperties, "expires_at")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "max_redemptions")
+		delete(additionalProperties, "max_redemptions_per_customer")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "restrictions")
+		delete(additionalProperties, "times_redeemed")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -45,6 +44,7 @@ type BillingMeterExternal struct {
 	Object *ObjectName `json:"object,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BillingMeterExternal BillingMeterExternal
@@ -445,6 +445,11 @@ func (o BillingMeterExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["object"] = o.Object
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -478,15 +483,31 @@ func (o *BillingMeterExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varBillingMeterExternal := _BillingMeterExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBillingMeterExternal)
+	err = json.Unmarshal(data, &varBillingMeterExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BillingMeterExternal(varBillingMeterExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "aggregation_formula")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "display_name")
+		delete(additionalProperties, "event_name")
+		delete(additionalProperties, "event_payload_customer_mapping_key")
+		delete(additionalProperties, "event_payload_value_key")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

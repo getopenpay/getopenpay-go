@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type UpdatePaymentRouteRequest struct {
 	Name string `json:"name"`
 	// The configuration object for the payment route. Contact the OpenPay team for more information.
 	RouteConfiguration map[string]interface{} `json:"route_configuration"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdatePaymentRouteRequest UpdatePaymentRouteRequest
@@ -108,6 +108,11 @@ func (o UpdatePaymentRouteRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["name"] = o.Name
 	toSerialize["route_configuration"] = o.RouteConfiguration
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *UpdatePaymentRouteRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdatePaymentRouteRequest := _UpdatePaymentRouteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdatePaymentRouteRequest)
+	err = json.Unmarshal(data, &varUpdatePaymentRouteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdatePaymentRouteRequest(varUpdatePaymentRouteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "route_configuration")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -25,7 +25,10 @@ type CheckoutProcessorsPreferences struct {
 	IdsWhitelist []string `json:"ids_whitelist,omitempty"`
 	// If not empty, only the processors with these names will be accepted. Valid values are: adyen, airwallex, authorize_net, checkout_com, braintree, stripe, foobar, pockyt, cybersource, loop, paypal, nmi.
 	NamesWhitelist []string `json:"names_whitelist,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CheckoutProcessorsPreferences CheckoutProcessorsPreferences
 
 // NewCheckoutProcessorsPreferences instantiates a new CheckoutProcessorsPreferences object
 // This constructor will assign default values to properties that have it defined,
@@ -159,7 +162,35 @@ func (o CheckoutProcessorsPreferences) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.NamesWhitelist) {
 		toSerialize["names_whitelist"] = o.NamesWhitelist
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CheckoutProcessorsPreferences) UnmarshalJSON(data []byte) (err error) {
+	varCheckoutProcessorsPreferences := _CheckoutProcessorsPreferences{}
+
+	err = json.Unmarshal(data, &varCheckoutProcessorsPreferences)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CheckoutProcessorsPreferences(varCheckoutProcessorsPreferences)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "filter_providers")
+		delete(additionalProperties, "ids_whitelist")
+		delete(additionalProperties, "names_whitelist")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCheckoutProcessorsPreferences struct {

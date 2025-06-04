@@ -26,7 +26,10 @@ type UpdateSubscriptionItemRequest struct {
 	// Determines how to handle prorations when the billable items changes. In case of subscription is in trialing state, invoice items if any will be for amount_atom 0.
 	ProrationBehavior *ProrationEnum `json:"proration_behavior,omitempty"`
 	Quantity NullableInt32 `json:"quantity,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateSubscriptionItemRequest UpdateSubscriptionItemRequest
 
 // NewUpdateSubscriptionItemRequest instantiates a new UpdateSubscriptionItemRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -306,7 +309,38 @@ func (o UpdateSubscriptionItemRequest) ToMap() (map[string]interface{}, error) {
 	if o.Quantity.IsSet() {
 		toSerialize["quantity"] = o.Quantity.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateSubscriptionItemRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdateSubscriptionItemRequest := _UpdateSubscriptionItemRequest{}
+
+	err = json.Unmarshal(data, &varUpdateSubscriptionItemRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateSubscriptionItemRequest(varUpdateSubscriptionItemRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "drop_at_end")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "proration_behavior")
+		delete(additionalProperties, "quantity")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateSubscriptionItemRequest struct {

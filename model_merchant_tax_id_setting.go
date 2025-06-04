@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type MerchantTaxIdSetting struct {
 	TaxId string `json:"tax_id"`
 	// The type code for this tax ID
 	TaxIdType string `json:"tax_id_type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _MerchantTaxIdSetting MerchantTaxIdSetting
@@ -136,6 +136,11 @@ func (o MerchantTaxIdSetting) ToMap() (map[string]interface{}, error) {
 	toSerialize["is_default"] = o.IsDefault
 	toSerialize["tax_id"] = o.TaxId
 	toSerialize["tax_id_type"] = o.TaxIdType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *MerchantTaxIdSetting) UnmarshalJSON(data []byte) (err error) {
 
 	varMerchantTaxIdSetting := _MerchantTaxIdSetting{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varMerchantTaxIdSetting)
+	err = json.Unmarshal(data, &varMerchantTaxIdSetting)
 
 	if err != nil {
 		return err
 	}
 
 	*o = MerchantTaxIdSetting(varMerchantTaxIdSetting)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "is_default")
+		delete(additionalProperties, "tax_id")
+		delete(additionalProperties, "tax_id_type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

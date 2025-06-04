@@ -42,7 +42,10 @@ type InvoiceQueryParams struct {
 	SubscriptionId NullableString `json:"subscription_id,omitempty"`
 	TotalAmountAtom NullableIntRangeFilter `json:"total_amount_atom,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _InvoiceQueryParams InvoiceQueryParams
 
 // NewInvoiceQueryParams instantiates a new InvoiceQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -847,7 +850,50 @@ func (o InvoiceQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *InvoiceQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varInvoiceQueryParams := _InvoiceQueryParams{}
+
+	err = json.Unmarshal(data, &varInvoiceQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = InvoiceQueryParams(varInvoiceQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "billing_reason")
+		delete(additionalProperties, "collection_method")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "period_end")
+		delete(additionalProperties, "period_start")
+		delete(additionalProperties, "search")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "subscription_id")
+		delete(additionalProperties, "total_amount_atom")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableInvoiceQueryParams struct {

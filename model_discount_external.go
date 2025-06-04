@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type DiscountExternal struct {
 	SubscriptionId NullableString `json:"subscription_id"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DiscountExternal DiscountExternal
@@ -497,6 +497,11 @@ func (o DiscountExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["start_date"] = o.StartDate
 	toSerialize["subscription_id"] = o.SubscriptionId.Get()
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -536,15 +541,34 @@ func (o *DiscountExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varDiscountExternal := _DiscountExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDiscountExternal)
+	err = json.Unmarshal(data, &varDiscountExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DiscountExternal(varDiscountExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "coupon")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "end_date")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "invoice_item_id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "promotion_code")
+		delete(additionalProperties, "promotion_code_id")
+		delete(additionalProperties, "start_date")
+		delete(additionalProperties, "subscription_id")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

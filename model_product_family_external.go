@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -38,6 +37,7 @@ type ProductFamilyExternal struct {
 	Products []string `json:"products"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProductFamilyExternal ProductFamilyExternal
@@ -340,6 +340,11 @@ func (o ProductFamilyExternal) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["products"] = o.Products
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -372,15 +377,28 @@ func (o *ProductFamilyExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varProductFamilyExternal := _ProductFamilyExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProductFamilyExternal)
+	err = json.Unmarshal(data, &varProductFamilyExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProductFamilyExternal(varProductFamilyExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "hierarchy")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "products")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

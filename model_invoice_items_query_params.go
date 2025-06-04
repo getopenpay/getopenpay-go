@@ -34,7 +34,10 @@ type InvoiceItemsQueryParams struct {
 	// Key name based on which data is sorted.
 	SortKey *string `json:"sort_key,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _InvoiceItemsQueryParams InvoiceItemsQueryParams
 
 // NewInvoiceItemsQueryParams instantiates a new InvoiceItemsQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -479,7 +482,42 @@ func (o InvoiceItemsQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *InvoiceItemsQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varInvoiceItemsQueryParams := _InvoiceItemsQueryParams{}
+
+	err = json.Unmarshal(data, &varInvoiceItemsQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = InvoiceItemsQueryParams(varInvoiceItemsQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableInvoiceItemsQueryParams struct {

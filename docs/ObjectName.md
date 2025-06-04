@@ -71,6 +71,8 @@
 
 * `PRICE_TIER` (value: `"price_tier"`)
 
+* `PROCESSOR_CARD_CHECKOUT_STATE` (value: `"processor_card_checkout_state"`)
+
 * `PRODUCT` (value: `"product"`)
 
 * `PRODUCT_FAMILY` (value: `"product_family"`)
@@ -89,11 +91,15 @@
 
 * `SINGLE_USE_TOKEN` (value: `"single_use_token"`)
 
+* `STATE_TRANSITION_LOG` (value: `"state_transition_log"`)
+
 * `SUBSCRIPTION` (value: `"subscription"`)
 
 * `SUBSCRIPTION_ITEM` (value: `"subscription_item"`)
 
 * `TAX_INTEGRATION` (value: `"tax_integration"`)
+
+* `UNIFIED_CC_STATE` (value: `"unified_cc_state"`)
 
 * `USER` (value: `"user"`)
 

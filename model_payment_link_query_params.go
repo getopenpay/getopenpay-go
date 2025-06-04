@@ -31,7 +31,10 @@ type PaymentLinkQueryParams struct {
 	// Key name based on which data is sorted.
 	SortKey *string `json:"sort_key,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PaymentLinkQueryParams PaymentLinkQueryParams
 
 // NewPaymentLinkQueryParams instantiates a new PaymentLinkQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -341,7 +344,39 @@ func (o PaymentLinkQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PaymentLinkQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varPaymentLinkQueryParams := _PaymentLinkQueryParams{}
+
+	err = json.Unmarshal(data, &varPaymentLinkQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PaymentLinkQueryParams(varPaymentLinkQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePaymentLinkQueryParams struct {

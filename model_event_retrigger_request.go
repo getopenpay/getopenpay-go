@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type EventRetriggerRequest struct {
 	// Unique id for the event which you would like to re-retigger.
 	EventId string `json:"event_id"`
 	SelectedWebhooks []string `json:"selected_webhooks,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventRetriggerRequest EventRetriggerRequest
@@ -117,6 +117,11 @@ func (o EventRetriggerRequest) ToMap() (map[string]interface{}, error) {
 	if o.SelectedWebhooks != nil {
 		toSerialize["selected_webhooks"] = o.SelectedWebhooks
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -144,15 +149,21 @@ func (o *EventRetriggerRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varEventRetriggerRequest := _EventRetriggerRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventRetriggerRequest)
+	err = json.Unmarshal(data, &varEventRetriggerRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventRetriggerRequest(varEventRetriggerRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "event_id")
+		delete(additionalProperties, "selected_webhooks")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

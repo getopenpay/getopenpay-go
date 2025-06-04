@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -58,6 +57,7 @@ type CreatePriceRequest struct {
 	UnitAmountAtom NullableInt32 `json:"unit_amount_atom,omitempty"`
 	// Configures how the quantity per period should be determined. Can be either 'metered' or 'licensed'. 'licensed' automatically bills the quantity set when adding it to a subscription. 'metered' aggregates the total usage based on usage records. Defaults to 'licensed'.
 	UsageType *UsageTypeEnum `json:"usage_type,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreatePriceRequest CreatePriceRequest
@@ -1048,6 +1048,11 @@ func (o CreatePriceRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.UsageType) {
 		toSerialize["usage_type"] = o.UsageType
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1078,15 +1083,44 @@ func (o *CreatePriceRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreatePriceRequest := _CreatePriceRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreatePriceRequest)
+	err = json.Unmarshal(data, &varCreatePriceRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreatePriceRequest(varCreatePriceRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "aggregate_usage")
+		delete(additionalProperties, "billing_interval")
+		delete(additionalProperties, "billing_interval_count")
+		delete(additionalProperties, "can_only_be_purchased_with")
+		delete(additionalProperties, "contract_auto_renew")
+		delete(additionalProperties, "contract_term_multiple")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "default_net_d")
+		delete(additionalProperties, "internal_description")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_default")
+		delete(additionalProperties, "is_exclusive")
+		delete(additionalProperties, "listed_exclusively_for_customers")
+		delete(additionalProperties, "meta")
+		delete(additionalProperties, "meter_id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "price_tiers")
+		delete(additionalProperties, "price_type")
+		delete(additionalProperties, "pricing_model")
+		delete(additionalProperties, "product_id")
+		delete(additionalProperties, "transform_quantity_divide_by")
+		delete(additionalProperties, "trial_period_days")
+		delete(additionalProperties, "unit_amount_atom")
+		delete(additionalProperties, "usage_type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

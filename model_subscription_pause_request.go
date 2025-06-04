@@ -24,7 +24,10 @@ type SubscriptionPauseRequest struct {
 	IsPreview *bool `json:"is_preview,omitempty"`
 	NumberOfBillingCyclesToSkip NullableInt32 `json:"number_of_billing_cycles_to_skip,omitempty"`
 	ResumptionDate NullableTime `json:"resumption_date,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SubscriptionPauseRequest SubscriptionPauseRequest
 
 // NewSubscriptionPauseRequest instantiates a new SubscriptionPauseRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -182,7 +185,35 @@ func (o SubscriptionPauseRequest) ToMap() (map[string]interface{}, error) {
 	if o.ResumptionDate.IsSet() {
 		toSerialize["resumption_date"] = o.ResumptionDate.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SubscriptionPauseRequest) UnmarshalJSON(data []byte) (err error) {
+	varSubscriptionPauseRequest := _SubscriptionPauseRequest{}
+
+	err = json.Unmarshal(data, &varSubscriptionPauseRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SubscriptionPauseRequest(varSubscriptionPauseRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "is_preview")
+		delete(additionalProperties, "number_of_billing_cycles_to_skip")
+		delete(additionalProperties, "resumption_date")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSubscriptionPauseRequest struct {

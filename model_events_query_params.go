@@ -34,7 +34,10 @@ type EventsQueryParams struct {
 	// An array of up to 20 strings containing specific event names. The list will be filtered to include only events with a matching event property.
 	Types []EventType `json:"types,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _EventsQueryParams EventsQueryParams
 
 // NewEventsQueryParams instantiates a new EventsQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -424,7 +427,41 @@ func (o EventsQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *EventsQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varEventsQueryParams := _EventsQueryParams{}
+
+	err = json.Unmarshal(data, &varEventsQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = EventsQueryParams(varEventsQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "delivery_success")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "types")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableEventsQueryParams struct {

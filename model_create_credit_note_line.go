@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type CreateCreditNoteLine struct {
 	// The type of the credit note line item, one of invoice_line_item or custom_line_item. When the type is invoice_line_item there is an additional invoice_line_item property on the resource the value of which is the id of the credited line item on the invoice
 	Type CreditNoteLineType `json:"type"`
 	UnitAmountAtom NullableInt32 `json:"unit_amount_atom,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCreditNoteLine CreateCreditNoteLine
@@ -267,6 +267,11 @@ func (o CreateCreditNoteLine) ToMap() (map[string]interface{}, error) {
 	if o.UnitAmountAtom.IsSet() {
 		toSerialize["unit_amount_atom"] = o.UnitAmountAtom.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -296,15 +301,25 @@ func (o *CreateCreditNoteLine) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCreditNoteLine := _CreateCreditNoteLine{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCreditNoteLine)
+	err = json.Unmarshal(data, &varCreateCreditNoteLine)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCreditNoteLine(varCreateCreditNoteLine)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "invoice_item_id")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "unit_amount_atom")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

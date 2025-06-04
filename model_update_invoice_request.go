@@ -25,7 +25,10 @@ type UpdateInvoiceRequest struct {
 	Description *string `json:"description,omitempty"`
 	EmailInvoiceOnFinalization NullableBool `json:"email_invoice_on_finalization,omitempty"`
 	PaymentMethodId NullableString `json:"payment_method_id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateInvoiceRequest UpdateInvoiceRequest
 
 // NewUpdateInvoiceRequest instantiates a new UpdateInvoiceRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -264,7 +267,37 @@ func (o UpdateInvoiceRequest) ToMap() (map[string]interface{}, error) {
 	if o.PaymentMethodId.IsSet() {
 		toSerialize["payment_method_id"] = o.PaymentMethodId.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateInvoiceRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdateInvoiceRequest := _UpdateInvoiceRequest{}
+
+	err = json.Unmarshal(data, &varUpdateInvoiceRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateInvoiceRequest(varUpdateInvoiceRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "email_invoice_on_finalization")
+		delete(additionalProperties, "payment_method_id")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateInvoiceRequest struct {

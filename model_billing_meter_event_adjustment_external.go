@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -41,6 +40,7 @@ type BillingMeterEventAdjustmentExternal struct {
 	Type *BillingMeterAdjustmentType `json:"type,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BillingMeterEventAdjustmentExternal BillingMeterEventAdjustmentExternal
@@ -363,6 +363,11 @@ func (o BillingMeterEventAdjustmentExternal) ToMap() (map[string]interface{}, er
 		toSerialize["type"] = o.Type
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -396,15 +401,29 @@ func (o *BillingMeterEventAdjustmentExternal) UnmarshalJSON(data []byte) (err er
 
 	varBillingMeterEventAdjustmentExternal := _BillingMeterEventAdjustmentExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBillingMeterEventAdjustmentExternal)
+	err = json.Unmarshal(data, &varBillingMeterEventAdjustmentExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BillingMeterEventAdjustmentExternal(varBillingMeterEventAdjustmentExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "cancel_identifier")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "event_name")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

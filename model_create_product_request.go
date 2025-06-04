@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type CreateProductRequest struct {
 	// Name of product.
 	Name string `json:"name"`
 	UnitLabel NullableString `json:"unit_label,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateProductRequest CreateProductRequest
@@ -315,6 +315,11 @@ func (o CreateProductRequest) ToMap() (map[string]interface{}, error) {
 	if o.UnitLabel.IsSet() {
 		toSerialize["unit_label"] = o.UnitLabel.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -343,15 +348,26 @@ func (o *CreateProductRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateProductRequest := _CreateProductRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateProductRequest)
+	err = json.Unmarshal(data, &varCreateProductRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateProductRequest(varCreateProductRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_sku")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "features")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "unit_label")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

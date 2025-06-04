@@ -37,7 +37,10 @@ type RefundQueryParams struct {
 	SortKey *string `json:"sort_key,omitempty"`
 	Status NullableRefundStatusEnum `json:"status,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _RefundQueryParams RefundQueryParams
 
 // NewRefundQueryParams instantiates a new RefundQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -617,7 +620,45 @@ func (o RefundQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *RefundQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varRefundQueryParams := _RefundQueryParams{}
+
+	err = json.Unmarshal(data, &varRefundQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = RefundQueryParams(varRefundQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "charge_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "payment_intent_id")
+		delete(additionalProperties, "reason")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableRefundQueryParams struct {

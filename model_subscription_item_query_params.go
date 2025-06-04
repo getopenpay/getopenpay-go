@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &SubscriptionItemQueryParams{}
 type SubscriptionItemQueryParams struct {
 	// The ID of the subscription whose items will be retrieved.
 	SubscriptionId string `json:"subscription_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SubscriptionItemQueryParams SubscriptionItemQueryParams
@@ -80,6 +80,11 @@ func (o SubscriptionItemQueryParams) MarshalJSON() ([]byte, error) {
 func (o SubscriptionItemQueryParams) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["subscription_id"] = o.SubscriptionId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *SubscriptionItemQueryParams) UnmarshalJSON(data []byte) (err error) {
 
 	varSubscriptionItemQueryParams := _SubscriptionItemQueryParams{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSubscriptionItemQueryParams)
+	err = json.Unmarshal(data, &varSubscriptionItemQueryParams)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SubscriptionItemQueryParams(varSubscriptionItemQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "subscription_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

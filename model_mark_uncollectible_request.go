@@ -20,7 +20,10 @@ var _ MappedNullable = &MarkUncollectibleRequest{}
 // MarkUncollectibleRequest struct for MarkUncollectibleRequest
 type MarkUncollectibleRequest struct {
 	Comment NullableString `json:"comment,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MarkUncollectibleRequest MarkUncollectibleRequest
 
 // NewMarkUncollectibleRequest instantiates a new MarkUncollectibleRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -94,7 +97,33 @@ func (o MarkUncollectibleRequest) ToMap() (map[string]interface{}, error) {
 	if o.Comment.IsSet() {
 		toSerialize["comment"] = o.Comment.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MarkUncollectibleRequest) UnmarshalJSON(data []byte) (err error) {
+	varMarkUncollectibleRequest := _MarkUncollectibleRequest{}
+
+	err = json.Unmarshal(data, &varMarkUncollectibleRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MarkUncollectibleRequest(varMarkUncollectibleRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "comment")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMarkUncollectibleRequest struct {

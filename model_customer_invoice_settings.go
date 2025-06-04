@@ -23,7 +23,10 @@ type CustomerInvoiceSettings struct {
 	CustomerTaxIds []TaxIdSetting `json:"customer_tax_ids,omitempty"`
 	DefaultNetD NullableInt32 `json:"default_net_d,omitempty"`
 	EmailReceiptOnPaid NullableBool `json:"email_receipt_on_paid,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CustomerInvoiceSettings CustomerInvoiceSettings
 
 // NewCustomerInvoiceSettings instantiates a new CustomerInvoiceSettings object
 // This constructor will assign default values to properties that have it defined,
@@ -177,7 +180,35 @@ func (o CustomerInvoiceSettings) ToMap() (map[string]interface{}, error) {
 	if o.EmailReceiptOnPaid.IsSet() {
 		toSerialize["email_receipt_on_paid"] = o.EmailReceiptOnPaid.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CustomerInvoiceSettings) UnmarshalJSON(data []byte) (err error) {
+	varCustomerInvoiceSettings := _CustomerInvoiceSettings{}
+
+	err = json.Unmarshal(data, &varCustomerInvoiceSettings)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CustomerInvoiceSettings(varCustomerInvoiceSettings)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "customer_tax_ids")
+		delete(additionalProperties, "default_net_d")
+		delete(additionalProperties, "email_receipt_on_paid")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCustomerInvoiceSettings struct {

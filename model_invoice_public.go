@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -72,6 +71,7 @@ type InvoicePublic struct {
 	TotalExcludingTaxesAmountAtom int32 `json:"total_excluding_taxes_amount_atom"`
 	TrialEndForSub NullableTime `json:"trial_end_for_sub"`
 	TrialStartForSub NullableTime `json:"trial_start_for_sub"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoicePublic InvoicePublic
@@ -1058,6 +1058,11 @@ func (o InvoicePublic) ToMap() (map[string]interface{}, error) {
 	toSerialize["total_excluding_taxes_amount_atom"] = o.TotalExcludingTaxesAmountAtom
 	toSerialize["trial_end_for_sub"] = o.TrialEndForSub.Get()
 	toSerialize["trial_start_for_sub"] = o.TrialStartForSub.Get()
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1103,15 +1108,49 @@ func (o *InvoicePublic) UnmarshalJSON(data []byte) (err error) {
 
 	varInvoicePublic := _InvoicePublic{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoicePublic)
+	err = json.Unmarshal(data, &varInvoicePublic)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoicePublic(varInvoicePublic)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "applied_balance_amount_atom")
+		delete(additionalProperties, "billed_to")
+		delete(additionalProperties, "billed_to_business_name")
+		delete(additionalProperties, "billing_address")
+		delete(additionalProperties, "branding")
+		delete(additionalProperties, "card_type")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "customer_tax_ids")
+		delete(additionalProperties, "due_amount_atom")
+		delete(additionalProperties, "due_date")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_pdf_url")
+		delete(additionalProperties, "is_initial_invoice_for_trial_sub")
+		delete(additionalProperties, "last_four")
+		delete(additionalProperties, "lines")
+		delete(additionalProperties, "merchant_billing_address")
+		delete(additionalProperties, "merchant_tax_ids")
+		delete(additionalProperties, "paid_amount_atom")
+		delete(additionalProperties, "paid_at")
+		delete(additionalProperties, "provider_type_fee_amount_atom")
+		delete(additionalProperties, "receipt_pdf_url")
+		delete(additionalProperties, "remaining_amount_atom")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "tax_amount_atom")
+		delete(additionalProperties, "total_amount_atom")
+		delete(additionalProperties, "total_discount_amount_atoms")
+		delete(additionalProperties, "total_excluding_taxes_amount_atom")
+		delete(additionalProperties, "trial_end_for_sub")
+		delete(additionalProperties, "trial_start_for_sub")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

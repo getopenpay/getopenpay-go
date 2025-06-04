@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type InvoiceItemDiscountAmountsPublic struct {
 	CouponDescription NullableString `json:"coupon_description,omitempty"`
 	// Name of the coupon that was applied to get this discount.
 	CouponName string `json:"coupon_name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoiceItemDiscountAmountsPublic InvoiceItemDiscountAmountsPublic
@@ -154,6 +154,11 @@ func (o InvoiceItemDiscountAmountsPublic) ToMap() (map[string]interface{}, error
 		toSerialize["coupon_description"] = o.CouponDescription.Get()
 	}
 	toSerialize["coupon_name"] = o.CouponName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -182,15 +187,22 @@ func (o *InvoiceItemDiscountAmountsPublic) UnmarshalJSON(data []byte) (err error
 
 	varInvoiceItemDiscountAmountsPublic := _InvoiceItemDiscountAmountsPublic{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoiceItemDiscountAmountsPublic)
+	err = json.Unmarshal(data, &varInvoiceItemDiscountAmountsPublic)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoiceItemDiscountAmountsPublic(varInvoiceItemDiscountAmountsPublic)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "coupon_description")
+		delete(additionalProperties, "coupon_name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -32,7 +32,10 @@ type CustomerPaymentMethodQueryParams struct {
 	// Key name based on which data is sorted.
 	SortKey *string `json:"sort_key,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CustomerPaymentMethodQueryParams CustomerPaymentMethodQueryParams
 
 // NewCustomerPaymentMethodQueryParams instantiates a new CustomerPaymentMethodQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -387,7 +390,40 @@ func (o CustomerPaymentMethodQueryParams) ToMap() (map[string]interface{}, error
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CustomerPaymentMethodQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varCustomerPaymentMethodQueryParams := _CustomerPaymentMethodQueryParams{}
+
+	err = json.Unmarshal(data, &varCustomerPaymentMethodQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CustomerPaymentMethodQueryParams(varCustomerPaymentMethodQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "provider_type")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCustomerPaymentMethodQueryParams struct {

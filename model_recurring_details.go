@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type RecurringDetails struct {
 	AggregateUsage NullableUsageAggMethodEnum `json:"aggregate_usage,omitempty"`
 	TrialPeriodDays *int32 `json:"trial_period_days,omitempty"`
 	UsageType UsageTypeEnum `json:"usage_type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _RecurringDetails RecurringDetails
@@ -165,6 +165,11 @@ func (o RecurringDetails) ToMap() (map[string]interface{}, error) {
 		toSerialize["trial_period_days"] = o.TrialPeriodDays
 	}
 	toSerialize["usage_type"] = o.UsageType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -192,15 +197,22 @@ func (o *RecurringDetails) UnmarshalJSON(data []byte) (err error) {
 
 	varRecurringDetails := _RecurringDetails{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varRecurringDetails)
+	err = json.Unmarshal(data, &varRecurringDetails)
 
 	if err != nil {
 		return err
 	}
 
 	*o = RecurringDetails(varRecurringDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "aggregate_usage")
+		delete(additionalProperties, "trial_period_days")
+		delete(additionalProperties, "usage_type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

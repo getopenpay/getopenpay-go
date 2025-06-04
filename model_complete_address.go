@@ -26,7 +26,10 @@ type CompleteAddress struct {
 	Line3 NullableString `json:"line3,omitempty"`
 	State NullableString `json:"state,omitempty"`
 	ZipCode NullableString `json:"zip_code,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CompleteAddress CompleteAddress
 
 // NewCompleteAddress instantiates a new CompleteAddress object
 // This constructor will assign default values to properties that have it defined,
@@ -370,7 +373,39 @@ func (o CompleteAddress) ToMap() (map[string]interface{}, error) {
 	if o.ZipCode.IsSet() {
 		toSerialize["zip_code"] = o.ZipCode.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CompleteAddress) UnmarshalJSON(data []byte) (err error) {
+	varCompleteAddress := _CompleteAddress{}
+
+	err = json.Unmarshal(data, &varCompleteAddress)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CompleteAddress(varCompleteAddress)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "city")
+		delete(additionalProperties, "country")
+		delete(additionalProperties, "line1")
+		delete(additionalProperties, "line2")
+		delete(additionalProperties, "line3")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "zip_code")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCompleteAddress struct {

@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -40,6 +39,7 @@ type CreateInvoiceRequest struct {
 	// This object contains details of selected product' price and quantity.
 	SelectedProductPriceQuantity []SelectedPriceQuantity `json:"selected_product_price_quantity,omitempty"`
 	SubscriptionId NullableString `json:"subscription_id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateInvoiceRequest CreateInvoiceRequest
@@ -632,6 +632,11 @@ func (o CreateInvoiceRequest) ToMap() (map[string]interface{}, error) {
 	if o.SubscriptionId.IsSet() {
 		toSerialize["subscription_id"] = o.SubscriptionId.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -659,15 +664,33 @@ func (o *CreateInvoiceRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateInvoiceRequest := _CreateInvoiceRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateInvoiceRequest)
+	err = json.Unmarshal(data, &varCreateInvoiceRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateInvoiceRequest(varCreateInvoiceRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "collection_method")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "email_invoice_on_finalization")
+		delete(additionalProperties, "finalize_invoice_immediately")
+		delete(additionalProperties, "invoice_item_details")
+		delete(additionalProperties, "invoice_type")
+		delete(additionalProperties, "is_preview")
+		delete(additionalProperties, "net_d")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "selected_product_price_quantity")
+		delete(additionalProperties, "subscription_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

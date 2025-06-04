@@ -20,7 +20,10 @@ var _ MappedNullable = &UpdatePaymentIntent{}
 // UpdatePaymentIntent struct for UpdatePaymentIntent
 type UpdatePaymentIntent struct {
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdatePaymentIntent UpdatePaymentIntent
 
 // NewUpdatePaymentIntent instantiates a new UpdatePaymentIntent object
 // This constructor will assign default values to properties that have it defined,
@@ -85,7 +88,33 @@ func (o UpdatePaymentIntent) ToMap() (map[string]interface{}, error) {
 	if o.CustomFields != nil {
 		toSerialize["custom_fields"] = o.CustomFields
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdatePaymentIntent) UnmarshalJSON(data []byte) (err error) {
+	varUpdatePaymentIntent := _UpdatePaymentIntent{}
+
+	err = json.Unmarshal(data, &varUpdatePaymentIntent)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdatePaymentIntent(varUpdatePaymentIntent)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "custom_fields")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdatePaymentIntent struct {

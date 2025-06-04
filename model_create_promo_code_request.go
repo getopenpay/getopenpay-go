@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type CreatePromoCodeRequest struct {
 	MaxRedemptions NullableInt32 `json:"max_redemptions,omitempty"`
 	MaxRedemptionsPerCustomer NullableInt32 `json:"max_redemptions_per_customer,omitempty"`
 	Restrictions NullablePromoRestrictions `json:"restrictions,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreatePromoCodeRequest CreatePromoCodeRequest
@@ -330,6 +330,11 @@ func (o CreatePromoCodeRequest) ToMap() (map[string]interface{}, error) {
 	if o.Restrictions.IsSet() {
 		toSerialize["restrictions"] = o.Restrictions.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -358,15 +363,26 @@ func (o *CreatePromoCodeRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreatePromoCodeRequest := _CreatePromoCodeRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreatePromoCodeRequest)
+	err = json.Unmarshal(data, &varCreatePromoCodeRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreatePromoCodeRequest(varCreatePromoCodeRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "code")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "customer_ids")
+		delete(additionalProperties, "expires_at")
+		delete(additionalProperties, "max_redemptions")
+		delete(additionalProperties, "max_redemptions_per_customer")
+		delete(additionalProperties, "restrictions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -37,7 +37,10 @@ type PaymentIntentQueryParams struct {
 	SortKey *string `json:"sort_key,omitempty"`
 	Status NullablePaymentIntentStatus `json:"status,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PaymentIntentQueryParams PaymentIntentQueryParams
 
 // NewPaymentIntentQueryParams instantiates a new PaymentIntentQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -617,7 +620,45 @@ func (o PaymentIntentQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PaymentIntentQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varPaymentIntentQueryParams := _PaymentIntentQueryParams{}
+
+	err = json.Unmarshal(data, &varPaymentIntentQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PaymentIntentQueryParams(varPaymentIntentQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "search")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePaymentIntentQueryParams struct {

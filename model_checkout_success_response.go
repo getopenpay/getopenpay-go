@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,7 +22,9 @@ var _ MappedNullable = &CheckoutSuccessResponse{}
 type CheckoutSuccessResponse struct {
 	CustomerId string `json:"customer_id"`
 	InvoiceUrls []string `json:"invoice_urls"`
+	ProcessorsUsed []string `json:"processors_used,omitempty"`
 	SubscriptionIds []string `json:"subscription_ids"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CheckoutSuccessResponse CheckoutSuccessResponse
@@ -96,6 +97,39 @@ func (o *CheckoutSuccessResponse) SetInvoiceUrls(v []string) {
 	o.InvoiceUrls = v
 }
 
+// GetProcessorsUsed returns the ProcessorsUsed field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CheckoutSuccessResponse) GetProcessorsUsed() []string {
+	if o == nil {
+		var ret []string
+		return ret
+	}
+	return o.ProcessorsUsed
+}
+
+// GetProcessorsUsedOk returns a tuple with the ProcessorsUsed field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CheckoutSuccessResponse) GetProcessorsUsedOk() ([]string, bool) {
+	if o == nil || IsNil(o.ProcessorsUsed) {
+		return nil, false
+	}
+	return o.ProcessorsUsed, true
+}
+
+// HasProcessorsUsed returns a boolean if a field has been set.
+func (o *CheckoutSuccessResponse) HasProcessorsUsed() bool {
+	if o != nil && !IsNil(o.ProcessorsUsed) {
+		return true
+	}
+
+	return false
+}
+
+// SetProcessorsUsed gets a reference to the given []string and assigns it to the ProcessorsUsed field.
+func (o *CheckoutSuccessResponse) SetProcessorsUsed(v []string) {
+	o.ProcessorsUsed = v
+}
+
 // GetSubscriptionIds returns the SubscriptionIds field value
 func (o *CheckoutSuccessResponse) GetSubscriptionIds() []string {
 	if o == nil {
@@ -132,7 +166,15 @@ func (o CheckoutSuccessResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["customer_id"] = o.CustomerId
 	toSerialize["invoice_urls"] = o.InvoiceUrls
+	if o.ProcessorsUsed != nil {
+		toSerialize["processors_used"] = o.ProcessorsUsed
+	}
 	toSerialize["subscription_ids"] = o.SubscriptionIds
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -162,15 +204,23 @@ func (o *CheckoutSuccessResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varCheckoutSuccessResponse := _CheckoutSuccessResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCheckoutSuccessResponse)
+	err = json.Unmarshal(data, &varCheckoutSuccessResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CheckoutSuccessResponse(varCheckoutSuccessResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "invoice_urls")
+		delete(additionalProperties, "processors_used")
+		delete(additionalProperties, "subscription_ids")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

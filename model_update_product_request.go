@@ -28,7 +28,10 @@ type UpdateProductRequest struct {
 	IsActive NullableBool `json:"is_active,omitempty"`
 	Name NullableString `json:"name,omitempty"`
 	UnitLabel NullableString `json:"unit_label,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateProductRequest UpdateProductRequest
 
 // NewUpdateProductRequest instantiates a new UpdateProductRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -398,7 +401,40 @@ func (o UpdateProductRequest) ToMap() (map[string]interface{}, error) {
 	if o.UnitLabel.IsSet() {
 		toSerialize["unit_label"] = o.UnitLabel.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateProductRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdateProductRequest := _UpdateProductRequest{}
+
+	err = json.Unmarshal(data, &varUpdateProductRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateProductRequest(varUpdateProductRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_sku")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "default_price_id")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "features")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "unit_label")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateProductRequest struct {

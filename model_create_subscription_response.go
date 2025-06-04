@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CreateSubscriptionResponse struct {
 	Invoices []InvoiceExternal `json:"invoices"`
 	// List of successful processor IDs used for creating the subscriptions
 	ProcessorsUsed []string `json:"processors_used"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateSubscriptionResponse CreateSubscriptionResponse
@@ -136,6 +136,11 @@ func (o CreateSubscriptionResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize["created"] = o.Created
 	toSerialize["invoices"] = o.Invoices
 	toSerialize["processors_used"] = o.ProcessorsUsed
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CreateSubscriptionResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateSubscriptionResponse := _CreateSubscriptionResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateSubscriptionResponse)
+	err = json.Unmarshal(data, &varCreateSubscriptionResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateSubscriptionResponse(varCreateSubscriptionResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created")
+		delete(additionalProperties, "invoices")
+		delete(additionalProperties, "processors_used")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

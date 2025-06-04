@@ -25,7 +25,10 @@ type DateTimeFilter struct {
 	Gte NullableTime `json:"gte,omitempty"`
 	Lt NullableTime `json:"lt,omitempty"`
 	Lte NullableTime `json:"lte,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DateTimeFilter DateTimeFilter
 
 // NewDateTimeFilter instantiates a new DateTimeFilter object
 // This constructor will assign default values to properties that have it defined,
@@ -279,7 +282,37 @@ func (o DateTimeFilter) ToMap() (map[string]interface{}, error) {
 	if o.Lte.IsSet() {
 		toSerialize["lte"] = o.Lte.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DateTimeFilter) UnmarshalJSON(data []byte) (err error) {
+	varDateTimeFilter := _DateTimeFilter{}
+
+	err = json.Unmarshal(data, &varDateTimeFilter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DateTimeFilter(varDateTimeFilter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eq")
+		delete(additionalProperties, "gt")
+		delete(additionalProperties, "gte")
+		delete(additionalProperties, "lt")
+		delete(additionalProperties, "lte")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDateTimeFilter struct {

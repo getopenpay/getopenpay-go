@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -34,6 +33,7 @@ type PriceTierExternal struct {
 	UnitsUpto NullableInt32 `json:"units_upto,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PriceTierExternal PriceTierExternal
@@ -314,6 +314,11 @@ func (o PriceTierExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["units_upto"] = o.UnitsUpto.Get()
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -345,15 +350,27 @@ func (o *PriceTierExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPriceTierExternal := _PriceTierExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPriceTierExternal)
+	err = json.Unmarshal(data, &varPriceTierExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PriceTierExternal(varPriceTierExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "flat_amount_atom")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "unit_amount_atom")
+		delete(additionalProperties, "units_upto")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

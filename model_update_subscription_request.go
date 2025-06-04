@@ -32,14 +32,19 @@ type UpdateSubscriptionRequest struct {
 	NetD NullableInt32 `json:"net_d,omitempty"`
 	NewPeriodEnd NullableTime `json:"new_period_end,omitempty"`
 	PaymentMethodId NullableString `json:"payment_method_id,omitempty"`
+	PaymentRouteId NullableString `json:"payment_route_id,omitempty"`
 	// Whether to include the preview of the renewal invoices for the subscriptions in the response.
 	PreviewRenewalInvoices *bool `json:"preview_renewal_invoices,omitempty"`
 	PromotionCode NullableString `json:"promotion_code,omitempty"`
 	// Determines how to handle prorations when the billable items changes
 	ProrationBehavior *ProrationEnum `json:"proration_behavior,omitempty"`
+	RemovePaymentRouteId NullableBool `json:"remove_payment_route_id,omitempty"`
 	TrialEnd NullableTime `json:"trial_end,omitempty"`
 	TrialPeriodDays NullableInt32 `json:"trial_period_days,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateSubscriptionRequest UpdateSubscriptionRequest
 
 // NewUpdateSubscriptionRequest instantiates a new UpdateSubscriptionRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -457,6 +462,48 @@ func (o *UpdateSubscriptionRequest) UnsetPaymentMethodId() {
 	o.PaymentMethodId.Unset()
 }
 
+// GetPaymentRouteId returns the PaymentRouteId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateSubscriptionRequest) GetPaymentRouteId() string {
+	if o == nil || IsNil(o.PaymentRouteId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PaymentRouteId.Get()
+}
+
+// GetPaymentRouteIdOk returns a tuple with the PaymentRouteId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateSubscriptionRequest) GetPaymentRouteIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PaymentRouteId.Get(), o.PaymentRouteId.IsSet()
+}
+
+// HasPaymentRouteId returns a boolean if a field has been set.
+func (o *UpdateSubscriptionRequest) HasPaymentRouteId() bool {
+	if o != nil && o.PaymentRouteId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPaymentRouteId gets a reference to the given NullableString and assigns it to the PaymentRouteId field.
+func (o *UpdateSubscriptionRequest) SetPaymentRouteId(v string) {
+	o.PaymentRouteId.Set(&v)
+}
+// SetPaymentRouteIdNil sets the value for PaymentRouteId to be an explicit nil
+func (o *UpdateSubscriptionRequest) SetPaymentRouteIdNil() {
+	o.PaymentRouteId.Set(nil)
+}
+
+// UnsetPaymentRouteId ensures that no value is present for PaymentRouteId, not even an explicit nil
+func (o *UpdateSubscriptionRequest) UnsetPaymentRouteId() {
+	o.PaymentRouteId.Unset()
+}
+
 // GetPreviewRenewalInvoices returns the PreviewRenewalInvoices field value if set, zero value otherwise.
 func (o *UpdateSubscriptionRequest) GetPreviewRenewalInvoices() bool {
 	if o == nil || IsNil(o.PreviewRenewalInvoices) {
@@ -561,6 +608,48 @@ func (o *UpdateSubscriptionRequest) HasProrationBehavior() bool {
 // SetProrationBehavior gets a reference to the given ProrationEnum and assigns it to the ProrationBehavior field.
 func (o *UpdateSubscriptionRequest) SetProrationBehavior(v ProrationEnum) {
 	o.ProrationBehavior = &v
+}
+
+// GetRemovePaymentRouteId returns the RemovePaymentRouteId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *UpdateSubscriptionRequest) GetRemovePaymentRouteId() bool {
+	if o == nil || IsNil(o.RemovePaymentRouteId.Get()) {
+		var ret bool
+		return ret
+	}
+	return *o.RemovePaymentRouteId.Get()
+}
+
+// GetRemovePaymentRouteIdOk returns a tuple with the RemovePaymentRouteId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *UpdateSubscriptionRequest) GetRemovePaymentRouteIdOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.RemovePaymentRouteId.Get(), o.RemovePaymentRouteId.IsSet()
+}
+
+// HasRemovePaymentRouteId returns a boolean if a field has been set.
+func (o *UpdateSubscriptionRequest) HasRemovePaymentRouteId() bool {
+	if o != nil && o.RemovePaymentRouteId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetRemovePaymentRouteId gets a reference to the given NullableBool and assigns it to the RemovePaymentRouteId field.
+func (o *UpdateSubscriptionRequest) SetRemovePaymentRouteId(v bool) {
+	o.RemovePaymentRouteId.Set(&v)
+}
+// SetRemovePaymentRouteIdNil sets the value for RemovePaymentRouteId to be an explicit nil
+func (o *UpdateSubscriptionRequest) SetRemovePaymentRouteIdNil() {
+	o.RemovePaymentRouteId.Set(nil)
+}
+
+// UnsetRemovePaymentRouteId ensures that no value is present for RemovePaymentRouteId, not even an explicit nil
+func (o *UpdateSubscriptionRequest) UnsetRemovePaymentRouteId() {
+	o.RemovePaymentRouteId.Unset()
 }
 
 // GetTrialEnd returns the TrialEnd field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -687,6 +776,9 @@ func (o UpdateSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	if o.PaymentMethodId.IsSet() {
 		toSerialize["payment_method_id"] = o.PaymentMethodId.Get()
 	}
+	if o.PaymentRouteId.IsSet() {
+		toSerialize["payment_route_id"] = o.PaymentRouteId.Get()
+	}
 	if !IsNil(o.PreviewRenewalInvoices) {
 		toSerialize["preview_renewal_invoices"] = o.PreviewRenewalInvoices
 	}
@@ -696,13 +788,58 @@ func (o UpdateSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ProrationBehavior) {
 		toSerialize["proration_behavior"] = o.ProrationBehavior
 	}
+	if o.RemovePaymentRouteId.IsSet() {
+		toSerialize["remove_payment_route_id"] = o.RemovePaymentRouteId.Get()
+	}
 	if o.TrialEnd.IsSet() {
 		toSerialize["trial_end"] = o.TrialEnd.Get()
 	}
 	if o.TrialPeriodDays.IsSet() {
 		toSerialize["trial_period_days"] = o.TrialPeriodDays.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateSubscriptionRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdateSubscriptionRequest := _UpdateSubscriptionRequest{}
+
+	err = json.Unmarshal(data, &varUpdateSubscriptionRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateSubscriptionRequest(varUpdateSubscriptionRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cancel_at_end")
+		delete(additionalProperties, "collection_method")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "is_preview")
+		delete(additionalProperties, "items")
+		delete(additionalProperties, "net_d")
+		delete(additionalProperties, "new_period_end")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "payment_route_id")
+		delete(additionalProperties, "preview_renewal_invoices")
+		delete(additionalProperties, "promotion_code")
+		delete(additionalProperties, "proration_behavior")
+		delete(additionalProperties, "remove_payment_route_id")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_period_days")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateSubscriptionRequest struct {

@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CreatePortalSessionRequest struct {
 	CustomerId string `json:"customer_id"`
 	// The default URL to redirect customers to when they click on the portal\"s link to return to your website.
 	ReturnUrl string `json:"return_url"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreatePortalSessionRequest CreatePortalSessionRequest
@@ -108,6 +108,11 @@ func (o CreatePortalSessionRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["customer_id"] = o.CustomerId
 	toSerialize["return_url"] = o.ReturnUrl
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *CreatePortalSessionRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreatePortalSessionRequest := _CreatePortalSessionRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreatePortalSessionRequest)
+	err = json.Unmarshal(data, &varCreatePortalSessionRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreatePortalSessionRequest(varCreatePortalSessionRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "return_url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

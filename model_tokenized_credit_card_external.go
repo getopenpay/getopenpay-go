@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -51,6 +50,7 @@ type TokenizedCreditCardExternal struct {
 	Provider PaymentProviderType `json:"provider"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TokenizedCreditCardExternal TokenizedCreditCardExternal
@@ -861,6 +861,11 @@ func (o TokenizedCreditCardExternal) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["provider"] = o.Provider
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -894,15 +899,40 @@ func (o *TokenizedCreditCardExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varTokenizedCreditCardExternal := _TokenizedCreditCardExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTokenizedCreditCardExternal)
+	err = json.Unmarshal(data, &varTokenizedCreditCardExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TokenizedCreditCardExternal(varTokenizedCreditCardExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "billing_address")
+		delete(additionalProperties, "card_brand")
+		delete(additionalProperties, "card_country")
+		delete(additionalProperties, "card_fingerprint")
+		delete(additionalProperties, "card_iin")
+		delete(additionalProperties, "card_issuer")
+		delete(additionalProperties, "card_type")
+		delete(additionalProperties, "cde_external_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "display_name")
+		delete(additionalProperties, "expiry_date")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "is_full_details_known")
+		delete(additionalProperties, "last_four")
+		delete(additionalProperties, "mappings")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "provider")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

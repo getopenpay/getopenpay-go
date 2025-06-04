@@ -25,7 +25,10 @@ type PayInvoiceRequest struct {
 	PaymentMethodId NullableString `json:"payment_method_id,omitempty"`
 	// Void the invoice if payment fails.
 	VoidOnFailure *bool `json:"void_on_failure,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PayInvoiceRequest PayInvoiceRequest
 
 // NewPayInvoiceRequest instantiates a new PayInvoiceRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -222,7 +225,36 @@ func (o PayInvoiceRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.VoidOnFailure) {
 		toSerialize["void_on_failure"] = o.VoidOnFailure
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PayInvoiceRequest) UnmarshalJSON(data []byte) (err error) {
+	varPayInvoiceRequest := _PayInvoiceRequest{}
+
+	err = json.Unmarshal(data, &varPayInvoiceRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PayInvoiceRequest(varPayInvoiceRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "comment")
+		delete(additionalProperties, "paid_out_of_band")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "void_on_failure")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePayInvoiceRequest struct {

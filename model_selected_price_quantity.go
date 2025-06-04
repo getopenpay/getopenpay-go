@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type SelectedPriceQuantity struct {
 	PriceId string `json:"price_id"`
 	// Quantity of the product selected for the subscription.This field is ignored for metered prices
 	Quantity int32 `json:"quantity"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SelectedPriceQuantity SelectedPriceQuantity
@@ -108,6 +108,11 @@ func (o SelectedPriceQuantity) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["price_id"] = o.PriceId
 	toSerialize["quantity"] = o.Quantity
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *SelectedPriceQuantity) UnmarshalJSON(data []byte) (err error) {
 
 	varSelectedPriceQuantity := _SelectedPriceQuantity{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSelectedPriceQuantity)
+	err = json.Unmarshal(data, &varSelectedPriceQuantity)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SelectedPriceQuantity(varSelectedPriceQuantity)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "quantity")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

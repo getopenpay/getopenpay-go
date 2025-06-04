@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -22,6 +21,8 @@ var _ MappedNullable = &CreatePaymentLinkRequest{}
 
 // CreatePaymentLinkRequest struct for CreatePaymentLinkRequest
 type CreatePaymentLinkRequest struct {
+	// If this flag is set to True and there is no customer attached to the payment link, the payment link will always create a new customer, rather than the default behavior of de-duping by email.
+	AlwaysCreateNewCustomer *bool `json:"always_create_new_customer,omitempty"`
 	CheckoutPreferences NullableCheckoutPreferences `json:"checkout_preferences,omitempty"`
 	CouponId NullableString `json:"coupon_id,omitempty"`
 	CustomFields map[string]interface{} `json:"custom_fields,omitempty"`
@@ -34,6 +35,7 @@ type CreatePaymentLinkRequest struct {
 	TrialEnd NullableTime `json:"trial_end,omitempty"`
 	TrialFromPrice NullableBool `json:"trial_from_price,omitempty"`
 	TrialPeriodDays NullableInt32 `json:"trial_period_days,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreatePaymentLinkRequest CreatePaymentLinkRequest
@@ -44,6 +46,8 @@ type _CreatePaymentLinkRequest CreatePaymentLinkRequest
 // will change when the set of required properties is changed
 func NewCreatePaymentLinkRequest(mode CheckoutMode, successUrl NullableString) *CreatePaymentLinkRequest {
 	this := CreatePaymentLinkRequest{}
+	var alwaysCreateNewCustomer bool = false
+	this.AlwaysCreateNewCustomer = &alwaysCreateNewCustomer
 	this.Mode = mode
 	this.SuccessUrl = successUrl
 	return &this
@@ -54,7 +58,41 @@ func NewCreatePaymentLinkRequest(mode CheckoutMode, successUrl NullableString) *
 // but it doesn't guarantee that properties required by API are set
 func NewCreatePaymentLinkRequestWithDefaults() *CreatePaymentLinkRequest {
 	this := CreatePaymentLinkRequest{}
+	var alwaysCreateNewCustomer bool = false
+	this.AlwaysCreateNewCustomer = &alwaysCreateNewCustomer
 	return &this
+}
+
+// GetAlwaysCreateNewCustomer returns the AlwaysCreateNewCustomer field value if set, zero value otherwise.
+func (o *CreatePaymentLinkRequest) GetAlwaysCreateNewCustomer() bool {
+	if o == nil || IsNil(o.AlwaysCreateNewCustomer) {
+		var ret bool
+		return ret
+	}
+	return *o.AlwaysCreateNewCustomer
+}
+
+// GetAlwaysCreateNewCustomerOk returns a tuple with the AlwaysCreateNewCustomer field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *CreatePaymentLinkRequest) GetAlwaysCreateNewCustomerOk() (*bool, bool) {
+	if o == nil || IsNil(o.AlwaysCreateNewCustomer) {
+		return nil, false
+	}
+	return o.AlwaysCreateNewCustomer, true
+}
+
+// HasAlwaysCreateNewCustomer returns a boolean if a field has been set.
+func (o *CreatePaymentLinkRequest) HasAlwaysCreateNewCustomer() bool {
+	if o != nil && !IsNil(o.AlwaysCreateNewCustomer) {
+		return true
+	}
+
+	return false
+}
+
+// SetAlwaysCreateNewCustomer gets a reference to the given bool and assigns it to the AlwaysCreateNewCustomer field.
+func (o *CreatePaymentLinkRequest) SetAlwaysCreateNewCustomer(v bool) {
+	o.AlwaysCreateNewCustomer = &v
 }
 
 // GetCheckoutPreferences returns the CheckoutPreferences field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -434,6 +472,9 @@ func (o CreatePaymentLinkRequest) MarshalJSON() ([]byte, error) {
 
 func (o CreatePaymentLinkRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.AlwaysCreateNewCustomer) {
+		toSerialize["always_create_new_customer"] = o.AlwaysCreateNewCustomer
+	}
 	if o.CheckoutPreferences.IsSet() {
 		toSerialize["checkout_preferences"] = o.CheckoutPreferences.Get()
 	}
@@ -460,6 +501,11 @@ func (o CreatePaymentLinkRequest) ToMap() (map[string]interface{}, error) {
 	if o.TrialPeriodDays.IsSet() {
 		toSerialize["trial_period_days"] = o.TrialPeriodDays.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -488,15 +534,30 @@ func (o *CreatePaymentLinkRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreatePaymentLinkRequest := _CreatePaymentLinkRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreatePaymentLinkRequest)
+	err = json.Unmarshal(data, &varCreatePaymentLinkRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreatePaymentLinkRequest(varCreatePaymentLinkRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "always_create_new_customer")
+		delete(additionalProperties, "checkout_preferences")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "line_items")
+		delete(additionalProperties, "mode")
+		delete(additionalProperties, "success_url")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_from_price")
+		delete(additionalProperties, "trial_period_days")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

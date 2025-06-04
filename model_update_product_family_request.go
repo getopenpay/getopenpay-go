@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type UpdateProductFamilyRequest struct {
 	Name NullableString `json:"name"`
 	// List of unique id's for the products in this family.
 	Products []string `json:"products"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateProductFamilyRequest UpdateProductFamilyRequest
@@ -201,6 +201,11 @@ func (o UpdateProductFamilyRequest) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["name"] = o.Name.Get()
 	toSerialize["products"] = o.Products
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -229,15 +234,23 @@ func (o *UpdateProductFamilyRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdateProductFamilyRequest := _UpdateProductFamilyRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateProductFamilyRequest)
+	err = json.Unmarshal(data, &varUpdateProductFamilyRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateProductFamilyRequest(varUpdateProductFamilyRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "hierarchy")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "products")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

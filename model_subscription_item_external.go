@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type SubscriptionItemExternal struct {
 	SubscriptionId NullableString `json:"subscription_id,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SubscriptionItemExternal SubscriptionItemExternal
@@ -614,6 +614,11 @@ func (o SubscriptionItemExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["subscription_id"] = o.SubscriptionId.Get()
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -651,15 +656,36 @@ func (o *SubscriptionItemExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varSubscriptionItemExternal := _SubscriptionItemExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSubscriptionItemExternal)
+	err = json.Unmarshal(data, &varSubscriptionItemExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SubscriptionItemExternal(varSubscriptionItemExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "add_at_period_end")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "deleted_at")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "drop_at_end")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "pending_attachment_to_subscription_id")
+		delete(additionalProperties, "price")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "product_id")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "subscription_id")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }
