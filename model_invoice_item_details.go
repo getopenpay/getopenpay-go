@@ -20,7 +20,10 @@ var _ MappedNullable = &InvoiceItemDetails{}
 // InvoiceItemDetails struct for InvoiceItemDetails
 type InvoiceItemDetails struct {
 	Description NullableString `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _InvoiceItemDetails InvoiceItemDetails
 
 // NewInvoiceItemDetails instantiates a new InvoiceItemDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -94,7 +97,33 @@ func (o InvoiceItemDetails) ToMap() (map[string]interface{}, error) {
 	if o.Description.IsSet() {
 		toSerialize["description"] = o.Description.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *InvoiceItemDetails) UnmarshalJSON(data []byte) (err error) {
+	varInvoiceItemDetails := _InvoiceItemDetails{}
+
+	err = json.Unmarshal(data, &varInvoiceItemDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = InvoiceItemDetails(varInvoiceItemDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableInvoiceItemDetails struct {

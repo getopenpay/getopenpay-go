@@ -74,4 +74,18 @@ func Test_getopenpay_PaymentRoutesAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test PaymentRoutesAPIService UpdatePaymentRoute", func(t *testing.T) {
+
+		t.Skip("skip test")  // remove to run test
+
+		var paymentRouteId string
+
+		resp, httpRes, err := apiClient.PaymentRoutesAPI.UpdatePaymentRoute(context.Background(), paymentRouteId).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 }

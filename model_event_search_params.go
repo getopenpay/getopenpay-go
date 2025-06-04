@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type EventSearchParams struct {
 	// An array of up to 20 strings containing specific event names. The list will be filtered to include only events with a matching event property.
 	Types []EventType `json:"types,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventSearchParams EventSearchParams
@@ -451,6 +451,11 @@ func (o EventSearchParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -478,15 +483,29 @@ func (o *EventSearchParams) UnmarshalJSON(data []byte) (err error) {
 
 	varEventSearchParams := _EventSearchParams{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventSearchParams)
+	err = json.Unmarshal(data, &varEventSearchParams)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventSearchParams(varEventSearchParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "limit")
+		delete(additionalProperties, "object_id")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "types")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -20,7 +20,10 @@ var _ MappedNullable = &InvoiceSettings{}
 // InvoiceSettings struct for InvoiceSettings
 type InvoiceSettings struct {
 	DefaultNetD NullableInt32 `json:"default_net_d,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _InvoiceSettings InvoiceSettings
 
 // NewInvoiceSettings instantiates a new InvoiceSettings object
 // This constructor will assign default values to properties that have it defined,
@@ -94,7 +97,33 @@ func (o InvoiceSettings) ToMap() (map[string]interface{}, error) {
 	if o.DefaultNetD.IsSet() {
 		toSerialize["default_net_d"] = o.DefaultNetD.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *InvoiceSettings) UnmarshalJSON(data []byte) (err error) {
+	varInvoiceSettings := _InvoiceSettings{}
+
+	err = json.Unmarshal(data, &varInvoiceSettings)
+
+	if err != nil {
+		return err
+	}
+
+	*o = InvoiceSettings(varInvoiceSettings)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "default_net_d")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableInvoiceSettings struct {

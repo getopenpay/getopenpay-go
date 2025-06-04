@@ -20,7 +20,10 @@ var _ MappedNullable = &MarkVoidRequest{}
 // MarkVoidRequest struct for MarkVoidRequest
 type MarkVoidRequest struct {
 	Comment NullableString `json:"comment,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _MarkVoidRequest MarkVoidRequest
 
 // NewMarkVoidRequest instantiates a new MarkVoidRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -94,7 +97,33 @@ func (o MarkVoidRequest) ToMap() (map[string]interface{}, error) {
 	if o.Comment.IsSet() {
 		toSerialize["comment"] = o.Comment.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *MarkVoidRequest) UnmarshalJSON(data []byte) (err error) {
+	varMarkVoidRequest := _MarkVoidRequest{}
+
+	err = json.Unmarshal(data, &varMarkVoidRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = MarkVoidRequest(varMarkVoidRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "comment")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableMarkVoidRequest struct {

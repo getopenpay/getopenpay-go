@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AttachPaymentMethodRequest{}
 type AttachPaymentMethodRequest struct {
 	// Unique Identifier of the payment_method.
 	CustomerId string `json:"customer_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AttachPaymentMethodRequest AttachPaymentMethodRequest
@@ -80,6 +80,11 @@ func (o AttachPaymentMethodRequest) MarshalJSON() ([]byte, error) {
 func (o AttachPaymentMethodRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["customer_id"] = o.CustomerId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *AttachPaymentMethodRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAttachPaymentMethodRequest := _AttachPaymentMethodRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAttachPaymentMethodRequest)
+	err = json.Unmarshal(data, &varAttachPaymentMethodRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AttachPaymentMethodRequest(varAttachPaymentMethodRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "customer_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -21,7 +21,10 @@ var _ MappedNullable = &ListActiveSubParams{}
 type ListActiveSubParams struct {
 	PriceId NullableString `json:"price_id,omitempty"`
 	ProductId NullableString `json:"product_id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _ListActiveSubParams ListActiveSubParams
 
 // NewListActiveSubParams instantiates a new ListActiveSubParams object
 // This constructor will assign default values to properties that have it defined,
@@ -140,7 +143,34 @@ func (o ListActiveSubParams) ToMap() (map[string]interface{}, error) {
 	if o.ProductId.IsSet() {
 		toSerialize["product_id"] = o.ProductId.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *ListActiveSubParams) UnmarshalJSON(data []byte) (err error) {
+	varListActiveSubParams := _ListActiveSubParams{}
+
+	err = json.Unmarshal(data, &varListActiveSubParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = ListActiveSubParams(varListActiveSubParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "product_id")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableListActiveSubParams struct {

@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -57,6 +56,7 @@ type CheckoutSessionExternal struct {
 	SubscriptionId NullableString `json:"subscription_id,omitempty"`
 	SubscriptionIds []string `json:"subscription_ids"`
 	SuccessUrl NullableString `json:"success_url"`
+	SuccessfulAttemptId NullableString `json:"successful_attempt_id,omitempty"`
 	// The integer amount representing the tax amount for the line items.
 	TaxAmountAtom int32 `json:"tax_amount_atom"`
 	TrialEnd NullableTime `json:"trial_end"`
@@ -66,6 +66,7 @@ type CheckoutSessionExternal struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	// The main URL for this checkout session.
 	Url string `json:"url"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CheckoutSessionExternal CheckoutSessionExternal
@@ -801,6 +802,48 @@ func (o *CheckoutSessionExternal) SetSuccessUrl(v string) {
 	o.SuccessUrl.Set(&v)
 }
 
+// GetSuccessfulAttemptId returns the SuccessfulAttemptId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CheckoutSessionExternal) GetSuccessfulAttemptId() string {
+	if o == nil || IsNil(o.SuccessfulAttemptId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.SuccessfulAttemptId.Get()
+}
+
+// GetSuccessfulAttemptIdOk returns a tuple with the SuccessfulAttemptId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CheckoutSessionExternal) GetSuccessfulAttemptIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.SuccessfulAttemptId.Get(), o.SuccessfulAttemptId.IsSet()
+}
+
+// HasSuccessfulAttemptId returns a boolean if a field has been set.
+func (o *CheckoutSessionExternal) HasSuccessfulAttemptId() bool {
+	if o != nil && o.SuccessfulAttemptId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetSuccessfulAttemptId gets a reference to the given NullableString and assigns it to the SuccessfulAttemptId field.
+func (o *CheckoutSessionExternal) SetSuccessfulAttemptId(v string) {
+	o.SuccessfulAttemptId.Set(&v)
+}
+// SetSuccessfulAttemptIdNil sets the value for SuccessfulAttemptId to be an explicit nil
+func (o *CheckoutSessionExternal) SetSuccessfulAttemptIdNil() {
+	o.SuccessfulAttemptId.Set(nil)
+}
+
+// UnsetSuccessfulAttemptId ensures that no value is present for SuccessfulAttemptId, not even an explicit nil
+func (o *CheckoutSessionExternal) UnsetSuccessfulAttemptId() {
+	o.SuccessfulAttemptId.Unset()
+}
+
 // GetTaxAmountAtom returns the TaxAmountAtom field value
 func (o *CheckoutSessionExternal) GetTaxAmountAtom() int32 {
 	if o == nil {
@@ -1001,12 +1044,20 @@ func (o CheckoutSessionExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["subscription_ids"] = o.SubscriptionIds
 	}
 	toSerialize["success_url"] = o.SuccessUrl.Get()
+	if o.SuccessfulAttemptId.IsSet() {
+		toSerialize["successful_attempt_id"] = o.SuccessfulAttemptId.Get()
+	}
 	toSerialize["tax_amount_atom"] = o.TaxAmountAtom
 	toSerialize["trial_end"] = o.TrialEnd.Get()
 	toSerialize["trial_from_price"] = o.TrialFromPrice.Get()
 	toSerialize["trial_period_days"] = o.TrialPeriodDays.Get()
 	toSerialize["updated_at"] = o.UpdatedAt
 	toSerialize["url"] = o.Url
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1056,15 +1107,50 @@ func (o *CheckoutSessionExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varCheckoutSessionExternal := _CheckoutSessionExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCheckoutSessionExternal)
+	err = json.Unmarshal(data, &varCheckoutSessionExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CheckoutSessionExternal(varCheckoutSessionExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "account_name")
+		delete(additionalProperties, "amount_subtotal_atom")
+		delete(additionalProperties, "amount_total_atom")
+		delete(additionalProperties, "client_reference_id")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_email")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "language")
+		delete(additionalProperties, "line_items")
+		delete(additionalProperties, "mode")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "return_url")
+		delete(additionalProperties, "secure_token")
+		delete(additionalProperties, "setup_intent")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "subscription_id")
+		delete(additionalProperties, "subscription_ids")
+		delete(additionalProperties, "success_url")
+		delete(additionalProperties, "successful_attempt_id")
+		delete(additionalProperties, "tax_amount_atom")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_from_price")
+		delete(additionalProperties, "trial_period_days")
+		delete(additionalProperties, "updated_at")
+		delete(additionalProperties, "url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

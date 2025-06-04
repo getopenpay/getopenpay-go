@@ -22,7 +22,10 @@ type PromoRestrictions struct {
 	FirstTimeTransaction NullableBool `json:"first_time_transaction,omitempty"`
 	MinimumAmountAtom NullableInt32 `json:"minimum_amount_atom,omitempty"`
 	MinimumAmountCurrency NullableCurrencyEnum `json:"minimum_amount_currency,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _PromoRestrictions PromoRestrictions
 
 // NewPromoRestrictions instantiates a new PromoRestrictions object
 // This constructor will assign default values to properties that have it defined,
@@ -186,7 +189,35 @@ func (o PromoRestrictions) ToMap() (map[string]interface{}, error) {
 	if o.MinimumAmountCurrency.IsSet() {
 		toSerialize["minimum_amount_currency"] = o.MinimumAmountCurrency.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *PromoRestrictions) UnmarshalJSON(data []byte) (err error) {
+	varPromoRestrictions := _PromoRestrictions{}
+
+	err = json.Unmarshal(data, &varPromoRestrictions)
+
+	if err != nil {
+		return err
+	}
+
+	*o = PromoRestrictions(varPromoRestrictions)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "first_time_transaction")
+		delete(additionalProperties, "minimum_amount_atom")
+		delete(additionalProperties, "minimum_amount_currency")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullablePromoRestrictions struct {

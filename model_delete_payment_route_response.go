@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DeletePaymentRouteResponse struct {
 	Message *string `json:"message,omitempty"`
 	// Unique identifier of the payment route.
 	PaymentRouteId string `json:"payment_route_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DeletePaymentRouteResponse DeletePaymentRouteResponse
@@ -121,6 +121,11 @@ func (o DeletePaymentRouteResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["message"] = o.Message
 	}
 	toSerialize["payment_route_id"] = o.PaymentRouteId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -148,15 +153,21 @@ func (o *DeletePaymentRouteResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varDeletePaymentRouteResponse := _DeletePaymentRouteResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDeletePaymentRouteResponse)
+	err = json.Unmarshal(data, &varDeletePaymentRouteResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DeletePaymentRouteResponse(varDeletePaymentRouteResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "payment_route_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

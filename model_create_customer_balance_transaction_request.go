@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CreateCustomerBalanceTransactionRequest struct {
 	AmountAtom int32 `json:"amount_atom"`
 	Currency *CurrencyEnum `json:"currency,omitempty"`
 	Description NullableString `json:"description,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCustomerBalanceTransactionRequest CreateCustomerBalanceTransactionRequest
@@ -162,6 +162,11 @@ func (o CreateCustomerBalanceTransactionRequest) ToMap() (map[string]interface{}
 	if o.Description.IsSet() {
 		toSerialize["description"] = o.Description.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -189,15 +194,22 @@ func (o *CreateCustomerBalanceTransactionRequest) UnmarshalJSON(data []byte) (er
 
 	varCreateCustomerBalanceTransactionRequest := _CreateCustomerBalanceTransactionRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCustomerBalanceTransactionRequest)
+	err = json.Unmarshal(data, &varCreateCustomerBalanceTransactionRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCustomerBalanceTransactionRequest(varCreateCustomerBalanceTransactionRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "description")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -36,7 +36,10 @@ type CustomerQueryParams struct {
 	// Key name based on which data is sorted.
 	SortKey *string `json:"sort_key,omitempty"`
 	UpdatedAt NullableDateTimeFilter `json:"updated_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CustomerQueryParams CustomerQueryParams
 
 // NewCustomerQueryParams instantiates a new CustomerQueryParams object
 // This constructor will assign default values to properties that have it defined,
@@ -516,7 +519,43 @@ func (o CustomerQueryParams) ToMap() (map[string]interface{}, error) {
 	if o.UpdatedAt.IsSet() {
 		toSerialize["updated_at"] = o.UpdatedAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CustomerQueryParams) UnmarshalJSON(data []byte) (err error) {
+	varCustomerQueryParams := _CustomerQueryParams{}
+
+	err = json.Unmarshal(data, &varCustomerQueryParams)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CustomerQueryParams(varCustomerQueryParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "emails")
+		delete(additionalProperties, "expand")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "search")
+		delete(additionalProperties, "sort_descending")
+		delete(additionalProperties, "sort_key")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCustomerQueryParams struct {

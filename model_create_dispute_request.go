@@ -24,7 +24,10 @@ type CreateDisputeRequest struct {
 	Reason NullableString `json:"reason,omitempty"`
 	TheirDisputeId NullableString `json:"their_dispute_id,omitempty"`
 	TheirPaymentIntentId NullableString `json:"their_payment_intent_id,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CreateDisputeRequest CreateDisputeRequest
 
 // NewCreateDisputeRequest instantiates a new CreateDisputeRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -269,7 +272,37 @@ func (o CreateDisputeRequest) ToMap() (map[string]interface{}, error) {
 	if o.TheirPaymentIntentId.IsSet() {
 		toSerialize["their_payment_intent_id"] = o.TheirPaymentIntentId.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CreateDisputeRequest) UnmarshalJSON(data []byte) (err error) {
+	varCreateDisputeRequest := _CreateDisputeRequest{}
+
+	err = json.Unmarshal(data, &varCreateDisputeRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreateDisputeRequest(varCreateDisputeRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "meta")
+		delete(additionalProperties, "payment_intent_id")
+		delete(additionalProperties, "reason")
+		delete(additionalProperties, "their_dispute_id")
+		delete(additionalProperties, "their_payment_intent_id")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCreateDisputeRequest struct {

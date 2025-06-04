@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CreateBillingMeterEventAdjustmentRequest struct {
 	EventName string `json:"event_name"`
 	// Specifies whether to cancel a single event.
 	Type *BillingMeterAdjustmentType `json:"type,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateBillingMeterEventAdjustmentRequest CreateBillingMeterEventAdjustmentRequest
@@ -145,6 +145,11 @@ func (o CreateBillingMeterEventAdjustmentRequest) ToMap() (map[string]interface{
 	if !IsNil(o.Type) {
 		toSerialize["type"] = o.Type
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *CreateBillingMeterEventAdjustmentRequest) UnmarshalJSON(data []byte) (e
 
 	varCreateBillingMeterEventAdjustmentRequest := _CreateBillingMeterEventAdjustmentRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateBillingMeterEventAdjustmentRequest)
+	err = json.Unmarshal(data, &varCreateBillingMeterEventAdjustmentRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateBillingMeterEventAdjustmentRequest(varCreateBillingMeterEventAdjustmentRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "cancel_identifier")
+		delete(additionalProperties, "event_name")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

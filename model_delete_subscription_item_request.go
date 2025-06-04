@@ -23,7 +23,10 @@ type DeleteSubscriptionItemRequest struct {
 	DropAtEnd *bool `json:"drop_at_end,omitempty"`
 	// Determines how to handle prorations while deleting item.In case of subscription is in trialing state, invoice items if any will be for amount_atom 0.
 	ProrationBehavior *ProrationEnum `json:"proration_behavior,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _DeleteSubscriptionItemRequest DeleteSubscriptionItemRequest
 
 // NewDeleteSubscriptionItemRequest instantiates a new DeleteSubscriptionItemRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -126,7 +129,34 @@ func (o DeleteSubscriptionItemRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.ProrationBehavior) {
 		toSerialize["proration_behavior"] = o.ProrationBehavior
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *DeleteSubscriptionItemRequest) UnmarshalJSON(data []byte) (err error) {
+	varDeleteSubscriptionItemRequest := _DeleteSubscriptionItemRequest{}
+
+	err = json.Unmarshal(data, &varDeleteSubscriptionItemRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = DeleteSubscriptionItemRequest(varDeleteSubscriptionItemRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "drop_at_end")
+		delete(additionalProperties, "proration_behavior")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableDeleteSubscriptionItemRequest struct {

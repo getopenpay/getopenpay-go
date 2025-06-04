@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -67,6 +66,7 @@ type CustomerExternal struct {
 	TotalSpent []CustomerTotalAmount `json:"total_spent,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CustomerExternal CustomerExternal
@@ -1135,6 +1135,11 @@ func (o CustomerExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["total_spent"] = o.TotalSpent
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1172,15 +1177,49 @@ func (o *CustomerExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varCustomerExternal := _CustomerExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCustomerExternal)
+	err = json.Unmarshal(data, &varCustomerExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CustomerExternal(varCustomerExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "address")
+		delete(additionalProperties, "balance_atoms")
+		delete(additionalProperties, "billing_email")
+		delete(additionalProperties, "business_name")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_billing_address")
+		delete(additionalProperties, "discount")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "first_name")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_settings")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "language")
+		delete(additionalProperties, "last_name")
+		delete(additionalProperties, "last_successful_payment_intent")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "mrr")
+		delete(additionalProperties, "notes")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "phone_number")
+		delete(additionalProperties, "shipping_addresses")
+		delete(additionalProperties, "should_send_payment_receipt")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "subscribed_to_products")
+		delete(additionalProperties, "subscriptions")
+		delete(additionalProperties, "total_refunds")
+		delete(additionalProperties, "total_spent")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

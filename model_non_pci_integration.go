@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type NonPciIntegration struct {
 	IntegrationId string `json:"integration_id"`
 	// The integration type
 	IntegrationType NonPciIntegrationEnum `json:"integration_type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NonPciIntegration NonPciIntegration
@@ -173,6 +173,11 @@ func (o NonPciIntegration) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["integration_id"] = o.IntegrationId
 	toSerialize["integration_type"] = o.IntegrationType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -202,15 +207,23 @@ func (o *NonPciIntegration) UnmarshalJSON(data []byte) (err error) {
 
 	varNonPciIntegration := _NonPciIntegration{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNonPciIntegration)
+	err = json.Unmarshal(data, &varNonPciIntegration)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NonPciIntegration(varNonPciIntegration)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "configuration")
+		delete(additionalProperties, "integration_id")
+		delete(additionalProperties, "integration_type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -7,6 +7,7 @@ Name | Type | Description | Notes
 **AccountId** | **string** | Unique Identifier of the account. | 
 **AccountName** | **string** | Name of the account. | 
 **Active** | **bool** | Whether a payment link is active or not. | 
+**AlwaysCreateNewCustomer** | Pointer to **bool** | If this flag is set to True and there is no customer attached to the payment link, the payment link will always create a new customer, rather than the default behavior of de-duping by email. | [optional] [default to false]
 **CheckoutPreferences** | [**NullableCheckoutPreferencesOutput**](CheckoutPreferencesOutput.md) |  | 
 **CouponId** | Pointer to **NullableString** |  | [optional] 
 **CreatedAt** | **time.Time** | DateTime at which the object was created, in &#39;ISO 8601&#39; format. | 
@@ -105,6 +106,31 @@ and a boolean to check if the value has been set.
 
 SetActive sets Active field to given value.
 
+
+### GetAlwaysCreateNewCustomer
+
+`func (o *PaymentLinkExternal) GetAlwaysCreateNewCustomer() bool`
+
+GetAlwaysCreateNewCustomer returns the AlwaysCreateNewCustomer field if non-nil, zero value otherwise.
+
+### GetAlwaysCreateNewCustomerOk
+
+`func (o *PaymentLinkExternal) GetAlwaysCreateNewCustomerOk() (*bool, bool)`
+
+GetAlwaysCreateNewCustomerOk returns a tuple with the AlwaysCreateNewCustomer field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAlwaysCreateNewCustomer
+
+`func (o *PaymentLinkExternal) SetAlwaysCreateNewCustomer(v bool)`
+
+SetAlwaysCreateNewCustomer sets AlwaysCreateNewCustomer field to given value.
+
+### HasAlwaysCreateNewCustomer
+
+`func (o *PaymentLinkExternal) HasAlwaysCreateNewCustomer() bool`
+
+HasAlwaysCreateNewCustomer returns a boolean if a field has been set.
 
 ### GetCheckoutPreferences
 

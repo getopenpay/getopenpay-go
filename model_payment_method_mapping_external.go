@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type PaymentMethodMappingExternal struct {
 	TheirPaymentMethodId string `json:"their_payment_method_id"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaymentMethodMappingExternal PaymentMethodMappingExternal
@@ -326,6 +326,11 @@ func (o PaymentMethodMappingExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["processor_name"] = o.ProcessorName
 	toSerialize["their_payment_method_id"] = o.TheirPaymentMethodId
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -359,15 +364,28 @@ func (o *PaymentMethodMappingExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPaymentMethodMappingExternal := _PaymentMethodMappingExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaymentMethodMappingExternal)
+	err = json.Unmarshal(data, &varPaymentMethodMappingExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaymentMethodMappingExternal(varPaymentMethodMappingExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "processor_id")
+		delete(additionalProperties, "processor_name")
+		delete(additionalProperties, "their_payment_method_id")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

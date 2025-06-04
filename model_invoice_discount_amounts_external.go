@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type InvoiceDiscountAmountsExternal struct {
 	// Id of the discount that was applied to get this discount amount.
 	DiscountId string `json:"discount_id"`
 	Object *ObjectName `json:"object,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoiceDiscountAmountsExternal InvoiceDiscountAmountsExternal
@@ -144,6 +144,11 @@ func (o InvoiceDiscountAmountsExternal) ToMap() (map[string]interface{}, error) 
 	if !IsNil(o.Object) {
 		toSerialize["object"] = o.Object
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -172,15 +177,22 @@ func (o *InvoiceDiscountAmountsExternal) UnmarshalJSON(data []byte) (err error) 
 
 	varInvoiceDiscountAmountsExternal := _InvoiceDiscountAmountsExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoiceDiscountAmountsExternal)
+	err = json.Unmarshal(data, &varInvoiceDiscountAmountsExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoiceDiscountAmountsExternal(varInvoiceDiscountAmountsExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "discount_id")
+		delete(additionalProperties, "object")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

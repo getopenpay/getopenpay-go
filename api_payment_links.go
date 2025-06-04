@@ -375,11 +375,18 @@ type ApiOpenPaymentLinkPagePublicRequest struct {
 	ApiService *PaymentLinksAPIService
 	secureToken string
 	refId *string
+	customerId *string
 }
 
 // Optional reference ID for the payment link
 func (r ApiOpenPaymentLinkPagePublicRequest) RefId(refId string) ApiOpenPaymentLinkPagePublicRequest {
 	r.refId = &refId
+	return r
+}
+
+// Optional ID for the customer using the payment link
+func (r ApiOpenPaymentLinkPagePublicRequest) CustomerId(customerId string) ApiOpenPaymentLinkPagePublicRequest {
+	r.customerId = &customerId
 	return r
 }
 
@@ -426,6 +433,9 @@ func (a *PaymentLinksAPIService) OpenPaymentLinkPagePublicExecute(r ApiOpenPayme
 
 	if r.refId != nil {
 		parameterAddToHeaderOrQuery(localVarQueryParams, "ref_id", r.refId, "form", "")
+	}
+	if r.customerId != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "customer_id", r.customerId, "form", "")
 	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{}

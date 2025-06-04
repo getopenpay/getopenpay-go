@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type CreateCheckoutSessionRequest struct {
 	TrialEnd NullableTime `json:"trial_end,omitempty"`
 	TrialFromPrice NullableBool `json:"trial_from_price,omitempty"`
 	TrialPeriodDays NullableInt32 `json:"trial_period_days,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCheckoutSessionRequest CreateCheckoutSessionRequest
@@ -707,6 +707,11 @@ func (o CreateCheckoutSessionRequest) ToMap() (map[string]interface{}, error) {
 	if o.TrialPeriodDays.IsSet() {
 		toSerialize["trial_period_days"] = o.TrialPeriodDays.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -734,15 +739,34 @@ func (o *CreateCheckoutSessionRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCheckoutSessionRequest := _CreateCheckoutSessionRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCheckoutSessionRequest)
+	err = json.Unmarshal(data, &varCreateCheckoutSessionRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCheckoutSessionRequest(varCreateCheckoutSessionRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "checkout_preferences")
+		delete(additionalProperties, "client_reference_id")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_email")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "language")
+		delete(additionalProperties, "line_items")
+		delete(additionalProperties, "mode")
+		delete(additionalProperties, "return_url")
+		delete(additionalProperties, "success_url")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_from_price")
+		delete(additionalProperties, "trial_period_days")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type DeleteSubscriptionItemResponse struct {
 	Message *string `json:"message,omitempty"`
 	// Unique identifier of the subscription_item.
 	SubscriptionItemId string `json:"subscription_item_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DeleteSubscriptionItemResponse DeleteSubscriptionItemResponse
@@ -192,6 +192,11 @@ func (o DeleteSubscriptionItemResponse) ToMap() (map[string]interface{}, error) 
 		toSerialize["message"] = o.Message
 	}
 	toSerialize["subscription_item_id"] = o.SubscriptionItemId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -220,15 +225,23 @@ func (o *DeleteSubscriptionItemResponse) UnmarshalJSON(data []byte) (err error) 
 
 	varDeleteSubscriptionItemResponse := _DeleteSubscriptionItemResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDeleteSubscriptionItemResponse)
+	err = json.Unmarshal(data, &varDeleteSubscriptionItemResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DeleteSubscriptionItemResponse(varDeleteSubscriptionItemResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "deleted_at")
+		delete(additionalProperties, "drop_at_end")
+		delete(additionalProperties, "message")
+		delete(additionalProperties, "subscription_item_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

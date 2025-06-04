@@ -21,7 +21,10 @@ var _ MappedNullable = &SearchFilter{}
 type SearchFilter struct {
 	Eq NullableString `json:"eq,omitempty"`
 	Ilike NullableString `json:"ilike,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SearchFilter SearchFilter
 
 // NewSearchFilter instantiates a new SearchFilter object
 // This constructor will assign default values to properties that have it defined,
@@ -140,7 +143,34 @@ func (o SearchFilter) ToMap() (map[string]interface{}, error) {
 	if o.Ilike.IsSet() {
 		toSerialize["ilike"] = o.Ilike.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SearchFilter) UnmarshalJSON(data []byte) (err error) {
+	varSearchFilter := _SearchFilter{}
+
+	err = json.Unmarshal(data, &varSearchFilter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SearchFilter(varSearchFilter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eq")
+		delete(additionalProperties, "ilike")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSearchFilter struct {

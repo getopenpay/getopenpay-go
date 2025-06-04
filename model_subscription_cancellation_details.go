@@ -22,7 +22,10 @@ type SubscriptionCancellationDetails struct {
 	Comment NullableString `json:"comment,omitempty"`
 	Feedback NullableSubscriptionCancelFeedbackEnum `json:"feedback,omitempty"`
 	Reason NullableString `json:"reason,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _SubscriptionCancellationDetails SubscriptionCancellationDetails
 
 // NewSubscriptionCancellationDetails instantiates a new SubscriptionCancellationDetails object
 // This constructor will assign default values to properties that have it defined,
@@ -186,7 +189,35 @@ func (o SubscriptionCancellationDetails) ToMap() (map[string]interface{}, error)
 	if o.Reason.IsSet() {
 		toSerialize["reason"] = o.Reason.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *SubscriptionCancellationDetails) UnmarshalJSON(data []byte) (err error) {
+	varSubscriptionCancellationDetails := _SubscriptionCancellationDetails{}
+
+	err = json.Unmarshal(data, &varSubscriptionCancellationDetails)
+
+	if err != nil {
+		return err
+	}
+
+	*o = SubscriptionCancellationDetails(varSubscriptionCancellationDetails)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "comment")
+		delete(additionalProperties, "feedback")
+		delete(additionalProperties, "reason")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableSubscriptionCancellationDetails struct {

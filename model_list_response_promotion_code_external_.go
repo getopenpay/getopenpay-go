@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type ListResponsePromotionCodeExternal struct {
 	PageNumber int32 `json:"page_number"`
 	PageSize int32 `json:"page_size"`
 	TotalObjects int32 `json:"total_objects"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ListResponsePromotionCodeExternal ListResponsePromotionCodeExternal
@@ -160,6 +160,11 @@ func (o ListResponsePromotionCodeExternal) ToMap() (map[string]interface{}, erro
 	toSerialize["page_number"] = o.PageNumber
 	toSerialize["page_size"] = o.PageSize
 	toSerialize["total_objects"] = o.TotalObjects
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -190,15 +195,23 @@ func (o *ListResponsePromotionCodeExternal) UnmarshalJSON(data []byte) (err erro
 
 	varListResponsePromotionCodeExternal := _ListResponsePromotionCodeExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varListResponsePromotionCodeExternal)
+	err = json.Unmarshal(data, &varListResponsePromotionCodeExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ListResponsePromotionCodeExternal(varListResponsePromotionCodeExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "data")
+		delete(additionalProperties, "page_number")
+		delete(additionalProperties, "page_size")
+		delete(additionalProperties, "total_objects")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

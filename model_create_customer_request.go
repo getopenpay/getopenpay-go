@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -44,6 +43,7 @@ type CreateCustomerRequest struct {
 	ShippingAddresses []CompleteAddress `json:"shipping_addresses,omitempty"`
 	State NullableString `json:"state,omitempty"`
 	ZipCode NullableString `json:"zip_code,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCustomerRequest CreateCustomerRequest
@@ -982,6 +982,11 @@ func (o CreateCustomerRequest) ToMap() (map[string]interface{}, error) {
 	if o.ZipCode.IsSet() {
 		toSerialize["zip_code"] = o.ZipCode.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1009,15 +1014,40 @@ func (o *CreateCustomerRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCustomerRequest := _CreateCustomerRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCustomerRequest)
+	err = json.Unmarshal(data, &varCreateCustomerRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCustomerRequest(varCreateCustomerRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "billing_email")
+		delete(additionalProperties, "business_name")
+		delete(additionalProperties, "city")
+		delete(additionalProperties, "country")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_billing_address")
+		delete(additionalProperties, "email")
+		delete(additionalProperties, "first_name")
+		delete(additionalProperties, "invoice_settings")
+		delete(additionalProperties, "language")
+		delete(additionalProperties, "last_name")
+		delete(additionalProperties, "line1")
+		delete(additionalProperties, "line2")
+		delete(additionalProperties, "line3")
+		delete(additionalProperties, "notes")
+		delete(additionalProperties, "phone_number")
+		delete(additionalProperties, "promotion_code_id")
+		delete(additionalProperties, "shipping_addresses")
+		delete(additionalProperties, "state")
+		delete(additionalProperties, "zip_code")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

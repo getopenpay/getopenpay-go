@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -44,6 +43,7 @@ type CreditNoteExternal struct {
 	TotalAmountAtom int32 `json:"total_amount_atom"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreditNoteExternal CreditNoteExternal
@@ -411,6 +411,11 @@ func (o CreditNoteExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["refund_amount_atom"] = o.RefundAmountAtom
 	toSerialize["total_amount_atom"] = o.TotalAmountAtom
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -447,15 +452,31 @@ func (o *CreditNoteExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varCreditNoteExternal := _CreditNoteExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreditNoteExternal)
+	err = json.Unmarshal(data, &varCreditNoteExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreditNoteExternal(varCreditNoteExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "credit_amount_atom")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "items")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "reason")
+		delete(additionalProperties, "refund_amount_atom")
+		delete(additionalProperties, "total_amount_atom")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

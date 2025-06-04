@@ -14,9 +14,11 @@ Name | Type | Description | Notes
 **NetD** | Pointer to **NullableInt32** |  | [optional] 
 **NewPeriodEnd** | Pointer to **NullableTime** |  | [optional] 
 **PaymentMethodId** | Pointer to **NullableString** |  | [optional] 
+**PaymentRouteId** | Pointer to **NullableString** |  | [optional] 
 **PreviewRenewalInvoices** | Pointer to **bool** | Whether to include the preview of the renewal invoices for the subscriptions in the response. | [optional] [default to false]
 **PromotionCode** | Pointer to **NullableString** |  | [optional] 
 **ProrationBehavior** | Pointer to [**ProrationEnum**](ProrationEnum.md) | Determines how to handle prorations when the billable items changes | [optional] 
+**RemovePaymentRouteId** | Pointer to **NullableBool** |  | [optional] 
 **TrialEnd** | Pointer to **NullableTime** |  | [optional] 
 **TrialPeriodDays** | Pointer to **NullableInt32** |  | [optional] 
 
@@ -369,6 +371,41 @@ HasPaymentMethodId returns a boolean if a field has been set.
 `func (o *UpdateSubscriptionRequest) UnsetPaymentMethodId()`
 
 UnsetPaymentMethodId ensures that no value is present for PaymentMethodId, not even an explicit nil
+### GetPaymentRouteId
+
+`func (o *UpdateSubscriptionRequest) GetPaymentRouteId() string`
+
+GetPaymentRouteId returns the PaymentRouteId field if non-nil, zero value otherwise.
+
+### GetPaymentRouteIdOk
+
+`func (o *UpdateSubscriptionRequest) GetPaymentRouteIdOk() (*string, bool)`
+
+GetPaymentRouteIdOk returns a tuple with the PaymentRouteId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetPaymentRouteId
+
+`func (o *UpdateSubscriptionRequest) SetPaymentRouteId(v string)`
+
+SetPaymentRouteId sets PaymentRouteId field to given value.
+
+### HasPaymentRouteId
+
+`func (o *UpdateSubscriptionRequest) HasPaymentRouteId() bool`
+
+HasPaymentRouteId returns a boolean if a field has been set.
+
+### SetPaymentRouteIdNil
+
+`func (o *UpdateSubscriptionRequest) SetPaymentRouteIdNil(b bool)`
+
+ SetPaymentRouteIdNil sets the value for PaymentRouteId to be an explicit nil
+
+### UnsetPaymentRouteId
+`func (o *UpdateSubscriptionRequest) UnsetPaymentRouteId()`
+
+UnsetPaymentRouteId ensures that no value is present for PaymentRouteId, not even an explicit nil
 ### GetPreviewRenewalInvoices
 
 `func (o *UpdateSubscriptionRequest) GetPreviewRenewalInvoices() bool`
@@ -454,6 +491,41 @@ SetProrationBehavior sets ProrationBehavior field to given value.
 
 HasProrationBehavior returns a boolean if a field has been set.
 
+### GetRemovePaymentRouteId
+
+`func (o *UpdateSubscriptionRequest) GetRemovePaymentRouteId() bool`
+
+GetRemovePaymentRouteId returns the RemovePaymentRouteId field if non-nil, zero value otherwise.
+
+### GetRemovePaymentRouteIdOk
+
+`func (o *UpdateSubscriptionRequest) GetRemovePaymentRouteIdOk() (*bool, bool)`
+
+GetRemovePaymentRouteIdOk returns a tuple with the RemovePaymentRouteId field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRemovePaymentRouteId
+
+`func (o *UpdateSubscriptionRequest) SetRemovePaymentRouteId(v bool)`
+
+SetRemovePaymentRouteId sets RemovePaymentRouteId field to given value.
+
+### HasRemovePaymentRouteId
+
+`func (o *UpdateSubscriptionRequest) HasRemovePaymentRouteId() bool`
+
+HasRemovePaymentRouteId returns a boolean if a field has been set.
+
+### SetRemovePaymentRouteIdNil
+
+`func (o *UpdateSubscriptionRequest) SetRemovePaymentRouteIdNil(b bool)`
+
+ SetRemovePaymentRouteIdNil sets the value for RemovePaymentRouteId to be an explicit nil
+
+### UnsetRemovePaymentRouteId
+`func (o *UpdateSubscriptionRequest) UnsetRemovePaymentRouteId()`
+
+UnsetRemovePaymentRouteId ensures that no value is present for RemovePaymentRouteId, not even an explicit nil
 ### GetTrialEnd
 
 `func (o *UpdateSubscriptionRequest) GetTrialEnd() time.Time`

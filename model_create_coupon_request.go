@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -39,6 +38,7 @@ type CreateCouponRequest struct {
 	ProductIds []string `json:"product_ids,omitempty"`
 	RedeemBy NullableTime `json:"redeem_by,omitempty"`
 	TrialDaysOff NullableInt32 `json:"trial_days_off,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCouponRequest CreateCouponRequest
@@ -555,6 +555,11 @@ func (o CreateCouponRequest) ToMap() (map[string]interface{}, error) {
 	if o.TrialDaysOff.IsSet() {
 		toSerialize["trial_days_off"] = o.TrialDaysOff.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -582,15 +587,31 @@ func (o *CreateCouponRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCouponRequest := _CreateCouponRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCouponRequest)
+	err = json.Unmarshal(data, &varCreateCouponRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCouponRequest(varCreateCouponRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom_off")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "duration_in_months")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "max_redemptions")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "percent_off")
+		delete(additionalProperties, "product_family_ids")
+		delete(additionalProperties, "product_ids")
+		delete(additionalProperties, "redeem_by")
+		delete(additionalProperties, "trial_days_off")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

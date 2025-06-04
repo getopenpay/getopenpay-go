@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -24,6 +23,7 @@ type ValidationError struct {
 	Loc []ValidationErrorLocInner `json:"loc"`
 	Msg string `json:"msg"`
 	Type string `json:"type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ValidationError ValidationError
@@ -133,6 +133,11 @@ func (o ValidationError) ToMap() (map[string]interface{}, error) {
 	toSerialize["loc"] = o.Loc
 	toSerialize["msg"] = o.Msg
 	toSerialize["type"] = o.Type
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -162,15 +167,22 @@ func (o *ValidationError) UnmarshalJSON(data []byte) (err error) {
 
 	varValidationError := _ValidationError{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varValidationError)
+	err = json.Unmarshal(data, &varValidationError)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ValidationError(varValidationError)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "loc")
+		delete(additionalProperties, "msg")
+		delete(additionalProperties, "type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

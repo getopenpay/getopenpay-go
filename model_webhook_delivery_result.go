@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type WebhookDeliveryResult struct {
 	ResponseText NullableString `json:"response_text,omitempty"`
 	// Unique id for the webhook url to which the event was sent.
 	WebhookId string `json:"webhook_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _WebhookDeliveryResult WebhookDeliveryResult
@@ -211,6 +211,11 @@ func (o WebhookDeliveryResult) ToMap() (map[string]interface{}, error) {
 		toSerialize["response_text"] = o.ResponseText.Get()
 	}
 	toSerialize["webhook_id"] = o.WebhookId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -241,15 +246,24 @@ func (o *WebhookDeliveryResult) UnmarshalJSON(data []byte) (err error) {
 
 	varWebhookDeliveryResult := _WebhookDeliveryResult{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varWebhookDeliveryResult)
+	err = json.Unmarshal(data, &varWebhookDeliveryResult)
 
 	if err != nil {
 		return err
 	}
 
 	*o = WebhookDeliveryResult(varWebhookDeliveryResult)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "attempt_time")
+		delete(additionalProperties, "event_id")
+		delete(additionalProperties, "response_code")
+		delete(additionalProperties, "response_text")
+		delete(additionalProperties, "webhook_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type CreateTaxIntegrationRequest struct {
 	ApiKeys map[string]string `json:"api_keys"`
 	// The name of the API used for the tax integration.
 	ApiName TaxIntegrationApiName `json:"api_name"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateTaxIntegrationRequest CreateTaxIntegrationRequest
@@ -136,6 +136,11 @@ func (o CreateTaxIntegrationRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize["accounting_tz"] = o.AccountingTz
 	toSerialize["api_keys"] = o.ApiKeys
 	toSerialize["api_name"] = o.ApiName
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *CreateTaxIntegrationRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateTaxIntegrationRequest := _CreateTaxIntegrationRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateTaxIntegrationRequest)
+	err = json.Unmarshal(data, &varCreateTaxIntegrationRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateTaxIntegrationRequest(varCreateTaxIntegrationRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "accounting_tz")
+		delete(additionalProperties, "api_keys")
+		delete(additionalProperties, "api_name")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

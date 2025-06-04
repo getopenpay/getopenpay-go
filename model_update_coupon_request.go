@@ -24,7 +24,10 @@ type UpdateCouponRequest struct {
 	MaxRedemptions NullableInt32 `json:"max_redemptions,omitempty"`
 	Name NullableString `json:"name,omitempty"`
 	RedeemBy NullableTime `json:"redeem_by,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _UpdateCouponRequest UpdateCouponRequest
 
 // NewUpdateCouponRequest instantiates a new UpdateCouponRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -233,7 +236,36 @@ func (o UpdateCouponRequest) ToMap() (map[string]interface{}, error) {
 	if o.RedeemBy.IsSet() {
 		toSerialize["redeem_by"] = o.RedeemBy.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *UpdateCouponRequest) UnmarshalJSON(data []byte) (err error) {
+	varUpdateCouponRequest := _UpdateCouponRequest{}
+
+	err = json.Unmarshal(data, &varUpdateCouponRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = UpdateCouponRequest(varUpdateCouponRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "max_redemptions")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "redeem_by")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableUpdateCouponRequest struct {

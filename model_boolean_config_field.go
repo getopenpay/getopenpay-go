@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -29,6 +28,7 @@ type BooleanConfigField struct {
 	Name string `json:"name"`
 	Type *string `json:"type,omitempty"`
 	Value NullableBool `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BooleanConfigField BooleanConfigField
@@ -269,6 +269,11 @@ func (o BooleanConfigField) ToMap() (map[string]interface{}, error) {
 		toSerialize["type"] = o.Type
 	}
 	toSerialize["value"] = o.Value.Get()
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -298,15 +303,25 @@ func (o *BooleanConfigField) UnmarshalJSON(data []byte) (err error) {
 
 	varBooleanConfigField := _BooleanConfigField{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBooleanConfigField)
+	err = json.Unmarshal(data, &varBooleanConfigField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BooleanConfigField(varBooleanConfigField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "default_value")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

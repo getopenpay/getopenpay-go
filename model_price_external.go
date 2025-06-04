@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -74,6 +73,7 @@ type PriceExternal struct {
 	UnitAmountAtom NullableInt32 `json:"unit_amount_atom"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PriceExternal PriceExternal
@@ -1121,6 +1121,11 @@ func (o PriceExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["transform_quantity_divide_by"] = o.TransformQuantityDivideBy
 	toSerialize["unit_amount_atom"] = o.UnitAmountAtom.Get()
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1173,15 +1178,53 @@ func (o *PriceExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPriceExternal := _PriceExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPriceExternal)
+	err = json.Unmarshal(data, &varPriceExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PriceExternal(varPriceExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "billing_interval")
+		delete(additionalProperties, "billing_interval_count")
+		delete(additionalProperties, "billing_scheme")
+		delete(additionalProperties, "can_only_be_purchased_with")
+		delete(additionalProperties, "contract_auto_renew")
+		delete(additionalProperties, "contract_term_multiple")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "eligible_for_updates")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "internal_description")
+		delete(additionalProperties, "invoice_settings")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_default")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "is_exclusive")
+		delete(additionalProperties, "is_licensed")
+		delete(additionalProperties, "listed_exclusively_for_customers")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "meter_id")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "optional_add_ons")
+		delete(additionalProperties, "price_tiers")
+		delete(additionalProperties, "price_type")
+		delete(additionalProperties, "product")
+		delete(additionalProperties, "product_id")
+		delete(additionalProperties, "product_name")
+		delete(additionalProperties, "recurring_details")
+		delete(additionalProperties, "tiers_mode")
+		delete(additionalProperties, "transform_quantity_divide_by")
+		delete(additionalProperties, "unit_amount_atom")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

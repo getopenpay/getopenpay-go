@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &ActiveSubResponse{}
 type ActiveSubResponse struct {
 	HasActiveSubscriptions bool `json:"has_active_subscriptions"`
 	Subscriptions []SubscriptionExternal `json:"subscriptions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ActiveSubResponse ActiveSubResponse
@@ -106,6 +106,11 @@ func (o ActiveSubResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["has_active_subscriptions"] = o.HasActiveSubscriptions
 	toSerialize["subscriptions"] = o.Subscriptions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *ActiveSubResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varActiveSubResponse := _ActiveSubResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varActiveSubResponse)
+	err = json.Unmarshal(data, &varActiveSubResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ActiveSubResponse(varActiveSubResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "has_active_subscriptions")
+		delete(additionalProperties, "subscriptions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

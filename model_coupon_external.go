@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -45,6 +44,7 @@ type CouponExternal struct {
 	TrialDaysOff NullableInt32 `json:"trial_days_off,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CouponExternal CouponExternal
@@ -705,6 +705,11 @@ func (o CouponExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["trial_days_off"] = o.TrialDaysOff.Get()
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -743,15 +748,39 @@ func (o *CouponExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varCouponExternal := _CouponExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCouponExternal)
+	err = json.Unmarshal(data, &varCouponExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CouponExternal(varCouponExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom_off")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "duration")
+		delete(additionalProperties, "duration_in_months")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "max_redemptions")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "percent_off")
+		delete(additionalProperties, "product_families")
+		delete(additionalProperties, "products")
+		delete(additionalProperties, "promotion_codes")
+		delete(additionalProperties, "redeem_by")
+		delete(additionalProperties, "times_redeemed")
+		delete(additionalProperties, "trial_days_off")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

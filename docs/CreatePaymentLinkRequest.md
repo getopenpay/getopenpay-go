@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**AlwaysCreateNewCustomer** | Pointer to **bool** | If this flag is set to True and there is no customer attached to the payment link, the payment link will always create a new customer, rather than the default behavior of de-duping by email. | [optional] [default to false]
 **CheckoutPreferences** | Pointer to [**NullableCheckoutPreferences**](CheckoutPreferences.md) |  | [optional] 
 **CouponId** | Pointer to **NullableString** |  | [optional] 
 **CustomFields** | Pointer to **map[string]interface{}** |  | [optional] 
@@ -33,6 +34,31 @@ will change when the set of required properties is changed
 NewCreatePaymentLinkRequestWithDefaults instantiates a new CreatePaymentLinkRequest object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetAlwaysCreateNewCustomer
+
+`func (o *CreatePaymentLinkRequest) GetAlwaysCreateNewCustomer() bool`
+
+GetAlwaysCreateNewCustomer returns the AlwaysCreateNewCustomer field if non-nil, zero value otherwise.
+
+### GetAlwaysCreateNewCustomerOk
+
+`func (o *CreatePaymentLinkRequest) GetAlwaysCreateNewCustomerOk() (*bool, bool)`
+
+GetAlwaysCreateNewCustomerOk returns a tuple with the AlwaysCreateNewCustomer field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAlwaysCreateNewCustomer
+
+`func (o *CreatePaymentLinkRequest) SetAlwaysCreateNewCustomer(v bool)`
+
+SetAlwaysCreateNewCustomer sets AlwaysCreateNewCustomer field to given value.
+
+### HasAlwaysCreateNewCustomer
+
+`func (o *CreatePaymentLinkRequest) HasAlwaysCreateNewCustomer() bool`
+
+HasAlwaysCreateNewCustomer returns a boolean if a field has been set.
 
 ### GetCheckoutPreferences
 

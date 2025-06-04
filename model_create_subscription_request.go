@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -50,6 +49,7 @@ type CreateSubscriptionRequest struct {
 	// Indicates if a price's trial_period_days should be applied to the subscription. Setting trial_end per subscription is preferred, and this defaults to false. Setting this flag to true together with trial_end is not allowed. In case of subscription containing multiple prices and the trial period of them are not same, minimum of trial days will be used.
 	TrialFromPrice *bool `json:"trial_from_price,omitempty"`
 	TrialPeriodDays NullableInt32 `json:"trial_period_days,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateSubscriptionRequest CreateSubscriptionRequest
@@ -936,6 +936,11 @@ func (o CreateSubscriptionRequest) ToMap() (map[string]interface{}, error) {
 	if o.TrialPeriodDays.IsSet() {
 		toSerialize["trial_period_days"] = o.TrialPeriodDays.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -964,15 +969,40 @@ func (o *CreateSubscriptionRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateSubscriptionRequest := _CreateSubscriptionRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateSubscriptionRequest)
+	err = json.Unmarshal(data, &varCreateSubscriptionRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateSubscriptionRequest(varCreateSubscriptionRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "attach_to_checkout_attempt_id")
+		delete(additionalProperties, "cancel_at_end")
+		delete(additionalProperties, "checkout_preferences")
+		delete(additionalProperties, "collection_method")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "is_preview")
+		delete(additionalProperties, "net_d")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "payment_route_id")
+		delete(additionalProperties, "promotion_code")
+		delete(additionalProperties, "selected_product_price_quantity")
+		delete(additionalProperties, "skip_invoice_payment")
+		delete(additionalProperties, "starts_at")
+		delete(additionalProperties, "subscription_item_details")
+		delete(additionalProperties, "total_amount_atom")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_from_price")
+		delete(additionalProperties, "trial_period_days")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

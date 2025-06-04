@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -44,6 +43,7 @@ type ProductExternal struct {
 	UnitLabel NullableString `json:"unit_label"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ProductExternal ProductExternal
@@ -515,6 +515,11 @@ func (o ProductExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["prices"] = o.Prices
 	toSerialize["unit_label"] = o.UnitLabel.Get()
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -552,15 +557,34 @@ func (o *ProductExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varProductExternal := _ProductExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varProductExternal)
+	err = json.Unmarshal(data, &varProductExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ProductExternal(varProductExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_sku")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "default_price")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "features")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_active")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "prices")
+		delete(additionalProperties, "unit_label")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

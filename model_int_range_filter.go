@@ -24,7 +24,10 @@ type IntRangeFilter struct {
 	Gte NullableInt32 `json:"gte,omitempty"`
 	Lt NullableInt32 `json:"lt,omitempty"`
 	Lte NullableInt32 `json:"lte,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _IntRangeFilter IntRangeFilter
 
 // NewIntRangeFilter instantiates a new IntRangeFilter object
 // This constructor will assign default values to properties that have it defined,
@@ -278,7 +281,37 @@ func (o IntRangeFilter) ToMap() (map[string]interface{}, error) {
 	if o.Lte.IsSet() {
 		toSerialize["lte"] = o.Lte.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *IntRangeFilter) UnmarshalJSON(data []byte) (err error) {
+	varIntRangeFilter := _IntRangeFilter{}
+
+	err = json.Unmarshal(data, &varIntRangeFilter)
+
+	if err != nil {
+		return err
+	}
+
+	*o = IntRangeFilter(varIntRangeFilter)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "eq")
+		delete(additionalProperties, "gt")
+		delete(additionalProperties, "gte")
+		delete(additionalProperties, "lt")
+		delete(additionalProperties, "lte")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableIntRangeFilter struct {

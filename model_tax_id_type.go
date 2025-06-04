@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type TaxIdType struct {
 	Example string `json:"example"`
 	// The type code for this tax ID
 	TaxIdType TaxIdTypeEnum `json:"tax_id_type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TaxIdType TaxIdType
@@ -136,6 +136,11 @@ func (o TaxIdType) ToMap() (map[string]interface{}, error) {
 	toSerialize["description"] = o.Description
 	toSerialize["example"] = o.Example
 	toSerialize["tax_id_type"] = o.TaxIdType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -165,15 +170,22 @@ func (o *TaxIdType) UnmarshalJSON(data []byte) (err error) {
 
 	varTaxIdType := _TaxIdType{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTaxIdType)
+	err = json.Unmarshal(data, &varTaxIdType)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TaxIdType(varTaxIdType)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "example")
+		delete(additionalProperties, "tax_id_type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

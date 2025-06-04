@@ -54,6 +54,7 @@ const (
 	OBJECTNAME_PORTAL_SESSION ObjectName = "portal_session"
 	OBJECTNAME_PRICE ObjectName = "price"
 	OBJECTNAME_PRICE_TIER ObjectName = "price_tier"
+	OBJECTNAME_PROCESSOR_CARD_CHECKOUT_STATE ObjectName = "processor_card_checkout_state"
 	OBJECTNAME_PRODUCT ObjectName = "product"
 	OBJECTNAME_PRODUCT_FAMILY ObjectName = "product_family"
 	OBJECTNAME_PROMOTION_CODE ObjectName = "promotion_code"
@@ -63,9 +64,11 @@ const (
 	OBJECTNAME_SIGNUP_QUESTIONS ObjectName = "signup_questions"
 	OBJECTNAME_SIGNUP_QUESTIONNAIRE_STATUS ObjectName = "signup_questionnaire_status"
 	OBJECTNAME_SINGLE_USE_TOKEN ObjectName = "single_use_token"
+	OBJECTNAME_STATE_TRANSITION_LOG ObjectName = "state_transition_log"
 	OBJECTNAME_SUBSCRIPTION ObjectName = "subscription"
 	OBJECTNAME_SUBSCRIPTION_ITEM ObjectName = "subscription_item"
 	OBJECTNAME_TAX_INTEGRATION ObjectName = "tax_integration"
+	OBJECTNAME_UNIFIED_CC_STATE ObjectName = "unified_cc_state"
 	OBJECTNAME_USER ObjectName = "user"
 	OBJECTNAME_USER_LOGIN ObjectName = "user_login"
 	OBJECTNAME_USER_RECORD ObjectName = "user_record"
@@ -112,6 +115,7 @@ var AllowedObjectNameEnumValues = []ObjectName{
 	"portal_session",
 	"price",
 	"price_tier",
+	"processor_card_checkout_state",
 	"product",
 	"product_family",
 	"promotion_code",
@@ -121,9 +125,11 @@ var AllowedObjectNameEnumValues = []ObjectName{
 	"signup_questions",
 	"signup_questionnaire_status",
 	"single_use_token",
+	"state_transition_log",
 	"subscription",
 	"subscription_item",
 	"tax_integration",
+	"unified_cc_state",
 	"user",
 	"user_login",
 	"user_record",

@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type CustomerTotalAmount struct {
 	AmountAtom *int32 `json:"amount_atom,omitempty"`
 	// The currency of the total amount.
 	Currency CurrencyEnum `json:"currency"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CustomerTotalAmount CustomerTotalAmount
@@ -121,6 +121,11 @@ func (o CustomerTotalAmount) ToMap() (map[string]interface{}, error) {
 		toSerialize["amount_atom"] = o.AmountAtom
 	}
 	toSerialize["currency"] = o.Currency
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -148,15 +153,21 @@ func (o *CustomerTotalAmount) UnmarshalJSON(data []byte) (err error) {
 
 	varCustomerTotalAmount := _CustomerTotalAmount{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCustomerTotalAmount)
+	err = json.Unmarshal(data, &varCustomerTotalAmount)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CustomerTotalAmount(varCustomerTotalAmount)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "currency")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

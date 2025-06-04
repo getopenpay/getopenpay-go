@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type DeleteInvoiceItemResponse struct {
 	InvoiceItemId string `json:"invoice_item_id"`
 	// Message describing result of API call.
 	Message *string `json:"message,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _DeleteInvoiceItemResponse DeleteInvoiceItemResponse
@@ -121,6 +121,11 @@ func (o DeleteInvoiceItemResponse) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Message) {
 		toSerialize["message"] = o.Message
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -148,15 +153,21 @@ func (o *DeleteInvoiceItemResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varDeleteInvoiceItemResponse := _DeleteInvoiceItemResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varDeleteInvoiceItemResponse)
+	err = json.Unmarshal(data, &varDeleteInvoiceItemResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = DeleteInvoiceItemResponse(varDeleteInvoiceItemResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "invoice_item_id")
+		delete(additionalProperties, "message")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

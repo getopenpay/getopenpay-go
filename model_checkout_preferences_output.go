@@ -23,9 +23,13 @@ type CheckoutPreferencesOutput struct {
 	FallbackCascadePreferences []FallbackConfigurationOutput `json:"fallback_cascade_preferences,omitempty"`
 	// This object contains a list of price groups that will be used to fall back to if the selected product price quantity fails to be created.
 	FallbackCascadeSelectedProductPriceQuantity [][]SelectedPriceQuantity `json:"fallback_cascade_selected_product_price_quantity,omitempty"`
+	OverrideFeatureRolloutSettings map[string]interface{} `json:"override_feature_rollout_settings,omitempty"`
 	ProcessorPreferences NullableCheckoutProcessorsPreferences `json:"processor_preferences,omitempty"`
 	Unused NullableString `json:"unused,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CheckoutPreferencesOutput CheckoutPreferencesOutput
 
 // NewCheckoutPreferencesOutput instantiates a new CheckoutPreferencesOutput object
 // This constructor will assign default values to properties that have it defined,
@@ -106,6 +110,39 @@ func (o *CheckoutPreferencesOutput) HasFallbackCascadeSelectedProductPriceQuanti
 // SetFallbackCascadeSelectedProductPriceQuantity gets a reference to the given [][]SelectedPriceQuantity and assigns it to the FallbackCascadeSelectedProductPriceQuantity field.
 func (o *CheckoutPreferencesOutput) SetFallbackCascadeSelectedProductPriceQuantity(v [][]SelectedPriceQuantity) {
 	o.FallbackCascadeSelectedProductPriceQuantity = v
+}
+
+// GetOverrideFeatureRolloutSettings returns the OverrideFeatureRolloutSettings field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *CheckoutPreferencesOutput) GetOverrideFeatureRolloutSettings() map[string]interface{} {
+	if o == nil {
+		var ret map[string]interface{}
+		return ret
+	}
+	return o.OverrideFeatureRolloutSettings
+}
+
+// GetOverrideFeatureRolloutSettingsOk returns a tuple with the OverrideFeatureRolloutSettings field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *CheckoutPreferencesOutput) GetOverrideFeatureRolloutSettingsOk() (map[string]interface{}, bool) {
+	if o == nil || IsNil(o.OverrideFeatureRolloutSettings) {
+		return map[string]interface{}{}, false
+	}
+	return o.OverrideFeatureRolloutSettings, true
+}
+
+// HasOverrideFeatureRolloutSettings returns a boolean if a field has been set.
+func (o *CheckoutPreferencesOutput) HasOverrideFeatureRolloutSettings() bool {
+	if o != nil && !IsNil(o.OverrideFeatureRolloutSettings) {
+		return true
+	}
+
+	return false
+}
+
+// SetOverrideFeatureRolloutSettings gets a reference to the given map[string]interface{} and assigns it to the OverrideFeatureRolloutSettings field.
+func (o *CheckoutPreferencesOutput) SetOverrideFeatureRolloutSettings(v map[string]interface{}) {
+	o.OverrideFeatureRolloutSettings = v
 }
 
 // GetProcessorPreferences returns the ProcessorPreferences field value if set, zero value otherwise (both if not set or set to explicit null).
@@ -208,13 +245,46 @@ func (o CheckoutPreferencesOutput) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.FallbackCascadeSelectedProductPriceQuantity) {
 		toSerialize["fallback_cascade_selected_product_price_quantity"] = o.FallbackCascadeSelectedProductPriceQuantity
 	}
+	if o.OverrideFeatureRolloutSettings != nil {
+		toSerialize["override_feature_rollout_settings"] = o.OverrideFeatureRolloutSettings
+	}
 	if o.ProcessorPreferences.IsSet() {
 		toSerialize["processor_preferences"] = o.ProcessorPreferences.Get()
 	}
 	if o.Unused.IsSet() {
 		toSerialize["unused"] = o.Unused.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CheckoutPreferencesOutput) UnmarshalJSON(data []byte) (err error) {
+	varCheckoutPreferencesOutput := _CheckoutPreferencesOutput{}
+
+	err = json.Unmarshal(data, &varCheckoutPreferencesOutput)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CheckoutPreferencesOutput(varCheckoutPreferencesOutput)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fallback_cascade_preferences")
+		delete(additionalProperties, "fallback_cascade_selected_product_price_quantity")
+		delete(additionalProperties, "override_feature_rollout_settings")
+		delete(additionalProperties, "processor_preferences")
+		delete(additionalProperties, "unused")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCheckoutPreferencesOutput struct {

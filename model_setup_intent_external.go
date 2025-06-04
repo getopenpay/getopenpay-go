@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -36,6 +35,7 @@ type SetupIntentExternal struct {
 	PaymentMethodIds []string `json:"payment_method_ids"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SetupIntentExternal SetupIntentExternal
@@ -299,6 +299,11 @@ func (o SetupIntentExternal) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["payment_method_ids"] = o.PaymentMethodIds
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -331,15 +336,27 @@ func (o *SetupIntentExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varSetupIntentExternal := _SetupIntentExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSetupIntentExternal)
+	err = json.Unmarshal(data, &varSetupIntentExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SetupIntentExternal(varSetupIntentExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "payment_method_ids")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -62,6 +61,7 @@ type SubscriptionExternal struct {
 	PauseAtEnd NullableBool `json:"pause_at_end,omitempty"`
 	PauseForCycles NullableInt32 `json:"pause_for_cycles,omitempty"`
 	PausedAt NullableTime `json:"paused_at,omitempty"`
+	PaymentRouteId NullableString `json:"payment_route_id,omitempty"`
 	RemainingBillingCycles NullableInt32 `json:"remaining_billing_cycles,omitempty"`
 	RenewsAt NullableTime `json:"renews_at,omitempty"`
 	ResumesAt NullableTime `json:"resumes_at,omitempty"`
@@ -74,6 +74,7 @@ type SubscriptionExternal struct {
 	TrialStart NullableTime `json:"trial_start,omitempty"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SubscriptionExternal SubscriptionExternal
@@ -1037,6 +1038,48 @@ func (o *SubscriptionExternal) UnsetPausedAt() {
 	o.PausedAt.Unset()
 }
 
+// GetPaymentRouteId returns the PaymentRouteId field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *SubscriptionExternal) GetPaymentRouteId() string {
+	if o == nil || IsNil(o.PaymentRouteId.Get()) {
+		var ret string
+		return ret
+	}
+	return *o.PaymentRouteId.Get()
+}
+
+// GetPaymentRouteIdOk returns a tuple with the PaymentRouteId field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *SubscriptionExternal) GetPaymentRouteIdOk() (*string, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.PaymentRouteId.Get(), o.PaymentRouteId.IsSet()
+}
+
+// HasPaymentRouteId returns a boolean if a field has been set.
+func (o *SubscriptionExternal) HasPaymentRouteId() bool {
+	if o != nil && o.PaymentRouteId.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetPaymentRouteId gets a reference to the given NullableString and assigns it to the PaymentRouteId field.
+func (o *SubscriptionExternal) SetPaymentRouteId(v string) {
+	o.PaymentRouteId.Set(&v)
+}
+// SetPaymentRouteIdNil sets the value for PaymentRouteId to be an explicit nil
+func (o *SubscriptionExternal) SetPaymentRouteIdNil() {
+	o.PaymentRouteId.Set(nil)
+}
+
+// UnsetPaymentRouteId ensures that no value is present for PaymentRouteId, not even an explicit nil
+func (o *SubscriptionExternal) UnsetPaymentRouteId() {
+	o.PaymentRouteId.Unset()
+}
+
 // GetRemainingBillingCycles returns the RemainingBillingCycles field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *SubscriptionExternal) GetRemainingBillingCycles() int32 {
 	if o == nil || IsNil(o.RemainingBillingCycles.Get()) {
@@ -1428,6 +1471,9 @@ func (o SubscriptionExternal) ToMap() (map[string]interface{}, error) {
 	if o.PausedAt.IsSet() {
 		toSerialize["paused_at"] = o.PausedAt.Get()
 	}
+	if o.PaymentRouteId.IsSet() {
+		toSerialize["payment_route_id"] = o.PaymentRouteId.Get()
+	}
 	if o.RemainingBillingCycles.IsSet() {
 		toSerialize["remaining_billing_cycles"] = o.RemainingBillingCycles.Get()
 	}
@@ -1449,6 +1495,11 @@ func (o SubscriptionExternal) ToMap() (map[string]interface{}, error) {
 		toSerialize["trial_start"] = o.TrialStart.Get()
 	}
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1493,15 +1544,58 @@ func (o *SubscriptionExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varSubscriptionExternal := _SubscriptionExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSubscriptionExternal)
+	err = json.Unmarshal(data, &varSubscriptionExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SubscriptionExternal(varSubscriptionExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "billing_interval")
+		delete(additionalProperties, "billing_interval_count")
+		delete(additionalProperties, "cancel_at_end")
+		delete(additionalProperties, "cancellation_details")
+		delete(additionalProperties, "cancelled_at")
+		delete(additionalProperties, "checkout_session_id")
+		delete(additionalProperties, "collection_method")
+		delete(additionalProperties, "contract_auto_renew")
+		delete(additionalProperties, "contract_start")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "current_period_end")
+		delete(additionalProperties, "current_period_start")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "default_payment_method_id")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "discount")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "initial_start")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "net_d")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "pause_at_end")
+		delete(additionalProperties, "pause_for_cycles")
+		delete(additionalProperties, "paused_at")
+		delete(additionalProperties, "payment_route_id")
+		delete(additionalProperties, "remaining_billing_cycles")
+		delete(additionalProperties, "renews_at")
+		delete(additionalProperties, "resumes_at")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "subscription_items")
+		delete(additionalProperties, "total_billing_cycles")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_start")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

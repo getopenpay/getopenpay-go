@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -66,6 +65,7 @@ type ChargeExternal struct {
 	TotalChargeAmountAtom int32 `json:"total_charge_amount_atom"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _ChargeExternal ChargeExternal
@@ -890,6 +890,11 @@ func (o ChargeExternal) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["total_charge_amount_atom"] = o.TotalChargeAmountAtom
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -936,15 +941,46 @@ func (o *ChargeExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varChargeExternal := _ChargeExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varChargeExternal)
+	err = json.Unmarshal(data, &varChargeExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = ChargeExternal(varChargeExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "disputed")
+		delete(additionalProperties, "failure_code")
+		delete(additionalProperties, "failure_message")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "payment_intent_id")
+		delete(additionalProperties, "payment_intent_mapping_id")
+		delete(additionalProperties, "payment_method")
+		delete(additionalProperties, "payment_method_id")
+		delete(additionalProperties, "payment_processor_id")
+		delete(additionalProperties, "payment_processor_name")
+		delete(additionalProperties, "processor_metadata")
+		delete(additionalProperties, "provider_type_fee_amount_atom")
+		delete(additionalProperties, "refunded")
+		delete(additionalProperties, "refunded_amount_atom")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "subscription_ids")
+		delete(additionalProperties, "subscriptions")
+		delete(additionalProperties, "total_charge_amount_atom")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

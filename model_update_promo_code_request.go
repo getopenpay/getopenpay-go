@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &UpdatePromoCodeRequest{}
 type UpdatePromoCodeRequest struct {
 	// Whether the promotion code is currently active. A promotion code can only be reactivated when the coupon is still valid and the promotion code is otherwise redeemable.
 	IsActive bool `json:"is_active"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdatePromoCodeRequest UpdatePromoCodeRequest
@@ -80,6 +80,11 @@ func (o UpdatePromoCodeRequest) MarshalJSON() ([]byte, error) {
 func (o UpdatePromoCodeRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["is_active"] = o.IsActive
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *UpdatePromoCodeRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdatePromoCodeRequest := _UpdatePromoCodeRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdatePromoCodeRequest)
+	err = json.Unmarshal(data, &varUpdatePromoCodeRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdatePromoCodeRequest(varUpdatePromoCodeRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "is_active")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

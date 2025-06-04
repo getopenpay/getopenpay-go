@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &AddCommentRequest{}
 type AddCommentRequest struct {
 	// Remarks on the invoice.
 	Comment string `json:"comment"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AddCommentRequest AddCommentRequest
@@ -80,6 +80,11 @@ func (o AddCommentRequest) MarshalJSON() ([]byte, error) {
 func (o AddCommentRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["comment"] = o.Comment
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *AddCommentRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAddCommentRequest := _AddCommentRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAddCommentRequest)
+	err = json.Unmarshal(data, &varAddCommentRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AddCommentRequest(varAddCommentRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "comment")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

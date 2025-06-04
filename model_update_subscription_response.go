@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type UpdateSubscriptionResponse struct {
 	RenewalInvoices []InvoiceExternal `json:"renewal_invoices,omitempty"`
 	// List of subscriptions updated.
 	Subscriptions []SubscriptionExternal `json:"subscriptions"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _UpdateSubscriptionResponse UpdateSubscriptionResponse
@@ -145,6 +145,11 @@ func (o UpdateSubscriptionResponse) ToMap() (map[string]interface{}, error) {
 		toSerialize["renewal_invoices"] = o.RenewalInvoices
 	}
 	toSerialize["subscriptions"] = o.Subscriptions
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -173,15 +178,22 @@ func (o *UpdateSubscriptionResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varUpdateSubscriptionResponse := _UpdateSubscriptionResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varUpdateSubscriptionResponse)
+	err = json.Unmarshal(data, &varUpdateSubscriptionResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = UpdateSubscriptionResponse(varUpdateSubscriptionResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "invoices")
+		delete(additionalProperties, "renewal_invoices")
+		delete(additionalProperties, "subscriptions")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

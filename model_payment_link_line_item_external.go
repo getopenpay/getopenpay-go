@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -37,6 +36,7 @@ type PaymentLinkLineItemExternal struct {
 	Quantity int32 `json:"quantity"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaymentLinkLineItemExternal PaymentLinkLineItemExternal
@@ -298,6 +298,11 @@ func (o PaymentLinkLineItemExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["price_id"] = o.PriceId
 	toSerialize["quantity"] = o.Quantity
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -330,15 +335,27 @@ func (o *PaymentLinkLineItemExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPaymentLinkLineItemExternal := _PaymentLinkLineItemExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaymentLinkLineItemExternal)
+	err = json.Unmarshal(data, &varPaymentLinkLineItemExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaymentLinkLineItemExternal(varPaymentLinkLineItemExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "payment_link_id")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

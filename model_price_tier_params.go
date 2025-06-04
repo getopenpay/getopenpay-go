@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type PriceTierParams struct {
 	// The starting unit for the price tier.
 	UnitsFrom int32 `json:"units_from"`
 	UnitsUpto NullableInt32 `json:"units_upto,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PriceTierParams PriceTierParams
@@ -200,6 +200,11 @@ func (o PriceTierParams) ToMap() (map[string]interface{}, error) {
 	if o.UnitsUpto.IsSet() {
 		toSerialize["units_upto"] = o.UnitsUpto.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -228,15 +233,23 @@ func (o *PriceTierParams) UnmarshalJSON(data []byte) (err error) {
 
 	varPriceTierParams := _PriceTierParams{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPriceTierParams)
+	err = json.Unmarshal(data, &varPriceTierParams)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PriceTierParams(varPriceTierParams)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "flat_amount_atom")
+		delete(additionalProperties, "unit_amount_atom")
+		delete(additionalProperties, "units_from")
+		delete(additionalProperties, "units_upto")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

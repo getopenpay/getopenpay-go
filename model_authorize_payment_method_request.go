@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -27,6 +26,7 @@ type AuthorizePaymentMethodRequest struct {
 	Currency *CurrencyEnum `json:"currency,omitempty"`
 	// Unique identifier of the payment method.
 	PaymentMethodId string `json:"payment_method_id"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _AuthorizePaymentMethodRequest AuthorizePaymentMethodRequest
@@ -158,6 +158,11 @@ func (o AuthorizePaymentMethodRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["currency"] = o.Currency
 	}
 	toSerialize["payment_method_id"] = o.PaymentMethodId
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -185,15 +190,22 @@ func (o *AuthorizePaymentMethodRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varAuthorizePaymentMethodRequest := _AuthorizePaymentMethodRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varAuthorizePaymentMethodRequest)
+	err = json.Unmarshal(data, &varAuthorizePaymentMethodRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = AuthorizePaymentMethodRequest(varAuthorizePaymentMethodRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "authorize_amount_atom")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "payment_method_id")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

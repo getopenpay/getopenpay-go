@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -109,6 +108,7 @@ type InvoiceExternal struct {
 	TotalExcludingTaxesAmountAtom int32 `json:"total_excluding_taxes_amount_atom"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _InvoiceExternal InvoiceExternal
@@ -1846,6 +1846,11 @@ func (o InvoiceExternal) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["total_excluding_taxes_amount_atom"] = o.TotalExcludingTaxesAmountAtom
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -1900,15 +1905,71 @@ func (o *InvoiceExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varInvoiceExternal := _InvoiceExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varInvoiceExternal)
+	err = json.Unmarshal(data, &varInvoiceExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = InvoiceExternal(varInvoiceExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "applied_balance_amount_atom")
+		delete(additionalProperties, "billing_reason")
+		delete(additionalProperties, "collection_method")
+		delete(additionalProperties, "comments")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "credit_note_ids")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "customer_tax_ids")
+		delete(additionalProperties, "default_payment_method_id")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "discounts")
+		delete(additionalProperties, "due_amount_atom")
+		delete(additionalProperties, "due_date")
+		delete(additionalProperties, "email_invoice_on_finalization")
+		delete(additionalProperties, "hosted_invoice_url")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "invoice_number")
+		delete(additionalProperties, "invoice_pdf_url")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "is_initial_invoice_for_trial_sub")
+		delete(additionalProperties, "latest_payment_attempt_failure_message")
+		delete(additionalProperties, "latest_payment_intent_id")
+		delete(additionalProperties, "lines")
+		delete(additionalProperties, "merchant_tax_ids")
+		delete(additionalProperties, "metadata")
+		delete(additionalProperties, "net_d")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "paid_amount_atom")
+		delete(additionalProperties, "paid_at")
+		delete(additionalProperties, "paid_out_of_band")
+		delete(additionalProperties, "period_end")
+		delete(additionalProperties, "period_start")
+		delete(additionalProperties, "post_payment_credit_notes_amount")
+		delete(additionalProperties, "pre_payment_credit_notes_amount")
+		delete(additionalProperties, "provider_type_fee_amount_atom")
+		delete(additionalProperties, "receipt_pdf_url")
+		delete(additionalProperties, "refund_ids")
+		delete(additionalProperties, "refunded_amount_atom")
+		delete(additionalProperties, "remaining_amount_atom")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "subscription")
+		delete(additionalProperties, "subscription_id")
+		delete(additionalProperties, "tax_amount_atom")
+		delete(additionalProperties, "tax_processor_updated_at")
+		delete(additionalProperties, "total_amount_atom")
+		delete(additionalProperties, "total_discount_amount_atoms")
+		delete(additionalProperties, "total_excluding_taxes_amount_atom")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

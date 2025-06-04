@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -26,6 +25,7 @@ type PriceTierPublic struct {
 	// Price per unit in the currency atom.
 	UnitAmountAtom int32 `json:"unit_amount_atom"`
 	UnitsUpto NullableInt32 `json:"units_upto,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PriceTierPublic PriceTierPublic
@@ -154,6 +154,11 @@ func (o PriceTierPublic) ToMap() (map[string]interface{}, error) {
 	if o.UnitsUpto.IsSet() {
 		toSerialize["units_upto"] = o.UnitsUpto.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -182,15 +187,22 @@ func (o *PriceTierPublic) UnmarshalJSON(data []byte) (err error) {
 
 	varPriceTierPublic := _PriceTierPublic{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPriceTierPublic)
+	err = json.Unmarshal(data, &varPriceTierPublic)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PriceTierPublic(varPriceTierPublic)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "flat_amount_atom")
+		delete(additionalProperties, "unit_amount_atom")
+		delete(additionalProperties, "units_upto")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

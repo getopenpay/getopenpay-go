@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &CustomerBalanceExternal{}
 type CustomerBalanceExternal struct {
 	AmountAtom int32 `json:"amount_atom"`
 	Currency CurrencyEnum `json:"currency"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CustomerBalanceExternal CustomerBalanceExternal
@@ -106,6 +106,11 @@ func (o CustomerBalanceExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["amount_atom"] = o.AmountAtom
 	toSerialize["currency"] = o.Currency
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -134,15 +139,21 @@ func (o *CustomerBalanceExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varCustomerBalanceExternal := _CustomerBalanceExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCustomerBalanceExternal)
+	err = json.Unmarshal(data, &varCustomerBalanceExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CustomerBalanceExternal(varCustomerBalanceExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "currency")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

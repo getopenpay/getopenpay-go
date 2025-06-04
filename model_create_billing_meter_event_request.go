@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -30,6 +29,7 @@ type CreateBillingMeterEventRequest struct {
 	Identifier *string `json:"identifier,omitempty"`
 	// The payload of the event. This must contain the fields corresponding to a meter’s event_payload_customer_mapping_key (default is customer_id) and event_payload_value_key (default is value). 
 	Payload map[string]interface{} `json:"payload"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateBillingMeterEventRequest CreateBillingMeterEventRequest
@@ -183,6 +183,11 @@ func (o CreateBillingMeterEventRequest) ToMap() (map[string]interface{}, error) 
 		toSerialize["identifier"] = o.Identifier
 	}
 	toSerialize["payload"] = o.Payload
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -211,15 +216,23 @@ func (o *CreateBillingMeterEventRequest) UnmarshalJSON(data []byte) (err error) 
 
 	varCreateBillingMeterEventRequest := _CreateBillingMeterEventRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateBillingMeterEventRequest)
+	err = json.Unmarshal(data, &varCreateBillingMeterEventRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateBillingMeterEventRequest(varCreateBillingMeterEventRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "event_datetime")
+		delete(additionalProperties, "event_name")
+		delete(additionalProperties, "identifier")
+		delete(additionalProperties, "payload")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

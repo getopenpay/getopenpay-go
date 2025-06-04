@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -32,6 +31,7 @@ type BillingMeterSummary struct {
 	MeterId string `json:"meter_id"`
 	// Start datetime for this event summary
 	StartDatetime time.Time `json:"start_datetime"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _BillingMeterSummary BillingMeterSummary
@@ -193,6 +193,11 @@ func (o BillingMeterSummary) ToMap() (map[string]interface{}, error) {
 	toSerialize["end_datetime"] = o.EndDatetime
 	toSerialize["meter_id"] = o.MeterId
 	toSerialize["start_datetime"] = o.StartDatetime
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -224,15 +229,24 @@ func (o *BillingMeterSummary) UnmarshalJSON(data []byte) (err error) {
 
 	varBillingMeterSummary := _BillingMeterSummary{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varBillingMeterSummary)
+	err = json.Unmarshal(data, &varBillingMeterSummary)
 
 	if err != nil {
 		return err
 	}
 
 	*o = BillingMeterSummary(varBillingMeterSummary)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "aggregated_value")
+		delete(additionalProperties, "document_count")
+		delete(additionalProperties, "end_datetime")
+		delete(additionalProperties, "meter_id")
+		delete(additionalProperties, "start_datetime")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

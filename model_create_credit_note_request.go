@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type CreateCreditNoteRequest struct {
 	RefundAmountAtom *int32 `json:"refund_amount_atom,omitempty"`
 	// The int amount representing the total amount of the credit note.
 	TotalAmountAtom int32 `json:"total_amount_atom"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _CreateCreditNoteRequest CreateCreditNoteRequest
@@ -300,6 +300,11 @@ func (o CreateCreditNoteRequest) ToMap() (map[string]interface{}, error) {
 		toSerialize["refund_amount_atom"] = o.RefundAmountAtom
 	}
 	toSerialize["total_amount_atom"] = o.TotalAmountAtom
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -329,15 +334,26 @@ func (o *CreateCreditNoteRequest) UnmarshalJSON(data []byte) (err error) {
 
 	varCreateCreditNoteRequest := _CreateCreditNoteRequest{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varCreateCreditNoteRequest)
+	err = json.Unmarshal(data, &varCreateCreditNoteRequest)
 
 	if err != nil {
 		return err
 	}
 
 	*o = CreateCreditNoteRequest(varCreateCreditNoteRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "credit_amount_atom")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "invoice_id")
+		delete(additionalProperties, "lines")
+		delete(additionalProperties, "reason")
+		delete(additionalProperties, "refund_amount_atom")
+		delete(additionalProperties, "total_amount_atom")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

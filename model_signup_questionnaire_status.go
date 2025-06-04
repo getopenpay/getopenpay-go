@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -33,6 +32,7 @@ type SignupQuestionnaireStatus struct {
 	Status bool `json:"status"`
 	// DateTime at which the object was updated, in 'ISO 8601' format.
 	UpdatedAt time.Time `json:"updated_at"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _SignupQuestionnaireStatus SignupQuestionnaireStatus
@@ -242,6 +242,11 @@ func (o SignupQuestionnaireStatus) ToMap() (map[string]interface{}, error) {
 	}
 	toSerialize["status"] = o.Status
 	toSerialize["updated_at"] = o.UpdatedAt
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -272,15 +277,25 @@ func (o *SignupQuestionnaireStatus) UnmarshalJSON(data []byte) (err error) {
 
 	varSignupQuestionnaireStatus := _SignupQuestionnaireStatus{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varSignupQuestionnaireStatus)
+	err = json.Unmarshal(data, &varSignupQuestionnaireStatus)
 
 	if err != nil {
 		return err
 	}
 
 	*o = SignupQuestionnaireStatus(varSignupQuestionnaireStatus)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "status")
+		delete(additionalProperties, "updated_at")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

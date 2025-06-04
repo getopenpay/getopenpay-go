@@ -2013,6 +2013,17 @@ paths:
           title: Ref Id
           type: string
         style: form
+      - description: Optional ID for the customer using the payment link
+        example: cus_dev_abc123
+        explode: true
+        in: query
+        name: customer_id
+        required: false
+        schema:
+          description: Optional ID for the customer using the payment link
+          title: Customer Id
+          type: string
+        style: form
       responses:
         "200":
           content:
@@ -2386,6 +2397,66 @@ paths:
       security:
       - HTTPBearer: []
       summary: Create Price For Product
+      tags:
+      - prices
+  /prices/find-by-amount/{amount}:
+    get:
+      description: |-
+        Find prices based on unit amount. Supports partial matching of amounts.
+        Decimal points are ignored in the search (e.g., "10.00" will match "1000").
+        Returns all active prices where amount contains the specified string.
+        Optionally filter by product_id. Returns empty list if no matches found.
+      operationId: find_price_by_amount
+      parameters:
+      - description: Full or partial amount to find matching prices. Decimal points
+          are ignored in matching.
+        example: "10.00"
+        explode: false
+        in: path
+        name: amount
+        required: true
+        schema:
+          description: Full or partial amount to find matching prices. Decimal points
+            are ignored in matching.
+          title: Amount
+          type: string
+        style: simple
+      - description: Optional product ID to filter prices by specific product
+        example: product_dev_abc123
+        explode: true
+        in: query
+        name: product_id
+        required: false
+        schema:
+          nullable: true
+          type: string
+        style: form
+      - description: Number of results to return per page
+        example: 5
+        explode: true
+        in: query
+        name: page_size
+        required: false
+        schema:
+          nullable: true
+          type: integer
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResponse_PriceExternal_'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      security:
+      - HTTPBearer: []
+      summary: Find Price By Amount
       tags:
       - prices
   /prices/list:
@@ -3624,6 +3695,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -3758,6 +3830,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -4342,6 +4415,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -4476,6 +4550,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -4897,7 +4972,9 @@ components:
         All changes to this object must be backwards-compatible, old objects should still be valid with all new schemas.
 
         Note: this object is stored in both PaymentLinks (in string form) and CheckoutSessions
+        💡 Please don't forget to update the checkout_session.preferences property method when you update this model.
       example:
+        override_feature_rollout_settings: "{}"
         processor_preferences:
           filter_providers:
           - credit_card
@@ -4957,11 +5034,15 @@ components:
               $ref: '#/components/schemas/SelectedPriceQuantity'
             type: array
           type: array
+        override_feature_rollout_settings:
+          nullable: true
+          type: object
         processor_preferences:
           $ref: '#/components/schemas/CheckoutProcessorsPreferences'
       title: CheckoutPreferences
     CheckoutPreferencesOutput:
       example:
+        override_feature_rollout_settings: "{}"
         processor_preferences:
           filter_providers:
           - credit_card
@@ -5022,6 +5103,9 @@ components:
               $ref: '#/components/schemas/SelectedPriceQuantity'
             type: array
           type: array
+        override_feature_rollout_settings:
+          nullable: true
+          type: object
         processor_preferences:
           $ref: '#/components/schemas/CheckoutProcessorsPreferences'
         unused:
@@ -5114,6 +5198,7 @@ components:
         custom_fields: "{}"
         amount_subtotal_atom: 1000
         trial_end: 2000-01-23T04:56:07.000+00:00
+        successful_attempt_id: successful_attempt_id
         url: https://pay.getopenpay.com/aaaa-bbbb-cccc-dddd
         secure_token: 33544253-7d23-4e58-9d58-860977eb36d3
         account_id: account_dev_abc123
@@ -5217,6 +5302,9 @@ components:
           nullable: true
           type: array
         success_url:
+          nullable: true
+          type: string
+        successful_attempt_id:
           nullable: true
           type: string
         tax_amount_atom:
@@ -5417,6 +5505,9 @@ components:
         subscription_ids:
         - subscription_ids
         - subscription_ids
+        processors_used:
+        - processors_used
+        - processors_used
         customer_id: customer_id
       properties:
         customer_id:
@@ -5425,6 +5516,11 @@ components:
         invoice_urls:
           items:
             type: string
+          type: array
+        processors_used:
+          items:
+            type: string
+          nullable: true
           type: array
         subscription_ids:
           items:
@@ -5815,6 +5911,7 @@ components:
         mode: payment
         coupon_id: coupon_id
         checkout_preferences:
+          override_feature_rollout_settings: "{}"
           processor_preferences:
             filter_providers:
             - credit_card
@@ -6298,8 +6395,10 @@ components:
       example:
         mode: payment
         trial_from_price: true
+        always_create_new_customer: false
         coupon_id: coupon_id
         checkout_preferences:
+          override_feature_rollout_settings: "{}"
           processor_preferences:
             filter_providers:
             - credit_card
@@ -6340,6 +6439,13 @@ components:
         customer_id: customer_id
         success_url: success_url
       properties:
+        always_create_new_customer:
+          default: false
+          description: "If this flag is set to True and there is no customer attached\
+            \ to the payment link, the payment link will always create a new customer,\
+            \ rather than the default behavior of de-duping by email."
+          title: Always Create New Customer
+          type: boolean
         checkout_preferences:
           $ref: '#/components/schemas/CheckoutPreferences'
         coupon_id:
@@ -6792,6 +6898,7 @@ components:
         payment_method_id: payment_method_id
         coupon_id: coupon_id
         checkout_preferences:
+          override_feature_rollout_settings: "{}"
           processor_preferences:
             filter_providers:
             - credit_card
@@ -7144,6 +7251,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -7538,6 +7646,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -8499,6 +8608,7 @@ components:
                 subscription_id: subscription_dev_abc123
               contract_auto_renew: true
               metadata: "{}"
+              payment_route_id: payment_route_id
               billing_interval: day
               created_at: 2000-01-23T04:56:07.000+00:00
               description: description
@@ -9805,6 +9915,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -9993,6 +10104,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -11109,6 +11221,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -12494,6 +12607,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -12628,6 +12742,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -12830,6 +12945,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -12964,6 +13080,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -13221,6 +13338,7 @@ components:
           custom_fields: "{}"
           amount_subtotal_atom: 1000
           trial_end: 2000-01-23T04:56:07.000+00:00
+          successful_attempt_id: successful_attempt_id
           url: https://pay.getopenpay.com/aaaa-bbbb-cccc-dddd
           secure_token: 33544253-7d23-4e58-9d58-860977eb36d3
           account_id: account_dev_abc123
@@ -13268,6 +13386,7 @@ components:
           custom_fields: "{}"
           amount_subtotal_atom: 1000
           trial_end: 2000-01-23T04:56:07.000+00:00
+          successful_attempt_id: successful_attempt_id
           url: https://pay.getopenpay.com/aaaa-bbbb-cccc-dddd
           secure_token: 33544253-7d23-4e58-9d58-860977eb36d3
           account_id: account_dev_abc123
@@ -13687,6 +13806,7 @@ components:
                   subscription_id: subscription_dev_abc123
                 contract_auto_renew: true
                 metadata: "{}"
+                payment_route_id: payment_route_id
                 billing_interval: day
                 created_at: 2000-01-23T04:56:07.000+00:00
                 description: description
@@ -14488,6 +14608,7 @@ components:
                   subscription_id: subscription_dev_abc123
                 contract_auto_renew: true
                 metadata: "{}"
+                payment_route_id: payment_route_id
                 billing_interval: day
                 created_at: 2000-01-23T04:56:07.000+00:00
                 description: description
@@ -15340,6 +15461,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -15734,6 +15856,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -16261,6 +16384,7 @@ components:
                 subscription_id: subscription_dev_abc123
               contract_auto_renew: true
               metadata: "{}"
+              payment_route_id: payment_route_id
               billing_interval: day
               created_at: 2000-01-23T04:56:07.000+00:00
               description: description
@@ -16681,6 +16805,7 @@ components:
                 subscription_id: subscription_dev_abc123
               contract_auto_renew: true
               metadata: "{}"
+              payment_route_id: payment_route_id
               billing_interval: day
               created_at: 2000-01-23T04:56:07.000+00:00
               description: description
@@ -16901,12 +17026,14 @@ components:
           trial_period_days: 0
           url: https://connto.getopenpay.com/payment-link/public/aaaa-bbbb-cccc-dddd
           mode: payment
+          always_create_new_customer: false
           secure_token: 33544253-7d23-4e58-9d58-860977eb36d3
           account_id: account_dev_abc123
           is_deleted: false
           coupon_id: coupon_id
           updated_at: 2000-01-23T04:56:07.000+00:00
           checkout_preferences:
+            override_feature_rollout_settings: "{}"
             processor_preferences:
               filter_providers:
               - credit_card
@@ -16953,12 +17080,14 @@ components:
           trial_period_days: 0
           url: https://connto.getopenpay.com/payment-link/public/aaaa-bbbb-cccc-dddd
           mode: payment
+          always_create_new_customer: false
           secure_token: 33544253-7d23-4e58-9d58-860977eb36d3
           account_id: account_dev_abc123
           is_deleted: false
           coupon_id: coupon_id
           updated_at: 2000-01-23T04:56:07.000+00:00
           checkout_preferences:
+            override_feature_rollout_settings: "{}"
             processor_preferences:
               filter_providers:
               - credit_card
@@ -17647,6 +17776,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -17781,6 +17911,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -18338,6 +18469,7 @@ components:
       - portal_session
       - price
       - price_tier
+      - processor_card_checkout_state
       - product
       - product_family
       - promotion_code
@@ -18347,9 +18479,11 @@ components:
       - signup_questions
       - signup_questionnaire_status
       - single_use_token
+      - state_transition_log
       - subscription
       - subscription_item
       - tax_integration
+      - unified_cc_state
       - user
       - user_login
       - user_record
@@ -18626,6 +18760,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -19010,12 +19145,14 @@ components:
         trial_period_days: 0
         url: https://connto.getopenpay.com/payment-link/public/aaaa-bbbb-cccc-dddd
         mode: payment
+        always_create_new_customer: false
         secure_token: 33544253-7d23-4e58-9d58-860977eb36d3
         account_id: account_dev_abc123
         is_deleted: false
         coupon_id: coupon_id
         updated_at: 2000-01-23T04:56:07.000+00:00
         checkout_preferences:
+          override_feature_rollout_settings: "{}"
           processor_preferences:
             filter_providers:
             - credit_card
@@ -19064,6 +19201,13 @@ components:
           description: Whether a payment link is active or not.
           example: true
           title: Active
+          type: boolean
+        always_create_new_customer:
+          default: false
+          description: "If this flag is set to True and there is no customer attached\
+            \ to the payment link, the payment link will always create a new customer,\
+            \ rather than the default behavior of de-duping by email."
+          title: Always Create New Customer
           type: boolean
         checkout_preferences:
           $ref: '#/components/schemas/CheckoutPreferencesOutput'
@@ -20991,6 +21135,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -21179,6 +21324,7 @@ components:
             subscription_id: subscription_dev_abc123
           contract_auto_renew: true
           metadata: "{}"
+          payment_route_id: payment_route_id
           billing_interval: day
           created_at: 2000-01-23T04:56:07.000+00:00
           description: description
@@ -21516,6 +21662,7 @@ components:
           subscription_id: subscription_dev_abc123
         contract_auto_renew: true
         metadata: "{}"
+        payment_route_id: payment_route_id
         billing_interval: day
         created_at: 2000-01-23T04:56:07.000+00:00
         description: description
@@ -21747,6 +21894,9 @@ components:
           type: integer
         paused_at:
           format: date-time
+          nullable: true
+          type: string
+        payment_route_id:
           nullable: true
           type: string
         remaining_billing_cycles:
@@ -22901,6 +23051,7 @@ components:
         new_period_end: 2000-01-23T04:56:07.000+00:00
         custom_fields: "{}"
         is_preview: false
+        payment_route_id: payment_route_id
         promotion_code: promotion_code
         description: description
         trial_end: 2000-01-23T04:56:07.000+00:00
@@ -22908,6 +23059,7 @@ components:
         trial_period_days: 6
         payment_method_id: payment_method_id
         coupon_id: coupon_id
+        remove_payment_route_id: true
         collection_method: charge_automatically
         proration_behavior: always_invoice
         items:
@@ -22960,6 +23112,9 @@ components:
         payment_method_id:
           nullable: true
           type: string
+        payment_route_id:
+          nullable: true
+          type: string
         preview_renewal_invoices:
           default: false
           description: Whether to include the preview of the renewal invoices for
@@ -22972,6 +23127,9 @@ components:
           type: string
         proration_behavior:
           $ref: '#/components/schemas/ProrationEnum'
+        remove_payment_route_id:
+          nullable: true
+          type: boolean
         trial_end:
           format: date-time
           nullable: true
@@ -23218,6 +23376,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -23612,6 +23771,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -24007,6 +24167,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description
@@ -24401,6 +24562,7 @@ components:
               subscription_id: subscription_dev_abc123
             contract_auto_renew: true
             metadata: "{}"
+            payment_route_id: payment_route_id
             billing_interval: day
             created_at: 2000-01-23T04:56:07.000+00:00
             description: description

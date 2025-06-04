@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -25,6 +24,7 @@ type TaxIdSetting struct {
 	TaxId string `json:"tax_id"`
 	// The type code for this tax ID
 	TaxIdType string `json:"tax_id_type"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _TaxIdSetting TaxIdSetting
@@ -108,6 +108,11 @@ func (o TaxIdSetting) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["tax_id"] = o.TaxId
 	toSerialize["tax_id_type"] = o.TaxIdType
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -136,15 +141,21 @@ func (o *TaxIdSetting) UnmarshalJSON(data []byte) (err error) {
 
 	varTaxIdSetting := _TaxIdSetting{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varTaxIdSetting)
+	err = json.Unmarshal(data, &varTaxIdSetting)
 
 	if err != nil {
 		return err
 	}
 
 	*o = TaxIdSetting(varTaxIdSetting)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "tax_id")
+		delete(additionalProperties, "tax_id_type")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

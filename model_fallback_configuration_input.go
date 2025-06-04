@@ -22,7 +22,10 @@ type FallbackConfigurationInput struct {
 	FallbackProcessorPreferences NullableCheckoutProcessorsPreferences `json:"fallback_processor_preferences,omitempty"`
 	// List of price groups that will be used to fall back to if the selected product price quantity fails to be created.
 	PriceGroups []SelectedPriceQuantity `json:"price_groups,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _FallbackConfigurationInput FallbackConfigurationInput
 
 // NewFallbackConfigurationInput instantiates a new FallbackConfigurationInput object
 // This constructor will assign default values to properties that have it defined,
@@ -131,7 +134,34 @@ func (o FallbackConfigurationInput) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PriceGroups) {
 		toSerialize["price_groups"] = o.PriceGroups
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *FallbackConfigurationInput) UnmarshalJSON(data []byte) (err error) {
+	varFallbackConfigurationInput := _FallbackConfigurationInput{}
+
+	err = json.Unmarshal(data, &varFallbackConfigurationInput)
+
+	if err != nil {
+		return err
+	}
+
+	*o = FallbackConfigurationInput(varFallbackConfigurationInput)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "fallback_processor_preferences")
+		delete(additionalProperties, "price_groups")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableFallbackConfigurationInput struct {

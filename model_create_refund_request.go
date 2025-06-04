@@ -30,7 +30,10 @@ type CreateRefundRequest struct {
 	Reason *RefundReasonEnum `json:"reason,omitempty"`
 	// The charge was refunded by an external platform. This cause the request to not execute a refund externally and instead simply update internal records.
 	RefundedOutOfBand *bool `json:"refunded_out_of_band,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _CreateRefundRequest CreateRefundRequest
 
 // NewCreateRefundRequest instantiates a new CreateRefundRequest object
 // This constructor will assign default values to properties that have it defined,
@@ -342,7 +345,39 @@ func (o CreateRefundRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.RefundedOutOfBand) {
 		toSerialize["refunded_out_of_band"] = o.RefundedOutOfBand
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *CreateRefundRequest) UnmarshalJSON(data []byte) (err error) {
+	varCreateRefundRequest := _CreateRefundRequest{}
+
+	err = json.Unmarshal(data, &varCreateRefundRequest)
+
+	if err != nil {
+		return err
+	}
+
+	*o = CreateRefundRequest(varCreateRefundRequest)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "amount_atom")
+		delete(additionalProperties, "charge_id")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "payment_intent_id")
+		delete(additionalProperties, "reason")
+		delete(additionalProperties, "refunded_out_of_band")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableCreateRefundRequest struct {

@@ -13,7 +13,6 @@ package getopenpay
 import (
 	"encoding/json"
 	"time"
-	"bytes"
 	"fmt"
 )
 
@@ -28,6 +27,8 @@ type PaymentLinkExternal struct {
 	AccountName string `json:"account_name"`
 	// Whether a payment link is active or not.
 	Active bool `json:"active"`
+	// If this flag is set to True and there is no customer attached to the payment link, the payment link will always create a new customer, rather than the default behavior of de-duping by email.
+	AlwaysCreateNewCustomer *bool `json:"always_create_new_customer,omitempty"`
 	CheckoutPreferences NullableCheckoutPreferencesOutput `json:"checkout_preferences"`
 	CouponId NullableString `json:"coupon_id,omitempty"`
 	// DateTime at which the object was created, in 'ISO 8601' format.
@@ -55,6 +56,7 @@ type PaymentLinkExternal struct {
 	UpdatedAt time.Time `json:"updated_at"`
 	// The main URL for this payment link.
 	Url string `json:"url"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _PaymentLinkExternal PaymentLinkExternal
@@ -68,6 +70,8 @@ func NewPaymentLinkExternal(accountId string, accountName string, active bool, c
 	this.AccountId = accountId
 	this.AccountName = accountName
 	this.Active = active
+	var alwaysCreateNewCustomer bool = false
+	this.AlwaysCreateNewCustomer = &alwaysCreateNewCustomer
 	this.CheckoutPreferences = checkoutPreferences
 	this.CreatedAt = createdAt
 	this.Currency = currency
@@ -93,6 +97,8 @@ func NewPaymentLinkExternal(accountId string, accountName string, active bool, c
 // but it doesn't guarantee that properties required by API are set
 func NewPaymentLinkExternalWithDefaults() *PaymentLinkExternal {
 	this := PaymentLinkExternal{}
+	var alwaysCreateNewCustomer bool = false
+	this.AlwaysCreateNewCustomer = &alwaysCreateNewCustomer
 	var isDeleted bool = false
 	this.IsDeleted = &isDeleted
 	return &this
@@ -168,6 +174,38 @@ func (o *PaymentLinkExternal) GetActiveOk() (*bool, bool) {
 // SetActive sets field value
 func (o *PaymentLinkExternal) SetActive(v bool) {
 	o.Active = v
+}
+
+// GetAlwaysCreateNewCustomer returns the AlwaysCreateNewCustomer field value if set, zero value otherwise.
+func (o *PaymentLinkExternal) GetAlwaysCreateNewCustomer() bool {
+	if o == nil || IsNil(o.AlwaysCreateNewCustomer) {
+		var ret bool
+		return ret
+	}
+	return *o.AlwaysCreateNewCustomer
+}
+
+// GetAlwaysCreateNewCustomerOk returns a tuple with the AlwaysCreateNewCustomer field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *PaymentLinkExternal) GetAlwaysCreateNewCustomerOk() (*bool, bool) {
+	if o == nil || IsNil(o.AlwaysCreateNewCustomer) {
+		return nil, false
+	}
+	return o.AlwaysCreateNewCustomer, true
+}
+
+// HasAlwaysCreateNewCustomer returns a boolean if a field has been set.
+func (o *PaymentLinkExternal) HasAlwaysCreateNewCustomer() bool {
+	if o != nil && !IsNil(o.AlwaysCreateNewCustomer) {
+		return true
+	}
+
+	return false
+}
+
+// SetAlwaysCreateNewCustomer gets a reference to the given bool and assigns it to the AlwaysCreateNewCustomer field.
+func (o *PaymentLinkExternal) SetAlwaysCreateNewCustomer(v bool) {
+	o.AlwaysCreateNewCustomer = &v
 }
 
 // GetCheckoutPreferences returns the CheckoutPreferences field value
@@ -698,6 +736,9 @@ func (o PaymentLinkExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["account_id"] = o.AccountId
 	toSerialize["account_name"] = o.AccountName
 	toSerialize["active"] = o.Active
+	if !IsNil(o.AlwaysCreateNewCustomer) {
+		toSerialize["always_create_new_customer"] = o.AlwaysCreateNewCustomer
+	}
 	toSerialize["checkout_preferences"] = o.CheckoutPreferences.Get()
 	if o.CouponId.IsSet() {
 		toSerialize["coupon_id"] = o.CouponId.Get()
@@ -725,6 +766,11 @@ func (o PaymentLinkExternal) ToMap() (map[string]interface{}, error) {
 	toSerialize["trial_period_days"] = o.TrialPeriodDays.Get()
 	toSerialize["updated_at"] = o.UpdatedAt
 	toSerialize["url"] = o.Url
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -769,15 +815,42 @@ func (o *PaymentLinkExternal) UnmarshalJSON(data []byte) (err error) {
 
 	varPaymentLinkExternal := _PaymentLinkExternal{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varPaymentLinkExternal)
+	err = json.Unmarshal(data, &varPaymentLinkExternal)
 
 	if err != nil {
 		return err
 	}
 
 	*o = PaymentLinkExternal(varPaymentLinkExternal)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "account_id")
+		delete(additionalProperties, "account_name")
+		delete(additionalProperties, "active")
+		delete(additionalProperties, "always_create_new_customer")
+		delete(additionalProperties, "checkout_preferences")
+		delete(additionalProperties, "coupon_id")
+		delete(additionalProperties, "created_at")
+		delete(additionalProperties, "currency")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "customer_email")
+		delete(additionalProperties, "customer_id")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "is_deleted")
+		delete(additionalProperties, "line_items")
+		delete(additionalProperties, "mode")
+		delete(additionalProperties, "object")
+		delete(additionalProperties, "secure_token")
+		delete(additionalProperties, "success_url")
+		delete(additionalProperties, "trial_end")
+		delete(additionalProperties, "trial_from_price")
+		delete(additionalProperties, "trial_period_days")
+		delete(additionalProperties, "updated_at")
+		delete(additionalProperties, "url")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

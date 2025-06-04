@@ -30,7 +30,10 @@ type InlineSubscriptionItemUpdate struct {
 	PriceId NullableString `json:"price_id,omitempty"`
 	Quantity NullableInt32 `json:"quantity,omitempty"`
 	StartsAt NullableTime `json:"starts_at,omitempty"`
+	AdditionalProperties map[string]interface{}
 }
+
+type _InlineSubscriptionItemUpdate InlineSubscriptionItemUpdate
 
 // NewInlineSubscriptionItemUpdate instantiates a new InlineSubscriptionItemUpdate object
 // This constructor will assign default values to properties that have it defined,
@@ -449,7 +452,41 @@ func (o InlineSubscriptionItemUpdate) ToMap() (map[string]interface{}, error) {
 	if o.StartsAt.IsSet() {
 		toSerialize["starts_at"] = o.StartsAt.Get()
 	}
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
+}
+
+func (o *InlineSubscriptionItemUpdate) UnmarshalJSON(data []byte) (err error) {
+	varInlineSubscriptionItemUpdate := _InlineSubscriptionItemUpdate{}
+
+	err = json.Unmarshal(data, &varInlineSubscriptionItemUpdate)
+
+	if err != nil {
+		return err
+	}
+
+	*o = InlineSubscriptionItemUpdate(varInlineSubscriptionItemUpdate)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "add_at_period_end")
+		delete(additionalProperties, "custom_fields")
+		delete(additionalProperties, "delete")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "drop_at_end")
+		delete(additionalProperties, "id")
+		delete(additionalProperties, "price_id")
+		delete(additionalProperties, "quantity")
+		delete(additionalProperties, "starts_at")
+		o.AdditionalProperties = additionalProperties
+	}
+
+	return err
 }
 
 type NullableInlineSubscriptionItemUpdate struct {

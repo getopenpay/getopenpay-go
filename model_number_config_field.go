@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -31,6 +30,7 @@ type NumberConfigField struct {
 	Name string `json:"name"`
 	Type *string `json:"type,omitempty"`
 	Value NullableFloat32 `json:"value"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _NumberConfigField NumberConfigField
@@ -361,6 +361,11 @@ func (o NumberConfigField) ToMap() (map[string]interface{}, error) {
 		toSerialize["type"] = o.Type
 	}
 	toSerialize["value"] = o.Value.Get()
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -390,15 +395,27 @@ func (o *NumberConfigField) UnmarshalJSON(data []byte) (err error) {
 
 	varNumberConfigField := _NumberConfigField{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varNumberConfigField)
+	err = json.Unmarshal(data, &varNumberConfigField)
 
 	if err != nil {
 		return err
 	}
 
 	*o = NumberConfigField(varNumberConfigField)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "default_value")
+		delete(additionalProperties, "description")
+		delete(additionalProperties, "key")
+		delete(additionalProperties, "max_value")
+		delete(additionalProperties, "min_value")
+		delete(additionalProperties, "name")
+		delete(additionalProperties, "type")
+		delete(additionalProperties, "value")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }

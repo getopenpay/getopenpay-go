@@ -12,7 +12,6 @@ package getopenpay
 
 import (
 	"encoding/json"
-	"bytes"
 	"fmt"
 )
 
@@ -23,6 +22,7 @@ var _ MappedNullable = &EventRetriggerResponse{}
 type EventRetriggerResponse struct {
 	// Mapping from webhook id to the delivery results
 	WebhookDeliveryResults map[string]WebhookDeliveryResult `json:"webhook_delivery_results"`
+	AdditionalProperties map[string]interface{}
 }
 
 type _EventRetriggerResponse EventRetriggerResponse
@@ -80,6 +80,11 @@ func (o EventRetriggerResponse) MarshalJSON() ([]byte, error) {
 func (o EventRetriggerResponse) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	toSerialize["webhook_delivery_results"] = o.WebhookDeliveryResults
+
+	for key, value := range o.AdditionalProperties {
+		toSerialize[key] = value
+	}
+
 	return toSerialize, nil
 }
 
@@ -107,15 +112,20 @@ func (o *EventRetriggerResponse) UnmarshalJSON(data []byte) (err error) {
 
 	varEventRetriggerResponse := _EventRetriggerResponse{}
 
-	decoder := json.NewDecoder(bytes.NewReader(data))
-	decoder.DisallowUnknownFields()
-	err = decoder.Decode(&varEventRetriggerResponse)
+	err = json.Unmarshal(data, &varEventRetriggerResponse)
 
 	if err != nil {
 		return err
 	}
 
 	*o = EventRetriggerResponse(varEventRetriggerResponse)
+
+	additionalProperties := make(map[string]interface{})
+
+	if err = json.Unmarshal(data, &additionalProperties); err == nil {
+		delete(additionalProperties, "webhook_delivery_results")
+		o.AdditionalProperties = additionalProperties
+	}
 
 	return err
 }
